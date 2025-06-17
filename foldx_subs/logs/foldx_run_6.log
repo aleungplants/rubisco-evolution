@@ -1,0 +1,307 @@
+   ********************************************
+   ***                                      ***
+   ***             FoldX 5.1 (c)            ***
+   ***                                      ***
+   ***     code by the FoldX Consortium     ***
+   ***                                      ***
+   ***     Jesper Borg, Frederic Rousseau   ***
+   ***    Joost Schymkowitz, Luis Serrano   ***
+   ***    Peter Vanhee, Erik Verschueren    ***
+   ***     Lies Baeten, Javier Delgado      ***
+   ***       and Francois Stricher          ***
+   *** and any other of the 9! permutations ***
+   ***   based on an original concept by    ***
+   ***   Raphael Guerois and Luis Serrano   ***
+   ********************************************
+
+ *** THIS IS AN IMPORTANT MESSAGE: 
+ >> External parametrized molecules were detected...
+ >> Final energetic values will depend of the correct parametrization of this molecules. 
+
+
+1 models read: 8ruc-assembly-clean_Repair.pdb
+1 models read: 8ruc-assembly-clean_Repair.pdb
+
+BackHbond       =               -3996.85
+SideHbond       =               -2172.91
+Energy_VdW      =               -6258.35
+Electro         =               -375.98
+Energy_SolvP    =               8709.95
+Energy_SolvH    =               -8399.37
+Energy_vdwclash =               75.39
+energy_torsion  =               5.52
+backbone_vdwclash=              858.95
+Entropy_sidec   =               3201.08
+Entropy_mainc   =               7361.29
+water bonds     =               0.00
+helix dipole    =               -16.28
+loop_entropy    =               0.00
+cis_bond        =               8.99
+disulfide       =               -7.18
+kn electrostatic=               -14.42
+partial covalent interactions = 0.00
+Energy_Ionisation =             33.24
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -1845.87
+
+
+BackHbond       =               -3996.85
+SideHbond       =               -2172.91
+Energy_VdW      =               -6258.35
+Electro         =               -375.98
+Energy_SolvP    =               8709.95
+Energy_SolvH    =               -8399.37
+Energy_vdwclash =               75.39
+energy_torsion  =               5.52
+backbone_vdwclash=              858.95
+Entropy_sidec   =               3201.08
+Entropy_mainc   =               7361.29
+water bonds     =               0.00
+helix dipole    =               -16.28
+loop_entropy    =               0.00
+cis_bond        =               8.99
+disulfide       =               -7.18
+kn electrostatic=               -14.42
+partial covalent interactions = 0.00
+Energy_Ionisation =             33.24
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -1845.87
+
+Starting BuildModel
+Reading NA95S,NB95S,NC95S,ND95S,NE95S,NF95S,NG95S,NH95S;
+Reading GA245A,GB245A,GC245A,GD245A,GE245A,GF245A,GG245A,GH245A;
+Reading MA309I,MB309I,MC309I,MD309I,ME309I,MF309I,MG309I,MH309I;
+Reading DA340E,DB340E,DC340E,DD340E,DE340E,DF340E,DG340E,DH340E;
+Reading PA50A,PB50A,PC50A,PD50A,PE50A,PF50A,PG50A,PH50A;
+Reading NA95S,NB95S,NC95S,ND95S,NE95S,NF95S,NG95S,NH95S;
+Reading NA95T,NB95T,NC95T,ND95T,NE95T,NF95T,NG95T,NH95T;
+Residue to Mutate ASNA95 has residue index 86
+Residue to Mutate ASNB95 has residue index 553
+Residue to Mutate ASNC95 has residue index 1020
+Residue to Mutate ASND95 has residue index 1487
+Residue to Mutate ASNE95 has residue index 1954
+Residue to Mutate ASNF95 has residue index 2421
+Residue to Mutate ASNG95 has residue index 2888
+Residue to Mutate ASNH95 has residue index 3355
+Residue to Mutate GLYA245 has residue index 236
+Residue to Mutate GLYB245 has residue index 703
+Residue to Mutate GLYC245 has residue index 1170
+Residue to Mutate GLYD245 has residue index 1637
+Residue to Mutate GLYE245 has residue index 2104
+Residue to Mutate GLYF245 has residue index 2571
+Residue to Mutate GLYG245 has residue index 3038
+Residue to Mutate GLYH245 has residue index 3505
+Residue to Mutate META309 has residue index 300
+Residue to Mutate METB309 has residue index 767
+Residue to Mutate METC309 has residue index 1234
+Residue to Mutate METD309 has residue index 1701
+Residue to Mutate METE309 has residue index 2168
+Residue to Mutate METF309 has residue index 2635
+Residue to Mutate METG309 has residue index 3102
+Residue to Mutate METH309 has residue index 3569
+Residue to Mutate ASPA340 has residue index 331
+Residue to Mutate ASPB340 has residue index 798
+Residue to Mutate ASPC340 has residue index 1265
+Residue to Mutate ASPD340 has residue index 1732
+Residue to Mutate ASPE340 has residue index 2199
+Residue to Mutate ASPF340 has residue index 2666
+Residue to Mutate ASPG340 has residue index 3133
+Residue to Mutate ASPH340 has residue index 3600
+Residue to Mutate PROA50 has residue index 41
+Residue to Mutate PROB50 has residue index 508
+Residue to Mutate PROC50 has residue index 975
+Residue to Mutate PROD50 has residue index 1442
+Residue to Mutate PROE50 has residue index 1909
+Residue to Mutate PROF50 has residue index 2376
+Residue to Mutate PROG50 has residue index 2843
+Residue to Mutate PROH50 has residue index 3310
+Residue to Mutate ASNA95 has residue index 86
+Residue to Mutate ASNB95 has residue index 553
+Residue to Mutate ASNC95 has residue index 1020
+Residue to Mutate ASND95 has residue index 1487
+Residue to Mutate ASNE95 has residue index 1954
+Residue to Mutate ASNF95 has residue index 2421
+Residue to Mutate ASNG95 has residue index 2888
+Residue to Mutate ASNH95 has residue index 3355
+Residue to Mutate ASNA95 has residue index 86
+Residue to Mutate ASNB95 has residue index 553
+Residue to Mutate ASNC95 has residue index 1020
+Residue to Mutate ASND95 has residue index 1487
+Residue to Mutate ASNE95 has residue index 1954
+Residue to Mutate ASNF95 has residue index 2421
+Residue to Mutate ASNG95 has residue index 2888
+Residue to Mutate ASNH95 has residue index 3355
+Mutating residue = ASNA95 into SER
+Mutating residue = ASNB95 into SER
+Mutating residue = ASNC95 into SER
+Mutating residue = ASND95 into SER
+Mutating residue = ASNE95 into SER
+Mutating residue = ASNF95 into SER
+Mutating residue = ASNG95 into SER
+Mutating residue = ASNH95 into SER
+Mutating residue = ASNA95 into SER
+Mutating residue = ASNB95 into SER
+Mutating residue = ASNC95 into SER
+Mutating residue = ASND95 into SER
+Mutating residue = ASNE95 into SER
+Mutating residue = ASNF95 into SER
+Mutating residue = ASNG95 into SER
+Mutating residue = ASNH95 into SER
+Mutating residue = ASNA95 into SER
+Mutating residue = ASNB95 into SER
+Mutating residue = ASNC95 into SER
+Mutating residue = ASND95 into SER
+Mutating residue = ASNE95 into SER
+Mutating residue = ASNF95 into SER
+Mutating residue = ASNG95 into SER
+Mutating residue = ASNH95 into SER
+Mutating residue = GLYA245 into ALA
+Mutating residue = GLYB245 into ALA
+Mutating residue = GLYC245 into ALA
+Mutating residue = GLYD245 into ALA
+Mutating residue = GLYE245 into ALA
+Mutating residue = GLYF245 into ALA
+Mutating residue = GLYG245 into ALA
+Mutating residue = GLYH245 into ALA
+Mutating residue = GLYA245 into ALA
+Mutating residue = GLYB245 into ALA
+Mutating residue = GLYC245 into ALA
+Mutating residue = GLYD245 into ALA
+Mutating residue = GLYE245 into ALA
+Mutating residue = GLYF245 into ALA
+Mutating residue = GLYG245 into ALA
+Mutating residue = GLYH245 into ALA
+Mutating residue = GLYA245 into ALA
+Mutating residue = GLYB245 into ALA
+Mutating residue = GLYC245 into ALA
+Mutating residue = GLYD245 into ALA
+Mutating residue = GLYE245 into ALA
+Mutating residue = GLYF245 into ALA
+Mutating residue = GLYG245 into ALA
+Mutating residue = GLYH245 into ALA
+Mutating residue = META309 into ILE
+Mutating residue = METB309 into ILE
+Mutating residue = METC309 into ILE
+Mutating residue = METD309 into ILE
+Mutating residue = METE309 into ILE
+Mutating residue = METF309 into ILE
+Mutating residue = METG309 into ILE
+Mutating residue = METH309 into ILE
+Mutating residue = META309 into ILE
+Mutating residue = METB309 into ILE
+Mutating residue = METC309 into ILE
+Mutating residue = METD309 into ILE
+Mutating residue = METE309 into ILE
+Mutating residue = METF309 into ILE
+Mutating residue = METG309 into ILE
+Mutating residue = METH309 into ILE
+Mutating residue = META309 into ILE
+Mutating residue = METB309 into ILE
+Mutating residue = METC309 into ILE
+Mutating residue = METD309 into ILE
+Mutating residue = METE309 into ILE
+Mutating residue = METF309 into ILE
+Mutating residue = METG309 into ILE
+Mutating residue = METH309 into ILE
+Mutating residue = ASPA340 into GLU
+Mutating residue = ASPB340 into GLU
+Mutating residue = ASPC340 into GLU
+Mutating residue = ASPD340 into GLU
+Mutating residue = ASPE340 into GLU
+Mutating residue = ASPF340 into GLU
+Mutating residue = ASPG340 into GLU
+Mutating residue = ASPH340 into GLU
+Mutating residue = ASPA340 into GLU
+Mutating residue = ASPB340 into GLU
+Mutating residue = ASPC340 into GLU
+Mutating residue = ASPD340 into GLU
+Mutating residue = ASPE340 into GLU
+Mutating residue = ASPF340 into GLU
+Mutating residue = ASPG340 into GLU
+Mutating residue = ASPH340 into GLU
+Mutating residue = ASPA340 into GLU
+Mutating residue = ASPB340 into GLU
+Mutating residue = ASPC340 into GLU
+Mutating residue = ASPD340 into GLU
+Mutating residue = ASPE340 into GLU
+Mutating residue = ASPF340 into GLU
+Mutating residue = ASPG340 into GLU
+Mutating residue = ASPH340 into GLU
+Mutating residue = PROA50 into ALA
+Mutating residue = PROB50 into ALA
+Mutating residue = PROC50 into ALA
+Mutating residue = PROD50 into ALA
+Mutating residue = PROE50 into ALA
+Mutating residue = PROF50 into ALA
+Mutating residue = PROG50 into ALA
+Mutating residue = PROH50 into ALA
+Mutating residue = PROA50 into ALA
+Mutating residue = PROB50 into ALA
+Mutating residue = PROC50 into ALA
+Mutating residue = PROD50 into ALA
+Mutating residue = PROE50 into ALA
+Mutating residue = PROF50 into ALA
+Mutating residue = PROG50 into ALA
+Mutating residue = PROH50 into ALA
+Mutating residue = PROA50 into ALA
+Mutating residue = PROB50 into ALA
+Mutating residue = PROC50 into ALA
+Mutating residue = PROD50 into ALA
+Mutating residue = PROE50 into ALA
+Mutating residue = PROF50 into ALA
+Mutating residue = PROG50 into ALA
+Mutating residue = PROH50 into ALA
+Mutating residue = ASNA95 into SER
+Mutating residue = ASNB95 into SER
+Mutating residue = ASNC95 into SER
+Mutating residue = ASND95 into SER
+Mutating residue = ASNE95 into SER
+Mutating residue = ASNF95 into SER
+Mutating residue = ASNG95 into SER
+Mutating residue = ASNH95 into SER
+Mutating residue = ASNA95 into SER
+Mutating residue = ASNB95 into SER
+Mutating residue = ASNC95 into SER
+Mutating residue = ASND95 into SER
+Mutating residue = ASNE95 into SER
+Mutating residue = ASNF95 into SER
+Mutating residue = ASNG95 into SER
+Mutating residue = ASNH95 into SER
+Mutating residue = ASNA95 into SER
+Mutating residue = ASNB95 into SER
+Mutating residue = ASNC95 into SER
+Mutating residue = ASND95 into SER
+Mutating residue = ASNE95 into SER
+Mutating residue = ASNF95 into SER
+Mutating residue = ASNG95 into SER
+Mutating residue = ASNH95 into SER
+Mutating residue = ASNA95 into THR
+Mutating residue = ASNB95 into THR
+Mutating residue = ASNC95 into THR
+Mutating residue = ASND95 into THR
+Mutating residue = ASNE95 into THR
+Mutating residue = ASNF95 into THR
+Mutating residue = ASNG95 into THR
+Mutating residue = ASNH95 into THR
+Mutating residue = ASNA95 into THR
+Mutating residue = ASNB95 into THR
+Mutating residue = ASNC95 into THR
+Mutating residue = ASND95 into THR
+Mutating residue = ASNE95 into THR
+Mutating residue = ASNF95 into THR
+Mutating residue = ASNG95 into THR
+Mutating residue = ASNH95 into THR
+Mutating residue = ASNA95 into THR
+Mutating residue = ASNB95 into THR
+Mutating residue = ASNC95 into THR
+Mutating residue = ASND95 into THR
+Mutating residue = ASNE95 into THR
+Mutating residue = ASNF95 into THR
+Mutating residue = ASNG95 into THR
+Mutating residue = ASNH95 into THR
+Your file run OK
+End time of FoldX: Tue Apr 15 20:29:58 2025
+Total time spend: 340.95 seconds.
+Cleaning BuildModel...DONE

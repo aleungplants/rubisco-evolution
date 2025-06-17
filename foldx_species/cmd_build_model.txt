@@ -1,0 +1,15 @@
+pdb=8ruc-assembly-clean_Repair.pdb
+
+command=BuildModel
+
+mutant-file=individual_list_mutations_1.txt
+fix-residues-file=individual_list_constraints.txt
+out-pdb=false
+output-file=run_1
+
+water=-CRYSTAL
+vdwDesign=0
+ionStrength=0.15
+
+numberOfRuns=3
+

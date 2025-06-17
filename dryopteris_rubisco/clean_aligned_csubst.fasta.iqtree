@@ -1,0 +1,492 @@
+IQ-TREE 2.0.3 built Dec 19 2020
+
+Input file name: ../clean_aligned_csubst.fasta
+User tree file name: tmp.csubst.nwk
+Type of analysis: tree reconstruction
+Random seed number: 397357
+
+REFERENCES
+----------
+
+To cite IQ-TREE please use:
+
+Bui Quang Minh, Heiko A. Schmidt, Olga Chernomor, Dominik Schrempf,
+Michael D. Woodhams, Arndt von Haeseler, and Robert Lanfear (2020)
+IQ-TREE 2: New models and efficient methods for phylogenetic inference
+in the genomic era. Mol. Biol. Evol., in press.
+https://doi.org/10.1093/molbev/msaa015
+
+SEQUENCE ALIGNMENT
+------------------
+
+Input data: 185 sequences with 418 codon sites
+Number of constant sites: 120 (= 28.7081% of all sites)
+Number of invariant (constant or ambiguous constant) sites: 120 (= 28.7081% of all sites)
+Number of parsimony informative sites: 191
+Number of distinct site patterns: 379
+
+SUBSTITUTION PROCESS
+--------------------
+
+Model of substitution: ECMK07+F+R4
+
+State frequencies: (empirical counts from alignment)
+
+  pi(AAA) = 0.0247  pi(AAC) = 0.0101  pi(AAG) = 0.0164  pi(AAT) = 0.0234
+  pi(ACA) = 0.0100  pi(ACC) = 0.0359  pi(ACG) = 0.0094  pi(ACT) = 0.0091
+  pi(AGA) = 0.0169  pi(AGC) = 0.0025  pi(AGG) = 0.0025  pi(AGT) = 0.0047
+  pi(ATA) = 0.0038  pi(ATC) = 0.0228  pi(ATG) = 0.0219  pi(ATT) = 0.0160
+  pi(CAA) = 0.0074  pi(CAC) = 0.0123  pi(CAG) = 0.0140  pi(CAT) = 0.0198
+  pi(CCA) = 0.0094  pi(CCC) = 0.0179  pi(CCG) = 0.0075  pi(CCT) = 0.0112
+  pi(CGA) = 0.0138  pi(CGC) = 0.0186  pi(CGG) = 0.0001  pi(CGT) = 0.0164
+  pi(CTA) = 0.0147  pi(CTC) = 0.0062  pi(CTG) = 0.0102  pi(CTT) = 0.0174
+  pi(GAA) = 0.0490  pi(GAC) = 0.0196  pi(GAG) = 0.0130  pi(GAT) = 0.0380
+  pi(GCA) = 0.0194  pi(GCC) = 0.0162  pi(GCG) = 0.0109  pi(GCT) = 0.0481
+  pi(GGA) = 0.0333  pi(GGC) = 0.0079  pi(GGG) = 0.0226  pi(GGT) = 0.0402
+  pi(GTA) = 0.0362  pi(GTC) = 0.0190  pi(GTG) = 0.0073  pi(GTT) = 0.0051
+  pi(TAC) = 0.0216  pi(TAT) = 0.0195  pi(TCA) = 0.0003  pi(TCC) = 0.0146
+  pi(TCG) = 0.0032  pi(TCT) = 0.0117  pi(TGC) = 0.0091  pi(TGG) = 0.0144
+  pi(TGT) = 0.0051  pi(TTA) = 0.0241  pi(TTC) = 0.0310  pi(TTG) = 0.0197
+  pi(TTT) = 0.0136
+Model of rate heterogeneity: FreeRate with 4 categories
+Site proportion and rates:  (0.4673,0.1889) (0.4198,0.9831) (0.1030,3.8138) (0.0099,10.6895)
+
+ Category  Relative_rate  Proportion
+  1         0.1889         0.4673
+  2         0.9831         0.4198
+  3         3.8138         0.1030
+  4         10.6895        0.0099
+
+USER TREE
+---------
+
+Log-likelihood of the tree: -8469.1224 (s.e. 488.0201)
+Unconstrained log-likelihood (without tree): -2460.9441
+Number of free parameters (#branches + #model parameters): 433
+Akaike information criterion (AIC) score: 17804.2447
+Corrected Akaike information criterion (AICc) score: 393648.2447
+Bayesian information criterion (BIC) score: 19551.6082
+
+**************************** WARNING ****************************
+Number of parameters (K, model parameters and branch lengths): 433
+Sample size (n, alignment length): 418
+
+Given that K>=n, the parameter estimates might be inaccurate.
+Thus, phylogenetic estimates should be interpreted with caution.
+
+Ideally, it is desirable that n >> K. When selecting optimal models,
+1. use AIC or BIC if n > 40K;
+2. use AICc or BIC if 40K >= n > K;
+3. be extremely cautious if n <= K
+
+To improve the situation (3), consider the following options:
+  1. Increase the sample size (n)
+  2. Decrease the number of parameters (K) to be estimated. If
+     possible:
+     a. Remove the least important sequences from the alignment
+     b. Specify some of the parameter values for the substitution
+        model (e.g., the nucleotide or amino acid frequencies)
+     c. Specify some of the parameter values for the rates-across-
+        sites model (e.g., the shape parameter for the discrete
+        Gamma distribution, the proportion of invariable sites, or
+        the rates of change for different rate categories under
+        the FreeRate model)
+
+Reference:
+Burnham KR, Anderson DR (2002). Model Selection and Multimodel
+Inference: A Practical Information-Theoretic Approach. Springer,
+New York.
+************************ END OF WARNING ***********************
+
+Total tree length (sum of branch lengths): 3.1398
+Sum of internal branch lengths: 0.9393 (29.9158% of tree length)
+
+WARNING: 87 near-zero internal branches (<0.0024) should be treated with caution
+         Such branches are denoted by '**' in the figure below
+
+NOTE: Tree is UNROOTED although outgroup taxon 'uniformis' is drawn at root
+
+NOTE: Branch lengths are interpreted as number of nucleotide substitutions per codon site!
+      Rescale them by 1/3 if you want to have #nt substitutions per nt site
+
++--uniformis
+| (Node1)
+|                                                     +--kilemen505
+|                                                  +--| (Node19)
+|                                                  |  +--aquilinoid
+|                                               +--| (Node18)
+|                                               |  |        +**goldiana
+|                                               |  |     +--| (Node22)
+|                                               |  |     |  +**monticola
+|                                               |  |  +--| (Node21)
+|                                               |  |  |  |  +--pallida
+|                                               |  |  |  +**| (Node23)
+|                                               |  |  |     |  +**oligodonta
+|                                               |  |  |     +--| (Node24)
+|                                               |  |  |        +**odontoloma
+|                                               |  +--| (Node20)
+|                                               |     |     +--celsa
+|                                               |     |  +--| (Node26)
+|                                               |     |  |  +--ludovician
+|                                               |     +--| (Node25)
+|                                               |        +--tokyoensis
+|                                            +**| (Node17)
+|                                            |  |     +--cognata546
+|                                            |  +-----| (Node27)
+|                                            |        +--occiden458
+|                                         +**| (Node16)
+|                                         |  |           +**sparsa
+|                                         |  |        +--| (Node31)
+|                                         |  |        |  |  +--melanocarp
+|                                         |  |        |  +**| (Node32)
+|                                         |  |        |     +--subexaltat
+|                                         |  |     +**| (Node30)
+|                                         |  |     |  +--sublacera
+|                                         |  |  +--| (Node29)
+|                                         |  |  |  +--maximowicz
+|                                         |  +--| (Node28)
+|                                         |     |     +**yakusilvic
+|                                         |     |  +**| (Node34)
+|                                         |     |  |  +**hondoensis
+|                                         |     +--| (Node33)
+|                                         |        +**sabaei
+|                                      +**| (Node15)
+|                                      |  |                          +**fuscipes
+|                                      |  |                       +--| (Node43)
+|                                      |  |                       |  +**tsugiwoi
+|                                      |  |                    +--| (Node42)
+|                                      |  |                    |  |     +**championii
+|                                      |  |                    |  |  +**| (Node45)
+|                                      |  |                    |  |  |  +**medioxima
+|                                      |  |                    |  +--| (Node44)
+|                                      |  |                    |     |  +--shibipedis
+|                                      |  |                    |     +**| (Node46)
+|                                      |  |                    |        +**kinkiensis
+|                                      |  |                 +**| (Node41)
+|                                      |  |                 |  |                    +**anadroma
+|                                      |  |                 |  |                 +**| (Node53)
+|                                      |  |                 |  |                 |  +**simasakii
+|                                      |  |                 |  |              +**| (Node52)
+|                                      |  |                 |  |              |  +**ryo-itoana
+|                                      |  |                 |  |           +--| (Node51)
+|                                      |  |                 |  |           |  +**labordei
+|                                      |  |                 |  |        +**| (Node50)
+|                                      |  |                 |  |        |  +--indusiata
+|                                      |  |                 |  |     +--| (Node49)
+|                                      |  |                 |  |     |  +**gymnosora
+|                                      |  |                 |  |  +**| (Node48)
+|                                      |  |                 |  |  |  |        +**caudipinna
+|                                      |  |                 |  |  |  |     +**| (Node56)
+|                                      |  |                 |  |  |  |     |  +**koidsumian
+|                                      |  |                 |  |  |  |  +**| (Node55)
+|                                      |  |                 |  |  |  |  |  +--decipiens
+|                                      |  |                 |  |  |  +--| (Node54)
+|                                      |  |                 |  |  |     +**erythrosor
+|                                      |  |                 |  +--| (Node47)
+|                                      |  |                 |     +--integrilob
+|                                      |  |              +--| (Node40)
+|                                      |  |              |  +--wattsii
+|                                      |  |           +--| (Node39)
+|                                      |  |           |  +--formosana
+|                                      |  |        +--| (Node38)
+|                                      |  |        |  |                       +--insularis
+|                                      |  |        |  |                    +--| (Node64)
+|                                      |  |        |  |                    |  +**varia
+|                                      |  |        |  |                 +**| (Node63)
+|                                      |  |        |  |                 |  +--bissetiana
+|                                      |  |        |  |              +--| (Node62)
+|                                      |  |        |  |              |  |  +**pacifica
+|                                      |  |        |  |              |  +**| (Node65)
+|                                      |  |        |  |              |     +**protobisse
+|                                      |  |        |  |           +--| (Node61)
+|                                      |  |        |  |           |  |  +**saxifragiv
+|                                      |  |        |  |           |  +--| (Node66)
+|                                      |  |        |  |           |     +**saxifraga
+|                                      |  |        |  |        +**| (Node60)
+|                                      |  |        |  |        |  +------setosa
+|                                      |  |        |  |     +**| (Node59)
+|                                      |  |        |  |     |  |     +**chinensis
+|                                      |  |        |  |     |  |  +--| (Node68)
+|                                      |  |        |  |     |  |  |  +**sacrosanct
+|                                      |  |        |  |     |  +**| (Node67)
+|                                      |  |        |  |     |     |  +--hadanoi
+|                                      |  |        |  |     |     +--| (Node69)
+|                                      |  |        |  |     |        +--sordidipes
+|                                      |  |        |  |  +--| (Node58)
+|                                      |  |        |  |  |  |     +--hasseltii
+|                                      |  |        |  |  |  |  +--| (Node71)
+|                                      |  |        |  |  |  |  |  +--polita
+|                                      |  |        |  |  |  +--| (Node70)
+|                                      |  |        |  |  |     +--diffracta
+|                                      |  |        |  +**| (Node57)
+|                                      |  |        |     |           +--apiciflora
+|                                      |  |        |     |        +**| (Node75)
+|                                      |  |        |     |        |  +--transmorri
+|                                      |  |        |     |     +--| (Node74)
+|                                      |  |        |     |     |  +--clarkei
+|                                      |  |        |     |  +--| (Node73)
+|                                      |  |        |     |  |  +--kawakamii
+|                                      |  |        |     +**| (Node72)
+|                                      |  |        |        +--heterolaen
+|                                      |  |     +--| (Node37)
+|                                      |  |     |  |                 +--shikokiana
+|                                      |  |     |  |              +--| (Node81)
+|                                      |  |     |  |              |  +--hendersoni
+|                                      |  |     |  |           +--| (Node80)
+|                                      |  |     |  |           |  +--rubiginosa
+|                                      |  |     |  |        +**| (Node79)
+|                                      |  |     |  |        |  |        +--diacalpe
+|                                      |  |     |  |        |  |     +--| (Node84)
+|                                      |  |     |  |        |  |     |  +--pseudocaen
+|                                      |  |     |  |        |  |  +--| (Node83)
+|                                      |  |     |  |        |  |  |  +--annamensis
+|                                      |  |     |  |        |  +--| (Node82)
+|                                      |  |     |  |        |     |           +**exstipella
+|                                      |  |     |  |        |     |        +**| (Node88)
+|                                      |  |     |  |        |     |        |  +**emeiensis
+|                                      |  |     |  |        |     |     +**| (Node87)
+|                                      |  |     |  |        |     |     |  +--nodosa
+|                                      |  |     |  |        |     |  +--| (Node86)
+|                                      |  |     |  |        |     |  |  +**paleolata
+|                                      |  |     |  |        |     +--| (Node85)
+|                                      |  |     |  |        |        +--squamifera
+|                                      |  |     |  |     +--| (Node78)
+|                                      |  |     |  |     |  +--christense
+|                                      |  |     |  |  +**| (Node77)
+|                                      |  |     |  |  |  |  +**peranema
+|                                      |  |     |  |  |  +--| (Node89)
+|                                      |  |     |  |  |     +**zhuweiming
+|                                      |  |     |  +**| (Node76)
+|                                      |  |     |     |     +**guanchica
+|                                      |  |     |     |  +**| (Node91)
+|                                      |  |     |     |  |  |     +**glabra
+|                                      |  |     |     |  |  |  +--| (Node93)
+|                                      |  |     |     |  |  |  |  +**hawaiiensi
+|                                      |  |     |     |  |  +**| (Node92)
+|                                      |  |     |     |  |     +**aemula
+|                                      |  |     |     +--| (Node90)
+|                                      |  |     |        +--corleyi
+|                                      |  |  +--| (Node36)
+|                                      |  |  |  |              +--rosea
+|                                      |  |  |  |           +**| (Node98)
+|                                      |  |  |  |           |  |  +--rossii
+|                                      |  |  |  |           |  +--| (Node99)
+|                                      |  |  |  |           |     +**knoblochii
+|                                      |  |  |  |        +--| (Node97)
+|                                      |  |  |  |        |  |  +**cinnamomea
+|                                      |  |  |  |        |  +**| (Node100)
+|                                      |  |  |  |        |     +--sororia
+|                                      |  |  |  |     +--| (Node96)
+|                                      |  |  |  |     |  |     +--patula
+|                                      |  |  |  |     |  |  +--| (Node102)
+|                                      |  |  |  |     |  |  |  |  +--huberi
+|                                      |  |  |  |     |  |  |  +**| (Node103)
+|                                      |  |  |  |     |  |  |     +--flaccisqua
+|                                      |  |  |  |     |  +--| (Node101)
+|                                      |  |  |  |     |     +--saffordii
+|                                      |  |  |  |  +--| (Node95)
+|                                      |  |  |  |  |  |  +--maxonii
+|                                      |  |  |  |  |  +--| (Node104)
+|                                      |  |  |  |  |     |  +--futura
+|                                      |  |  |  |  |     +--| (Node105)
+|                                      |  |  |  |  |        +--nubigena
+|                                      |  |  |  +--| (Node94)
+|                                      |  |  |     +--karwinskya
+|                                      |  +**| (Node35)
+|                                      |     +-----fragrans
+|                                   +**| (Node14)
+|                                   |  |              +**crispifoli
+|                                   |  |           +**| (Node110)
+|                                   |  |           |  +**campylopte
+|                                   |  |        +**| (Node109)
+|                                   |  |        |  +**antarctica
+|                                   |  |     +**| (Node108)
+|                                   |  |     |  |  +**dilatata
+|                                   |  |     |  +**| (Node111)
+|                                   |  |     |     +**intermedia
+|                                   |  |  +--| (Node107)
+|                                   |  |  |  |  +**maderensis
+|                                   |  |  |  +**| (Node112)
+|                                   |  |  |     +**azorica460
+|                                   |  +--| (Node106)
+|                                   |     |        +**clintonian
+|                                   |     |     +**| (Node115)
+|                                   |     |     |  +**cristata
+|                                   |     |  +--| (Node114)
+|                                   |     |  |  |  +**munchii
+|                                   |     |  |  +**| (Node116)
+|                                   |     |  |     |  +--remota
+|                                   |     |  |     +--| (Node117)
+|                                   |     |  |        +**carthusian
+|                                   |     +--| (Node113)
+|                                   |        |  +--expansa
+|                                   |        +--| (Node118)
+|                                   |           +--amurensis
+|                                +--| (Node13)
+|                                |  |            +--sandwicens
+|                                |  |         +--| (Node122)
+|                                |  |         |  |  +--unidentata
+|                                |  |         |  +**| (Node123)
+|                                |  |         |     +**tetrapinna
+|                                |  |      +--| (Node121)
+|                                |  |      |  +--crinalis
+|                                |  |  +---| (Node120)
+|                                |  |  |   +--mauiensis
+|                                |  +--| (Node119)
+|                                |     +--aitonia466
+|                             +**| (Node12)
+|                             |  |     +--arguta
+|                             |  |  +--| (Node125)
+|                             |  |  |  +--marginalis
+|                             |  +**| (Node124)
+|                             |     +--shiroumens
+|                          +**| (Node11)
+|                          |  |                    +--stewartii
+|                          |  |                 +**| (Node132)
+|                          |  |                 |  |  +**gymnophyll
+|                          |  |                 |  +--| (Node133)
+|                          |  |                 |     +**goeringian
+|                          |  |              +**| (Node131)
+|                          |  |              |  +--reflexosqu
+|                          |  |           +**| (Node130)
+|                          |  |           |  |  +--juxtaposit
+|                          |  |           |  +**| (Node134)
+|                          |  |           |     |  +--neolacera
+|                          |  |           |     +**| (Node135)
+|                          |  |           |        +--lacera
+|                          |  |        +--| (Node129)
+|                          |  |        |  |     +--panda
+|                          |  |        |  |  +--| (Node137)
+|                          |  |        |  |  |  +**costalisor
+|                          |  |        |  +**| (Node136)
+|                          |  |        |     |  +--rubrobrunn
+|                          |  |        |     +**| (Node138)
+|                          |  |        |        |  +--basisora
+|                          |  |        |        +**| (Node139)
+|                          |  |        |           |  +--sieboldii
+|                          |  |        |           +--| (Node140)
+|                          |  |        |              +--bodinieri
+|                          |  |     +**| (Node128)
+|                          |  |     |  +--barberiger
+|                          |  |  +**| (Node127)
+|                          |  |  |  |              +**bojeri568
+|                          |  |  |  |           +--| (Node145)
+|                          |  |  |  |           |  +--bernieri
+|                          |  |  |  |        +**| (Node144)
+|                          |  |  |  |        |  |     +--squamis504
+|                          |  |  |  |        |  |  +--| (Node147)
+|                          |  |  |  |        |  |  |  +**tricell456
+|                          |  |  |  |        |  +--| (Node146)
+|                          |  |  |  |        |     +--fadenii459
+|                          |  |  |  |     +**| (Node143)
+|                          |  |  |  |     |  |  +**schimpe639
+|                          |  |  |  |     |  +**| (Node148)
+|                          |  |  |  |     |     +--cochleata
+|                          |  |  |  |  +--| (Node142)
+|                          |  |  |  |  |  |           +----subcren638
+|                          |  |  |  |  |  |        +**| (Node152)
+|                          |  |  |  |  |  |        |  +--glandul457
+|                          |  |  |  |  |  |     +--| (Node151)
+|                          |  |  |  |  |  |     |  |  +--katanga626
+|                          |  |  |  |  |  |     |  +**| (Node153)
+|                          |  |  |  |  |  |     |     +--lewalle637
+|                          |  |  |  |  |  |  +**| (Node150)
+|                          |  |  |  |  |  |  |  |     +--dracomo635
+|                          |  |  |  |  |  |  |  |  +**| (Node155)
+|                          |  |  |  |  |  |  |  |  |  +**athamantic
+|                          |  |  |  |  |  |  |  +**| (Node154)
+|                          |  |  |  |  |  |  |     +--pentheri
+|                          |  |  |  |  |  +**| (Node149)
+|                          |  |  |  |  |     |        +--oligodo640
+|                          |  |  |  |  |     |     +--| (Node158)
+|                          |  |  |  |  |     |     |  +-----schnell455
+|                          |  |  |  |  |     |  +--| (Node157)
+|                          |  |  |  |  |     |  |  +--mannian510
+|                          |  |  |  |  |     +--| (Node156)
+|                          |  |  |  |  |        +----------------------------------------------------inaequa632
+|                          |  |  |  +**| (Node141)
+|                          |  |  |     +--chrysocoma
+|                          |  +--| (Node126)
+|                          |     |  +--alpestris
+|                          |     +**| (Node159)
+|                          |        |  +--villari414
+|                          |        +--| (Node160)
+|                          |           +--komarovii
+|                       +--| (Node10)
+|                       |  |           +**caucasica
+|                       |  |        +**| (Node164)
+|                       |  |        |  +**pseudofili
+|                       |  |     +--| (Node163)
+|                       |  |     |  |        +--ardechensi
+|                       |  |     |  |     +**| (Node167)
+|                       |  |     |  |     |  +--oreades
+|                       |  |     |  |  +**| (Node166)
+|                       |  |     |  |  |  +--tyrrhen494
+|                       |  |     |  +**| (Node165)
+|                       |  |     |     +--filix-mas
+|                       |  |  +**| (Node162)
+|                       |  |  |  +**lepidopoda
+|                       |  +--| (Node161)
+|                       |     +--coreano-mo
+|                    +--| (Node9)
+|                    |  |              +**affinis
+|                    |  |           +**| (Node172)
+|                    |  |           |  +**subbipinna
+|                    |  |        +--| (Node171)
+|                    |  |        |  +**wallichian
+|                    |  |     +**| (Node170)
+|                    |  |     |  +--conjugata
+|                    |  |  +**| (Node169)
+|                    |  |  |  |  +**sinofibril
+|                    |  |  |  +--| (Node173)
+|                    |  |  |     +--pulcherrim
+|                    |  +**| (Node168)
+|                    |     |     +**polylepis
+|                    |     |  +--| (Node175)
+|                    |     |  |  +**dickinsii
+|                    |     +--| (Node174)
+|                    |        +--crassirhiz
+|                 +**| (Node8)
+|                 |  +--fuscoatra
+|              +**| (Node7)
+|              |  |           +--tsutsuiana
+|              |  |        +--| (Node179)
+|              |  |        |  +**handeliana
+|              |  |     +--| (Node178)
+|              |  |     |  +--subpycnopt
+|              |  |  +**| (Node177)
+|              |  |  |  +--scottii
+|              |  +**| (Node176)
+|              |     |     +**cycadina
+|              |     |  +--| (Node181)
+|              |     |  |  +**namegatae
+|              |     +**| (Node180)
+|              |        +**rosthornii
+|           +**| (Node6)
+|           |  |  +--lunanensis
+|           |  +**| (Node182)
+|           |     +--stenolepis
+|        +**| (Node5)
+|        |  +--gamblei
+|     +--| (Node4)
+|     |  |  +--anthracini
+|     |  +--| (Node183)
+|     |     +--atrata
+|  +**| (Node3)
+|  |  +--hangchowen
++**| (Node2)
+|  +**pycnoptero
+|
++**commixta
+
+Tree in newick format:
+
+(uniformis:0.0027569262,((((((((((((((((((kilemen505:0.0362412130,aquilinoid:0.0273660335)Node19:0.0094320557,(((goldiana:0.0000029923,monticola:0.0000028183)Node22:0.0084898638,(pallida:0.0135159922,(oligodonta:0.0000035776,odontoloma:0.0000035776)Node24:0.0029097646)Node23:0.0000032600)Node21:0.0103650478,((celsa:0.0027482326,ludovician:0.0029288895)Node26:0.0063419122,tokyoensis:0.0086226002)Node25:0.0165405545)Node20:0.0218732508)Node18:0.0072862516,(cognata546:0.0113697905,occiden458:0.0059815861)Node27:0.0704120858)Node17:0.0000031210,((((sparsa:0.0000032318,(melanocarp:0.0086843627,subexaltat:0.0055776393)Node32:0.0000032936)Node31:0.0140802127,sublacera:0.0278290209)Node30:0.0000028794,maximowicz:0.0170516756)Node29:0.0026619265,((yakusilvic:0.0000031607,hondoensis:0.0000031607)Node34:0.0000030262,sabaei:0.0000034754)Node33:0.0150148772)Node28:0.0195306167)Node16:0.0000033489,(((((((((fuscipes:0.0000034531,tsugiwoi:0.0000034531)Node43:0.0117340506,((championii:0.0000032436,medioxima:0.0000032436)Node45:0.0000029085,(shibipedis:0.0030209069,kinkiensis:0.0000037953)Node46:0.0000029616)Node44:0.0058509729)Node42:0.0029099067,(((((((anadroma:0.0000037556,simasakii:0.0000037556)Node53:0.0000028205,ryo-itoana:0.0000040165)Node52:0.0000028085,labordei:0.0000034125)Node51:0.0032977181,indusiata:0.0184258205)Node50:0.0000029034,gymnosora:0.0000039315)Node49:0.0065004936,(((caudipinna:0.0000030379,koidsumian:0.0000040862)Node56:0.0000035884,decipiens:0.0079853103)Node55:0.0000027323,erythrosor:0.0000035809)Node54:0.0074554615)Node48:0.0000029349,integrilob:0.0060374543)Node47:0.0029165066)Node41:0.0000028423,wattsii:0.0402076315)Node40:0.0058482944,formosana:0.0075193007)Node39:0.0191795019,((((((((insularis:0.0032556693,varia:0.0000027721)Node64:0.0081942134,bissetiana:0.0027874055)Node63:0.0000031477,(pacifica:0.0000040235,protobisse:0.0000040235)Node65:0.0000038215)Node62:0.0085281618,(saxifragiv:0.0000029579,saxifraga:0.0000029579)Node66:0.0087969946)Node61:0.0135546486,setosa:0.0878207808)Node60:0.0000029841,((chinensis:0.0000029669,sacrosanct:0.0000028433)Node68:0.0247690919,(hadanoi:0.0029496932,sordidipes:0.0059123262)Node69:0.0213900522)Node67:0.0000034381)Node59:0.0000028954,((hasseltii:0.0320438715,polita:0.0321672277)Node71:0.0033522666,diffracta:0.0122688670)Node70:0.0235534616)Node58:0.0057202283,((((apiciflora:0.0030248986,transmorri:0.0060912119)Node75:0.0000028397,clarkei:0.0172027835)Node74:0.0105008607,kawakamii:0.0111144276)Node73:0.0063741241,heterolaen:0.0196839222)Node72:0.0000027393)Node57:0.0000031014)Node38:0.0031144632,((((((shikokiana:0.0097437747,hendersoni:0.0029349090)Node81:0.0198978957,rubiginosa:0.0098967629)Node80:0.0068202798,(((diacalpe:0.0029124970,pseudocaen:0.0030077998)Node84:0.0063174607,annamensis:0.0146542355)Node83:0.0025687395,((((exstipella:0.0000033089,emeiensis:0.0000033089)Node88:0.0000034141,nodosa:0.0029974770)Node87:0.0000035684,paleolata:0.0000039513)Node86:0.0030781335,squamifera:0.0057365904)Node85:0.0177545822)Node82:0.0029344415)Node79:0.0000029410,christense:0.0121769223)Node78:0.0090609771,(peranema:0.0000037532,zhuweiming:0.0019934592)Node89:0.0165114218)Node77:0.0000035383,((guanchica:0.0000034246,((glabra:0.0000029322,hawaiiensi:0.0000029322)Node93:0.0027788369,aemula:0.0000032668)Node92:0.0000038875)Node91:0.0000027429,corleyi:0.0055927566)Node90:0.0281623304)Node76:0.0000037093)Node37:0.0194126360,(((((rosea:0.0112024284,(rossii:0.0027687138,knoblochii:0.0000027798)Node99:0.0055506952)Node98:0.0000028426,(cinnamomea:0.0000037828,sororia:0.0126788757)Node100:0.0000028194)Node97:0.0029973169,((patula:0.0145624187,(huberi:0.0083253028,flaccisqua:0.0027753681)Node103:0.0000032516)Node102:0.0082169084,saffordii:0.0049466680)Node101:0.0083542297)Node96:0.0163065433,(maxonii:0.0211089590,(futura:0.0028912305,nubigena:0.0055836273)Node105:0.0081037216)Node104:0.0029901932)Node95:0.0147788294,karwinskya:0.0204766403)Node94:0.0251518767)Node36:0.0025714859,fragrans:0.0720112175)Node35:0.0000033893)Node15:0.0000040657,(((((crispifoli:0.0000034185,campylopte:0.0000034185)Node110:0.0000035158,antarctica:0.0000029291)Node109:0.0000028172,(dilatata:0.0000037462,intermedia:0.0000037462)Node111:0.0000030602)Node108:0.0000035750,(maderensis:0.0000038548,azorica460:0.0000038548)Node112:0.0000029926)Node107:0.0240850818,(((clintonian:0.0000027905,cristata:0.0000027905)Node115:0.0000027545,(munchii:0.0000040308,(remota:0.0057765408,carthusian:0.0000027296)Node117:0.0027667373)Node116:0.0000029051)Node114:0.0029896858,(expansa:0.0164621532,amurensis:0.0033130977)Node118:0.0027961284)Node113:0.0139918675)Node106:0.0166629684)Node14:0.0000037562,((((sandwicens:0.0028608917,(unidentata:0.0028542033,tetrapinna:0.0000028639)Node123:0.0000028343)Node122:0.0028664813,crinalis:0.0056844082)Node121:0.0028453346,mauiensis:0.0061486939)Node120:0.0446864550,aitonia466:0.0376887124)Node119:0.0115855177)Node13:0.0371803629,((arguta:0.0231372837,marginalis:0.0117650694)Node125:0.0084354536,shiroumens:0.0242106330)Node124:0.0000032753)Node12:0.0000030962,(((((((stewartii:0.0128957035,(gymnophyll:0.0000033717,goeringian:0.0000033717)Node133:0.0312120575)Node132:0.0000032019,reflexosqu:0.0030317141)Node131:0.0000031745,(juxtaposit:0.0084626099,(neolacera:0.0257950002,lacera:0.0197615774)Node135:0.0000031463)Node134:0.0000036229)Node130:0.0000036809,((panda:0.0027492025,costalisor:0.0000039688)Node137:0.0025058447,(rubrobrunn:0.0108704531,(basisora:0.0083893313,(sieboldii:0.0112252533,bodinieri:0.0050626248)Node140:0.0053697724)Node139:0.0000029271)Node138:0.0000032847)Node136:0.0000028104)Node129:0.0042807269,barberiger:0.0039222966)Node128:0.0000029699,(((((bojeri568:0.0000038050,bernieri:0.0053362421)Node145:0.0126280902,((squamis504:0.0124814592,tricell456:0.0000039284)Node147:0.0095836082,fadenii459:0.0062672686)Node146:0.0131556471)Node144:0.0011719214,(schimpe639:0.0000034725,cochleata:0.0182185916)Node148:0.0000031835)Node143:0.0000036524,((((subcren638:0.0556013560,glandul457:0.0136577313)Node152:0.0000036509,(katanga626:0.0068579495,lewalle637:0.0030747336)Node153:0.0000030851)Node151:0.0066477623,((dracomo635:0.0048862335,athamantic:0.0000028206)Node155:0.0000037327,pentheri:0.0027459017)Node154:0.0000030080)Node150:0.0000038933,(((oligodo640:0.0358499092,schnell455:0.0706578807)Node158:0.0229299540,mannian510:0.0186561295)Node157:0.0355055376,inaequa632:0.5885647339)Node156:0.0130483833)Node149:0.0000027740)Node142:0.0242315650,chrysocoma:0.0128007834)Node141:0.0013762577)Node127:0.0000027735,(alpestris:0.0223619719,(villari414:0.0032162163,komarovii:0.0118904574)Node160:0.0167468229)Node159:0.0019413051)Node126:0.0056766913)Node11:0.0000039890,((((caucasica:0.0000027396,pseudofili:0.0000027396)Node164:0.0000030721,(((ardechensi:0.0026514637,oreades:0.0026880317)Node167:0.0000039062,tyrrhen494:0.0049804298)Node166:0.0018596743,filix-mas:0.0026912993)Node165:0.0000031285)Node163:0.0026896761,lepidopoda:0.0000039143)Node162:0.0000029821,coreano-mo:0.0215520830)Node161:0.0055102095)Node10:0.0122234215,(((((affinis:0.0000040128,subbipinna:0.0000030346)Node172:0.0000029740,wallichian:0.0000030043)Node171:0.0026306044,conjugata:0.0052845556)Node170:0.0000029958,(sinofibril:0.0022145729,pulcherrim:0.0027061111)Node173:0.0028050238)Node169:0.0000030677,((polylepis:0.0000027406,dickinsii:0.0000034668)Node175:0.0029909724,crassirhiz:0.0122003696)Node174:0.0054861677)Node168:0.0000034044)Node9:0.0026261054,fuscoatra:0.0315084185)Node8:0.0000037155,((((tsutsuiana:0.0027187443,handeliana:0.0000035599)Node179:0.0105101639,subpycnopt:0.0072761956)Node178:0.0033999629,scottii:0.0120470371)Node177:0.0000033887,((cycadina:0.0000033509,namegatae:0.0000033509)Node181:0.0134486691,rosthornii:0.0000035526)Node180:0.0000029599)Node176:0.0000038360)Node7:0.0000033788,(lunanensis:0.0081932473,stenolepis:0.0093149254)Node182:0.0000033208)Node6:0.0000031495,gamblei:0.0026173481)Node5:0.0000030946,(anthracini:0.0083787361,atrata:0.0034758585)Node183:0.0081118356)Node4:0.0157594828,hangchowen:0.0026991679)Node3:0.0000027661,pycnoptero:0.0000039018)Node2:0.0000027306,commixta:0.0000037061)Node1;
+
+TIME STAMP
+----------
+
+Date and time: Mon Jan 13 14:21:23 2025
+Total CPU time used: 1345.28 seconds (0h:22m:25s)
+Total wall-clock time used: 457.071 seconds (0h:7m:37s)
+

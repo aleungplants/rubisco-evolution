@@ -1,0 +1,490 @@
+IQ-TREE 2.0.3 built Dec 19 2020
+
+Input file name: ../clean_aligned_csubst.fasta
+User tree file name: tmp.csubst.nwk
+Type of analysis: tree reconstruction
+Random seed number: 675747
+
+REFERENCES
+----------
+
+To cite IQ-TREE please use:
+
+Bui Quang Minh, Heiko A. Schmidt, Olga Chernomor, Dominik Schrempf,
+Michael D. Woodhams, Arndt von Haeseler, and Robert Lanfear (2020)
+IQ-TREE 2: New models and efficient methods for phylogenetic inference
+in the genomic era. Mol. Biol. Evol., in press.
+https://doi.org/10.1093/molbev/msaa015
+
+SEQUENCE ALIGNMENT
+------------------
+
+Input data: 184 sequences with 422 codon sites
+Number of constant sites: 339 (= 80.3318% of all sites)
+Number of invariant (constant or ambiguous constant) sites: 339 (= 80.3318% of all sites)
+Number of parsimony informative sites: 64
+Number of distinct site patterns: 299
+
+SUBSTITUTION PROCESS
+--------------------
+
+Model of substitution: ECMK07+F+R4
+
+State frequencies: (empirical counts from alignment)
+
+  pi(AAA) = 0.0369  pi(AAC) = 0.0144  pi(AAG) = 0.0026  pi(AAT) = 0.0218
+  pi(ACA) = 0.0124  pi(ACC) = 0.0145  pi(ACG) = 0.0000  pi(ACT) = 0.0409
+  pi(AGA) = 0.0162  pi(AGC) = 0.0004  pi(AGG) = 0.0006  pi(AGT) = 0.0041
+  pi(ATA) = 0.0046  pi(ATC) = 0.0190  pi(ATG) = 0.0197  pi(ATT) = 0.0210
+  pi(CAA) = 0.0193  pi(CAC) = 0.0211  pi(CAG) = 0.0047  pi(CAT) = 0.0118
+  pi(CCA) = 0.0123  pi(CCC) = 0.0045  pi(CCG) = 0.0052  pi(CCT) = 0.0270
+  pi(CGA) = 0.0115  pi(CGC) = 0.0070  pi(CGG) = 0.0000  pi(CGT) = 0.0299
+  pi(CTA) = 0.0196  pi(CTC) = 0.0000  pi(CTG) = 0.0056  pi(CTT) = 0.0216
+  pi(GAA) = 0.0557  pi(GAC) = 0.0104  pi(GAG) = 0.0128  pi(GAT) = 0.0441
+  pi(GCA) = 0.0215  pi(GCC) = 0.0084  pi(GCG) = 0.0039  pi(GCT) = 0.0559
+  pi(GGA) = 0.0354  pi(GGC) = 0.0098  pi(GGG) = 0.0115  pi(GGT) = 0.0448
+  pi(GTA) = 0.0271  pi(GTC) = 0.0027  pi(GTG) = 0.0106  pi(GTT) = 0.0250
+  pi(TAC) = 0.0142  pi(TAT) = 0.0282  pi(TCA) = 0.0050  pi(TCC) = 0.0135
+  pi(TCG) = 0.0021  pi(TCT) = 0.0129  pi(TGC) = 0.0048  pi(TGG) = 0.0141
+  pi(TGT) = 0.0121  pi(TTA) = 0.0161  pi(TTC) = 0.0159  pi(TTG) = 0.0254
+  pi(TTT) = 0.0258
+Model of rate heterogeneity: FreeRate with 4 categories
+Site proportion and rates:  (0.3457,0.1290) (0.3079,0.1880) (0.2889,0.9105) (0.0575,11.0380)
+
+ Category  Relative_rate  Proportion
+  1         0.1290         0.3457
+  2         0.1880         0.3079
+  3         0.9105         0.2889
+  4         11.0380        0.0575
+
+USER TREE
+---------
+
+Log-likelihood of the tree: -3222.8022 (s.e. 244.7164)
+Unconstrained log-likelihood (without tree): -2336.0532
+Number of free parameters (#branches + #model parameters): 431
+Akaike information criterion (AIC) score: 7307.6045
+Corrected Akaike information criterion (AICc) score: 379691.6045
+Bayesian information criterion (BIC) score: 9051.0018
+
+**************************** WARNING ****************************
+Number of parameters (K, model parameters and branch lengths): 431
+Sample size (n, alignment length): 422
+
+Given that K>=n, the parameter estimates might be inaccurate.
+Thus, phylogenetic estimates should be interpreted with caution.
+
+Ideally, it is desirable that n >> K. When selecting optimal models,
+1. use AIC or BIC if n > 40K;
+2. use AICc or BIC if 40K >= n > K;
+3. be extremely cautious if n <= K
+
+To improve the situation (3), consider the following options:
+  1. Increase the sample size (n)
+  2. Decrease the number of parameters (K) to be estimated. If
+     possible:
+     a. Remove the least important sequences from the alignment
+     b. Specify some of the parameter values for the substitution
+        model (e.g., the nucleotide or amino acid frequencies)
+     c. Specify some of the parameter values for the rates-across-
+        sites model (e.g., the shape parameter for the discrete
+        Gamma distribution, the proportion of invariable sites, or
+        the rates of change for different rate categories under
+        the FreeRate model)
+
+Reference:
+Burnham KR, Anderson DR (2002). Model Selection and Multimodel
+Inference: A Practical Information-Theoretic Approach. Springer,
+New York.
+************************ END OF WARNING ***********************
+
+Total tree length (sum of branch lengths): 0.4826
+Sum of internal branch lengths: 0.1594 (33.0363% of tree length)
+
+WARNING: 159 near-zero internal branches (<0.0024) should be treated with caution
+         Such branches are denoted by '**' in the figure below
+
+NOTE: Tree is UNROOTED although outgroup taxon 'cancellatu' is drawn at root
+
+NOTE: Branch lengths are interpreted as number of nucleotide substitutions per codon site!
+      Rescale them by 1/3 if you want to have #nt substitutions per nt site
+
++**cancellatu
+| (Node1)
+|                                                                         +**tomentellu
+|                                                                      +**| (Node23)
+|                                                                      |  +**platyphyll
+|                                                                   +**| (Node22)
+|                                                                   |  |  +**latifolium
+|                                                                   |  +**| (Node24)
+|                                                                   |     +**gmelini
+|                                                                +**| (Node21)
+|                                                                |  +**meyeri
+|                                                             +**| (Node20)
+|                                                             |  |                 +**brasiliens
+|                                                             |  |              +**| (Node30)
+|                                                             |  |              |  +**californic
+|                                                             |  |           +**| (Node29)
+|                                                             |  |           |  |  +**guaicuru
+|                                                             |  |           |  +**| (Node31)
+|                                                             |  |           |     +**limbatum
+|                                                             |  |        +**| (Node28)
+|                                                             |  |        |  +**diasii
+|                                                             |  |     +**| (Node27)
+|                                                             |  |     |  |  +**vulgare
+|                                                             |  |     |  +**| (Node32)
+|                                                             |  |     |     +**humile
+|                                                             |  |  +**| (Node26)
+|                                                             |  |  |  |     +**effusum
+|                                                             |  |  |  |  +**| (Node34)
+|                                                             |  |  |  |  |  +**compactum
+|                                                             |  |  |  +**| (Node33)
+|                                                             |  |  |     |     +**narbonense
+|                                                             |  |  |     |  +**| (Node36)
+|                                                             |  |  |     |  |  +**hungaricum
+|                                                             |  |  |     +**| (Node35)
+|                                                             |  |  |        +**brevipetio
+|                                                             |  +--| (Node25)
+|                                                             |     +**carolinian
+|                                                          +**| (Node19)
+|                                                          |  |  +**pycnanthum
+|                                                          |  +--| (Node37)
+|                                                          |     |  +**lilacinum
+|                                                          |     +**| (Node38)
+|                                                          |        +**globulifer
+|                                                 +--------| (Node18)
+|                                                 |        |        +**failachicu
+|                                                 |        |     +--| (Node41)
+|                                                 |        |     |  +**palmyrense
+|                                                 |        |  +**| (Node40)
+|                                                 |        |  |  |  +**suffrutico
+|                                                 |        |  |  +**| (Node42)
+|                                                 |        |  |     +----iranicum
+|                                                 |        +**| (Node39)
+|                                                 |           +--anatolicum
+|                                              +**| (Node17)
+|                                              |  |         +**milleri
+|                                              |  |      +**| (Node45)
+|                                              |  |      |  +**axillare
+|                                              |  |   +**| (Node44)
+|                                              |  |   |  |  +**paulayanum
+|                                              |  |   |  +**| (Node46)
+|                                              |  |   |     +**sarcophyll
+|                                              |  +---| (Node43)
+|                                              |      |  +**sokotranum
+|                                              |      +**| (Node47)
+|                                              |         +**somalorum
+|                                           +--| (Node16)
+|                                           |  |                       +--perfoliatu
+|                                           |  |                    +**| (Node51)
+|                                           |  |                    |  +**otolepis
+|                                           |  |     +--------------| (Node50)
+|                                           |  |     |              |  +--iconicum
+|                                           |  |     |              +**| (Node52)
+|                                           |  |     |                 |  +**bellidifol
+|                                           |  |     |                 +--| (Node53)
+|                                           |  |     |                    +**sp1
+|                                           |  |  +**| (Node49)
+|                                           |  |  |  |                +**corculum
+|                                           |  |  |  |             +**| (Node58)
+|                                           |  |  |  |             |  +**solandri
+|                                           |  |  |  |          +**| (Node57)
+|                                           |  |  |  |          |  +**divaricatu
+|                                           |  |  |  |       +**| (Node56)
+|                                           |  |  |  |       |  |     +**brunneri
+|                                           |  |  |  |       |  |  +**| (Node60)
+|                                           |  |  |  |       |  |  |  +**braunii
+|                                           |  |  |  |       |  +**| (Node59)
+|                                           |  |  |  |       |     +**papillatum
+|                                           |  |  |  |    +--| (Node55)
+|                                           |  |  |  |    |  |  +**fallax
+|                                           |  |  |  |    |  +**| (Node61)
+|                                           |  |  |  |    |     +**mucronatum
+|                                           |  |  |  +----| (Node54)
+|                                           |  |  |       |  +-----lobinii
+|                                           |  |  |       +**| (Node62)
+|                                           |  |  |          |  +**jovibarba
+|                                           |  |  |          +**| (Node63)
+|                                           |  |  |             +**sundingii
+|                                           |  +**| (Node48)
+|                                           |     |                        +------------dichroanth
+|                                           |     |            +-----------| (Node66)
+|                                           |     |            |           |        +**sinense
+|                                           |     |            |           |     +**| (Node69)
+|                                           |     |            |           |     |  |     +**flexuosum
+|                                           |     |            |           |     |  |  +**| (Node71)
+|                                           |     |            |           |     |  |  |  +**tenellum
+|                                           |     |            |           |     |  +**| (Node70)
+|                                           |     |            |           |     |     +**tetragonum
+|                                           |     |            |           |  +**| (Node68)
+|                                           |     |            |           |  |  +--wrightii
+|                                           |     |            |           +**| (Node67)
+|                                           |     |            |              +**aureum
+|                                           |     |  +---------| (Node65)
+|                                           |     |  |         |  +**hoeltzeri
+|                                           |     |  |         +**| (Node72)
+|                                           |     |  |            +**kaschgaric
+|                                           |     +**| (Node64)
+|                                           |        |        +**capense
+|                                           |        |     +**| (Node74)
+|                                           |        |     |  +**peregrinum
+|                                           |        +-----| (Node73)
+|                                           |              +**purpuratum
+|                                        +--| (Node15)
+|                                        |  |                                                              +--vigaroense
+|                                        |  |                                                           +**| (Node80)
+|                                        |  |                                                           |  |  +**preauxii
+|                                        |  |                                                           |  +**| (Node81)
+|                                        |  |                                                           |     |  +**benmageci
+|                                        |  |                                                           |     +**| (Node82)
+|                                        |  |                                                           |        +**sventenii
+|                                        |  |                                                        +**| (Node79)
+|                                        |  |                                                        |  |        +**macropteru
+|                                        |  |                                                        |  |     +**| (Node85)
+|                                        |  |                                                        |  |     |  +**brassicifo
+|                                        |  |                                                        |  |  +**| (Node84)
+|                                        |  |                                                        |  |  |  +**relicticum
+|                                        |  |                                                        |  +**| (Node83)
+|                                        |  |                                                        |     +**redivivum
+|                                        |  |                                                     +**| (Node78)
+|                                        |  |                                                     |  |        +**imbricatum
+|                                        |  |                                                     |  |     +**| (Node88)
+|                                        |  |                                                     |  |     |  |  +**perezii
+|                                        |  |                                                     |  |     |  +**| (Node89)
+|                                        |  |                                                     |  |     |     +**spectabile
+|                                        |  |                                                     |  |  +**| (Node87)
+|                                        |  |                                                     |  |  |  |  +**arboreum
+|                                        |  |                                                     |  |  |  +**| (Node90)
+|                                        |  |                                                     |  |  |     +**frutescens
+|                                        |  |                                                     |  +**| (Node86)
+|                                        |  |                                                     |     |  +**bourgeaui
+|                                        |  |                                                     |     +**| (Node91)
+|                                        |  |                                                     |        +**puberulum
+|                                        |  |                                                  +**| (Node77)
+|                                        |  |                                                  |  +**macrophyll
+|                                        |  |  +-----------------------------------------------| (Node76)
+|                                        |  |  |                                               |        +**bonduellei
+|                                        |  |  |                                               |     +--| (Node94)
+|                                        |  |  |                                               |     |  |  +**sinuatum
+|                                        |  |  |                                               |     |  +**| (Node95)
+|                                        |  |  |                                               |     |     +**beaumieria
+|                                        |  |  |                                               |  +**| (Node93)
+|                                        |  |  |                                               |  |  +**lobatum
+|                                        |  |  |                                               +**| (Node92)
+|                                        |  |  |                                                  +--mouretii
+|                                        |  +**| (Node75)
+|                                        |     +---------dendroides
+|                                   +----| (Node14)
+|                                   |    |        +**pruinosum
+|                                   |    |     +**| (Node97)
+|                                   |    |     |  +**tuberculat
+|                                   |    +-----| (Node96)
+|                                   |          |  +**insigne
+|                                   |          +**| (Node98)
+|                                   |             +**caesium
+|                                +**| (Node13)
+|                                |  |  +**echioides
+|                                |  +--| (Node99)
+|                                |     +**longebract
+|                             +**| (Node12)
+|                             |  |                                               +**grabusae
+|                             |  |                                            +**| (Node110)
+|                             |  |                                            |  +-----------------------cythereum
+|                             |  |                                         +**| (Node109)
+|                             |  |                                         |  +**roridum
+|                             |  |                                      +**| (Node108)
+|                             |  |                                      |  +**proliferum
+|                             |  |                                   +**| (Node107)
+|                             |  |                                   |  |  +**recticaule
+|                             |  |                                   |  +**| (Node111)
+|                             |  |                                   |     +**craterifor
+|                             |  |                                +**| (Node106)
+|                             |  |                                |  +**stenotatum
+|                             |  |                             +**| (Node105)
+|                             |  |                             |  |  +-----------------algarvense
+|                             |  |                             |  +**| (Node112)
+|                             |  |                             |     +**sougiae
+|                             |  |           +-----------------| (Node104)
+|                             |  |           |                 |     +**oligotrich
+|                             |  |           |                 |  +**| (Node114)
+|                             |  |           |                 |  |  |  +**calliopsiu
+|                             |  |           |                 |  |  +**| (Node115)
+|                             |  |           |                 |  |     +**spreitzenh
+|                             |  |           |                 +**| (Node113)
+|                             |  |           |                    +--ammophilon
+|                             |  |        +**| (Node103)
+|                             |  |        |  |  +**albomargin
+|                             |  |        |  +**| (Node116)
+|                             |  |        |     +-----------------xiliense
+|                             |  |     +**| (Node102)
+|                             |  |     |  |     +**lanceolatu
+|                             |  |     |  |  +**| (Node118)
+|                             |  |     |  |  |  |     +**lowei
+|                             |  |     |  |  |  |  +**| (Node120)
+|                             |  |     |  |  |  |  |  +**ovalifoliu
+|                             |  |     |  |  |  +**| (Node119)
+|                             |  |     |  |  |     +**bollei
+|                             |  |     |  +**| (Node117)
+|                             |  |     |     |  +**carpetanic
+|                             |  |     |     +**| (Node121)
+|                             |  |     |        +**nydeggeri
+|                             |  |  +**| (Node101)
+|                             |  |  |  |  +**cossonianu
+|                             |  |  |  +**| (Node122)
+|                             |  |  |     +**tabernense
+|                             |  +**| (Node100)
+|                             |     |           +**thiniense
+|                             |     |        +**| (Node126)
+|                             |     |        |  +**girardianu
+|                             |     |     +**| (Node125)
+|                             |     |     |  +**delicatulu
+|                             |     |  +**| (Node124)
+|                             |     |  |  +**estevei
+|                             |     +**| (Node123)
+|                             |        +**tunetanum
+|                          +**| (Node11)
+|                          |  |                        +**ocymifoliu
+|                          |  |                     +**| (Node129)
+|                          |  |                     |  +**frederici
+|                          |  |  +------------------| (Node128)
+|                          |  |  |                  +**amopicum
+|                          |  +**| (Node127)
+|                          |     +**latebracte
+|                       +**| (Node10)
+|                       |  |  +**cornarianu
+|                       |  +**| (Node130)
+|                       |     +**sp2
+|                    +**| (Node9)
+|                    |  +**gymnesicum
+|                 +**| (Node8)
+|                 |  +**gougetianu
+|              +**| (Node7)
+|              |  |                    +-----------------------------aucheri
+|              |  |                 +**| (Node137)
+|              |  |                 |  +**pigadiense
+|              |  |              +**| (Node136)
+|              |  |              |  |  +**minutiflor
+|              |  |              |  +**| (Node138)
+|              |  |              |     +**aphroditae
+|              |  |           +**| (Node135)
+|              |  |           |  +**meandrinum
+|              |  |        +**| (Node134)
+|              |  |        |  |     +**minutum
+|              |  |        |  |  +**| (Node140)
+|              |  |        |  |  |  +-----------------------creticum
+|              |  |        |  +**| (Node139)
+|              |  |        |     +--pseudebusi
+|              |  |     +**| (Node133)
+|              |  |     |  +**ebusitanum
+|              |  |  +**| (Node132)
+|              |  |  |  |  +**santapolen
+|              |  |  |  +**| (Node141)
+|              |  |  |     +**furfuraceu
+|              |  +**| (Node131)
+|              |     |  +**cordatum
+|              |     +**| (Node142)
+|              |        +**confusum
+|           +**| (Node6)
+|           |  |           +**subglabrum
+|           |  |        +**| (Node146)
+|           |  |        |  +----cymuliferu
+|           |  |     +**| (Node145)
+|           |  |     |  |  +**camposanum
+|           |  |     |  +**| (Node147)
+|           |  |     |     +**biflorum
+|           |  |  +**| (Node144)
+|           |  |  |  +**scopulorum
+|           |  +**| (Node143)
+|           |     |        +**multifloru
+|           |     |     +**| (Node150)
+|           |     |     |  +**daveaui
+|           |     |  +**| (Node149)
+|           |     |  |  +**binervosum
+|           |     +**| (Node148)
+|           |        |     +**densissimu
+|           |        |  +**| (Node152)
+|           |        |  |  +**hyblaeum
+|           |        +**| (Node151)
+|           |           +**sieberi
+|        +**| (Node5)
+|        |  |           +**ursifolium
+|        |  |        +**| (Node156)
+|        |  |        |  +**rhumile
+|        |  |     +**| (Node155)
+|        |  |     |  +**dodartii
+|        |  |  +**| (Node154)
+|        |  |  |  |        +--toletanum
+|        |  |  |  |     +**| (Node159)
+|        |  |  |  |     |  +**erectum
+|        |  |  |  |  +**| (Node158)
+|        |  |  |  |  |  +**tournefort
+|        |  |  |  +--| (Node157)
+|        |  |  |     +**dichotomum
+|        |  +**| (Node153)
+|        |     |  +**supinum
+|        |     +**| (Node160)
+|        |        |  +--aragonense
+|        |        +**| (Node161)
+|        |           |  +**rigualii
+|        |           +**| (Node162)
+|        |              |  +**virgatum
+|        |              +**| (Node163)
+|        |                 +**plurisquam
+|     +**| (Node4)
+|     |  |  +**dufourii
+|     |  +**| (Node164)
+|     |     +**cosyrense
+|  +**| (Node3)
+|  |  |     +--scabrum
+|  |  |  +**| (Node166)
+|  |  |  |  |     +**remotispic
+|  |  |  |  |  +**| (Node168)
+|  |  |  |  |  |  +**minoicum
+|  |  |  |  +**| (Node167)
+|  |  |  |     +--hibericum
+|  |  +**| (Node165)
+|  |     |  +**saracinatu
+|  |     +**| (Node169)
+|  |        +**cephalonic
++**| (Node2)
+|  |           +**greuteri
+|  |        +**| (Node173)
+|  |        |  +**bonifacien
+|  |     +**| (Node172)
+|  |     |  +**circaei
+|  |  +**| (Node171)
+|  |  |  |        +----------------------archaeothi
+|  |  |  |     +**| (Node176)
+|  |  |  |     |  +**bocconei
+|  |  |  |  +**| (Node175)
+|  |  |  |  |  +**obtusifoli
+|  |  |  +**| (Node174)
+|  |  |     |  +**contortira
+|  |  |     +**| (Node177)
+|  |  |        |     +**carthagine
+|  |  |        |  +**| (Node179)
+|  |  |        |  |  +**corsicum
+|  |  |        +**| (Node178)
+|  |  |           +**articulatu
+|  +**| (Node170)
+|     |  +**hierapetra
+|     +**| (Node180)
+|        +**multiforme
+|
+|     +**coronense
+|  +**| (Node182)
+|  |  +**pylium
++**| (Node181)
+   +**kardamylii
+
+Tree in newick format:
+
+(cancellatu:0.0000049695,((((((((((((((((((((((tomentellu:0.0000044311,platyphyll:0.0000044311)Node23:0.0000040189,(latifolium:0.0000045650,gmelini:0.0000045650)Node24:0.0000048289)Node22:0.0000038930,meyeri:0.0000042950)Node21:0.0000050617,((((((brasiliens:0.0000038758,californic:0.0000038758)Node30:0.0000044886,(guaicuru:0.0000046991,limbatum:0.0000046991)Node31:0.0000044373)Node29:0.0000050253,diasii:0.0000034904)Node28:0.0000035383,(vulgare:0.0000047372,humile:0.0000047372)Node32:0.0000040228)Node27:0.0000034709,((effusum:0.0000046346,compactum:0.0000046346)Node34:0.0000036438,((narbonense:0.0000037128,hungaricum:0.0000037128)Node36:0.0000037421,brevipetio:0.0000042187)Node35:0.0000037978)Node33:0.0000036934)Node26:0.0000049137,carolinian:0.0000034782)Node25:0.0027267810)Node20:0.0000047809,(pycnanthum:0.0000045111,(lilacinum:0.0000050805,globulifer:0.0000050805)Node38:0.0000036707)Node37:0.0029200215)Node19:0.0000041142,(((failachicu:0.0000041610,palmyrense:0.0000041610)Node41:0.0030361729,(suffrutico:0.0000050011,iranicum:0.0063427015)Node42:0.0000035045)Node40:0.0000040224,anatolicum:0.0027576721)Node39:0.0000045442)Node18:0.0113462371,(((milleri:0.0000035132,axillare:0.0000035132)Node45:0.0000045473,(paulayanum:0.0000035256,sarcophyll:0.0000035256)Node46:0.0000045225)Node44:0.0000038827,(sokotranum:0.0000042741,somalorum:0.0000042741)Node47:0.0000045360)Node43:0.0049672192)Node17:0.0000048788,((((perfoliatu:0.0027049957,otolepis:0.0000036767)Node51:0.0000038351,(iconicum:0.0027001068,(bellidifol:0.0016992364,sp1:0.0000042102)Node53:0.0026733323)Node52:0.0000049167)Node50:0.0187462659,(((((corculum:0.0000050760,solandri:0.0000050760)Node58:0.0000040484,divaricatu:0.0000039798)Node57:0.0000034834,((brunneri:0.0000041010,braunii:0.0000041010)Node60:0.0000051477,papillatum:0.0000046243)Node59:0.0000050997)Node56:0.0000047154,(fallax:0.0000042889,mucronatum:0.0000042889)Node61:0.0000038890)Node55:0.0046022377,(lobinii:0.0082402024,(jovibarba:0.0000043639,sundingii:0.0000043639)Node63:0.0000040962)Node62:0.0000042879)Node54:0.0065296119)Node49:0.0000035849,(((dichroanth:0.0166607004,(((sinense:0.0000047966,((flexuosum:0.0000046893,tenellum:0.0000046893)Node71:0.0000036263,tetragonum:0.0000041578)Node70:0.0000042741)Node69:0.0000041924,wrightii:0.0027195519)Node68:0.0000035839,aureum:0.0000048086)Node67:0.0000035945)Node66:0.0153066990,(hoeltzeri:0.0000046604,kaschgaric:0.0000046604)Node72:0.0000036626)Node65:0.0123366440,((capense:0.0000036011,peregrinum:0.0000036011)Node74:0.0000048810,purpuratum:0.0000047695)Node73:0.0080860793)Node64:0.0000040449)Node48:0.0000047355)Node16:0.0030700056,((((((vigaroense:0.0036009323,(preauxii:0.0000039673,(benmageci:0.0000043390,sventenii:0.0000043390)Node82:0.0000049056)Node81:0.0000048935)Node80:0.0000040255,(((macropteru:0.0000035111,brassicifo:0.0000035111)Node85:0.0000043050,relicticum:0.0000048041)Node84:0.0000036533,redivivum:0.0000035219)Node83:0.0000044364)Node79:0.0000041859,(((imbricatum:0.0000035275,(perezii:0.0000041381,spectabile:0.0000041381)Node89:0.0000037580)Node88:0.0000047104,(arboreum:0.0000041714,frutescens:0.0000041714)Node90:0.0000036355)Node87:0.0000039477,(bourgeaui:0.0000044358,puberulum:0.0000044358)Node91:0.0000035258)Node86:0.0000043433)Node78:0.0000044232,macrophyll:0.0000036187)Node77:0.0000040489,(((bonduellei:0.0000043385,(sinuatum:0.0000039321,beaumieria:0.0000039321)Node95:0.0000047449)Node94:0.0026282120,lobatum:0.0000039363)Node93:0.0000049760,mouretii:0.0039526500)Node92:0.0000048167)Node76:0.0575939269,dendroides:0.0125145496)Node75:0.0000040079)Node15:0.0029683840,((pruinosum:0.0000038838,tuberculat:0.0000038838)Node97:0.0000040109,(insigne:0.0000048785,caesium:0.0000037468)Node98:0.0000037685)Node96:0.0073503166)Node14:0.0069381776,(echioides:0.0000034635,longebract:0.0000034635)Node99:0.0032252439)Node13:0.0000047403,(((((((((((grabusae:0.0000049901,cythereum:0.0293024958)Node110:0.0000047766,roridum:0.0000050118)Node109:0.0000050461,proliferum:0.0000050290)Node108:0.0000040560,(recticaule:0.0000043889,craterifor:0.0000043889)Node111:0.0000049457)Node107:0.0000051143,stenotatum:0.0000040905)Node106:0.0000039819,(algarvense:0.0215672238,sougiae:0.0000038481)Node112:0.0000037889)Node105:0.0000050190,((oligotrich:0.0000044383,(calliopsiu:0.0000046704,spreitzenh:0.0000046704)Node115:0.0000037004)Node114:0.0000048716,ammophilon:0.0026731021)Node113:0.0000037275)Node104:0.0217048518,(albomargin:0.0000047279,xiliense:0.0223604810)Node116:0.0000037826)Node103:0.0000050583,((lanceolatu:0.0000035915,((lowei:0.0000043865,ovalifoliu:0.0000043865)Node120:0.0000047710,bollei:0.0000045788)Node119:0.0000047117)Node118:0.0000043156,(carpetanic:0.0000040110,nydeggeri:0.0000040110)Node121:0.0000040064)Node117:0.0000039523)Node102:0.0000045853,(cossonianu:0.0000042805,tabernense:0.0000042805)Node122:0.0000041073)Node101:0.0000036795,((((thiniense:0.0000039657,girardianu:0.0000039657)Node126:0.0000042413,delicatulu:0.0000035418)Node125:0.0000050703,estevei:0.0000034682)Node124:0.0000034421,tunetanum:0.0000034551)Node123:0.0000037921)Node100:0.0000039404)Node12:0.0000044996,(((ocymifoliu:0.0000040020,frederici:0.0000040020)Node129:0.0000039098,amopicum:0.0000050513)Node128:0.0231907109,latebracte:0.0000034855)Node127:0.0000043392)Node11:0.0000037534,(cornarianu:0.0000049887,sp2:0.0000049887)Node130:0.0000040019)Node10:0.0000037737,gymnesicum:0.0000034542)Node9:0.0000036207,gougetianu:0.0000045110)Node8:0.0000050554,(((((((aucheri:0.0365745948,pigadiense:0.0000035148)Node137:0.0000044171,(minutiflor:0.0000049618,aphroditae:0.0000049618)Node138:0.0000045043)Node136:0.0000045092,meandrinum:0.0000049121)Node135:0.0000035304,((minutum:0.0000040179,creticum:0.0290404751)Node140:0.0000037537,pseudebusi:0.0024442815)Node139:0.0000035349)Node134:0.0000046310,ebusitanum:0.0000035140)Node133:0.0000040288,(santapolen:0.0022996072,furfuraceu:0.0000051366)Node141:0.0000041691)Node132:0.0000038496,(cordatum:0.0000034868,confusum:0.0000034868)Node142:0.0000034626)Node131:0.0000039362)Node7:0.0000034621,((((subglabrum:0.0000042769,cymuliferu:0.0060854754)Node146:0.0000040583,(camposanum:0.0000050694,biflorum:0.0000041527)Node147:0.0000040693)Node145:0.0000036664,scopulorum:0.0000050847)Node144:0.0000039479,(((multifloru:0.0000050302,daveaui:0.0000038300)Node150:0.0000049852,binervosum:0.0000044076)Node149:0.0000048586,((densissimu:0.0000047748,hyblaeum:0.0000047748)Node152:0.0000045388,sieberi:0.0000050149)Node151:0.0000042691)Node148:0.0000040927)Node143:0.0000036910)Node6:0.0000043770,((((ursifolium:0.0000050263,rhumile:0.0000050263)Node156:0.0000037735,dodartii:0.0000046003)Node155:0.0000045455,(((toletanum:0.0025213954,erectum:0.0000037904)Node159:0.0000035144,tournefort:0.0000046881)Node158:0.0000042400,dichotomum:0.0000044641)Node157:0.0025872636)Node154:0.0000035432,(supinum:0.0000045203,(aragonense:0.0025977948,(rigualii:0.0012324125,(virgatum:0.0000046722,plurisquam:0.0000035056)Node163:0.0000037383)Node162:0.0000038771)Node161:0.0000038460)Node160:0.0000041222)Node153:0.0000048919)Node5:0.0000038215,(dufourii:0.0000037882,cosyrense:0.0000037882)Node164:0.0000035983)Node4:0.0000042478,((scabrum:0.0024234641,((remotispic:0.0000050773,minoicum:0.0000050773)Node168:0.0000050539,hibericum:0.0033711083)Node167:0.0000043879)Node166:0.0000045350,(saracinatu:0.0000039065,cephalonic:0.0000039065)Node169:0.0000036477)Node165:0.0000042042)Node3:0.0000038062,((((greuteri:0.0000049933,bonifacien:0.0000049933)Node173:0.0000037183,circaei:0.0000034811)Node172:0.0000034882,(((archaeothi:0.0283473115,bocconei:0.0000040902)Node176:0.0000046701,obtusifoli:0.0000036424)Node175:0.0000037081,(contortira:0.0000044438,((carthagine:0.0000043718,corsicum:0.0000043718)Node179:0.0000044268,articulatu:0.0000037361)Node178:0.0000051514)Node177:0.0000048104)Node174:0.0000041724)Node171:0.0000046592,(hierapetra:0.0000042598,multiforme:0.0000042598)Node180:0.0000035346)Node170:0.0000035871)Node2:0.0000036689,((coronense:0.0000044974,pylium:0.0000044974)Node182:0.0000036413,kardamylii:0.0000040694)Node181:0.0000035193)Node1;
+
+TIME STAMP
+----------
+
+Date and time: Tue Dec 10 17:36:16 2024
+Total CPU time used: 180.346 seconds (0h:3m:0s)
+Total wall-clock time used: 63.3221 seconds (0h:1m:3s)
+

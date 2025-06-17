@@ -1,0 +1,340 @@
+   ********************************************
+   ***                                      ***
+   ***             FoldX 5.1 (c)            ***
+   ***                                      ***
+   ***     code by the FoldX Consortium     ***
+   ***                                      ***
+   ***     Jesper Borg, Frederic Rousseau   ***
+   ***    Joost Schymkowitz, Luis Serrano   ***
+   ***    Peter Vanhee, Erik Verschueren    ***
+   ***     Lies Baeten, Javier Delgado      ***
+   ***       and Francois Stricher          ***
+   *** and any other of the 9! permutations ***
+   ***   based on an original concept by    ***
+   ***   Raphael Guerois and Luis Serrano   ***
+   ********************************************
+
+ *** THIS IS AN IMPORTANT MESSAGE: 
+ >> External parametrized molecules were detected...
+ >> Final energetic values will depend of the correct parametrization of this molecules. 
+
+
+1 models read: 8ruc-assembly-clean_Repair.pdb
+1 models read: 8ruc-assembly-clean_Repair.pdb
+
+BackHbond       =               -3996.85
+SideHbond       =               -2172.91
+Energy_VdW      =               -6258.35
+Electro         =               -375.98
+Energy_SolvP    =               8709.95
+Energy_SolvH    =               -8399.37
+Energy_vdwclash =               75.39
+energy_torsion  =               5.52
+backbone_vdwclash=              858.95
+Entropy_sidec   =               3201.08
+Entropy_mainc   =               7361.29
+water bonds     =               0.00
+helix dipole    =               -16.28
+loop_entropy    =               0.00
+cis_bond        =               8.99
+disulfide       =               -7.18
+kn electrostatic=               -14.42
+partial covalent interactions = 0.00
+Energy_Ionisation =             33.24
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -1845.87
+
+
+BackHbond       =               -3996.85
+SideHbond       =               -2172.91
+Energy_VdW      =               -6258.35
+Electro         =               -375.98
+Energy_SolvP    =               8709.95
+Energy_SolvH    =               -8399.37
+Energy_vdwclash =               75.39
+energy_torsion  =               5.52
+backbone_vdwclash=              858.95
+Entropy_sidec   =               3201.08
+Entropy_mainc   =               7361.29
+water bonds     =               0.00
+helix dipole    =               -16.28
+loop_entropy    =               0.00
+cis_bond        =               8.99
+disulfide       =               -7.18
+kn electrostatic=               -14.42
+partial covalent interactions = 0.00
+Energy_Ionisation =             33.24
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -1845.87
+
+Starting BuildModel
+Reading AA317G,AB317G,AC317G,AD317G,AE317G,AF317G,AG317G,AH317G;
+Reading SA328A,SB328A,SC328A,SD328A,SE328A,SF328A,SG328A,SH328A;
+Reading SA328A,SB328A,SC328A,SD328A,SE328A,SF328A,SG328A,SH328A;
+Reading SA328G,SB328G,SC328G,SD328G,SE328G,SF328G,SG328G,SH328G;
+Reading TA449S,TB449S,TC449S,TD449S,TE449S,TF449S,TG449S,TH449S;
+Reading TA449C,TB449C,TC449C,TD449C,TE449C,TF449C,TG449C,TH449C;
+Reading VA461I,VB461I,VC461I,VD461I,VE461I,VF461I,VG461I,VH461I;
+Reading MA472V,MB472V,MC472V,MD472V,ME472V,MF472V,MG472V,MH472V;
+Residue to Mutate ALAA317 has residue index 308
+Residue to Mutate ALAB317 has residue index 775
+Residue to Mutate ALAC317 has residue index 1242
+Residue to Mutate ALAD317 has residue index 1709
+Residue to Mutate ALAE317 has residue index 2176
+Residue to Mutate ALAF317 has residue index 2643
+Residue to Mutate ALAG317 has residue index 3110
+Residue to Mutate ALAH317 has residue index 3577
+Residue to Mutate SERA328 has residue index 319
+Residue to Mutate SERB328 has residue index 786
+Residue to Mutate SERC328 has residue index 1253
+Residue to Mutate SERD328 has residue index 1720
+Residue to Mutate SERE328 has residue index 2187
+Residue to Mutate SERF328 has residue index 2654
+Residue to Mutate SERG328 has residue index 3121
+Residue to Mutate SERH328 has residue index 3588
+Residue to Mutate SERA328 has residue index 319
+Residue to Mutate SERB328 has residue index 786
+Residue to Mutate SERC328 has residue index 1253
+Residue to Mutate SERD328 has residue index 1720
+Residue to Mutate SERE328 has residue index 2187
+Residue to Mutate SERF328 has residue index 2654
+Residue to Mutate SERG328 has residue index 3121
+Residue to Mutate SERH328 has residue index 3588
+Residue to Mutate SERA328 has residue index 319
+Residue to Mutate SERB328 has residue index 786
+Residue to Mutate SERC328 has residue index 1253
+Residue to Mutate SERD328 has residue index 1720
+Residue to Mutate SERE328 has residue index 2187
+Residue to Mutate SERF328 has residue index 2654
+Residue to Mutate SERG328 has residue index 3121
+Residue to Mutate SERH328 has residue index 3588
+Residue to Mutate THRA449 has residue index 440
+Residue to Mutate THRB449 has residue index 907
+Residue to Mutate THRC449 has residue index 1374
+Residue to Mutate THRD449 has residue index 1841
+Residue to Mutate THRE449 has residue index 2308
+Residue to Mutate THRF449 has residue index 2775
+Residue to Mutate THRG449 has residue index 3242
+Residue to Mutate THRH449 has residue index 3709
+Residue to Mutate THRA449 has residue index 440
+Residue to Mutate THRB449 has residue index 907
+Residue to Mutate THRC449 has residue index 1374
+Residue to Mutate THRD449 has residue index 1841
+Residue to Mutate THRE449 has residue index 2308
+Residue to Mutate THRF449 has residue index 2775
+Residue to Mutate THRG449 has residue index 3242
+Residue to Mutate THRH449 has residue index 3709
+Residue to Mutate VALA461 has residue index 452
+Residue to Mutate VALB461 has residue index 919
+Residue to Mutate VALC461 has residue index 1386
+Residue to Mutate VALD461 has residue index 1853
+Residue to Mutate VALE461 has residue index 2320
+Residue to Mutate VALF461 has residue index 2787
+Residue to Mutate VALG461 has residue index 3254
+Residue to Mutate VALH461 has residue index 3721
+Residue to Mutate META472 has residue index 463
+Residue to Mutate METB472 has residue index 930
+Residue to Mutate METC472 has residue index 1397
+Residue to Mutate METD472 has residue index 1864
+Residue to Mutate METE472 has residue index 2331
+Residue to Mutate METF472 has residue index 2798
+Residue to Mutate METG472 has residue index 3265
+Residue to Mutate METH472 has residue index 3732
+Mutating residue = ALAA317 into GLY
+Mutating residue = ALAB317 into GLY
+Mutating residue = ALAC317 into GLY
+Mutating residue = ALAD317 into GLY
+Mutating residue = ALAE317 into GLY
+Mutating residue = ALAF317 into GLY
+Mutating residue = ALAG317 into GLY
+Mutating residue = ALAH317 into GLY
+Mutating residue = ALAA317 into GLY
+Mutating residue = ALAB317 into GLY
+Mutating residue = ALAC317 into GLY
+Mutating residue = ALAD317 into GLY
+Mutating residue = ALAE317 into GLY
+Mutating residue = ALAF317 into GLY
+Mutating residue = ALAG317 into GLY
+Mutating residue = ALAH317 into GLY
+Mutating residue = ALAA317 into GLY
+Mutating residue = ALAB317 into GLY
+Mutating residue = ALAC317 into GLY
+Mutating residue = ALAD317 into GLY
+Mutating residue = ALAE317 into GLY
+Mutating residue = ALAF317 into GLY
+Mutating residue = ALAG317 into GLY
+Mutating residue = ALAH317 into GLY
+Mutating residue = SERA328 into ALA
+Mutating residue = SERB328 into ALA
+Mutating residue = SERC328 into ALA
+Mutating residue = SERD328 into ALA
+Mutating residue = SERE328 into ALA
+Mutating residue = SERF328 into ALA
+Mutating residue = SERG328 into ALA
+Mutating residue = SERH328 into ALA
+Mutating residue = SERA328 into ALA
+Mutating residue = SERB328 into ALA
+Mutating residue = SERC328 into ALA
+Mutating residue = SERD328 into ALA
+Mutating residue = SERE328 into ALA
+Mutating residue = SERF328 into ALA
+Mutating residue = SERG328 into ALA
+Mutating residue = SERH328 into ALA
+Mutating residue = SERA328 into ALA
+Mutating residue = SERB328 into ALA
+Mutating residue = SERC328 into ALA
+Mutating residue = SERD328 into ALA
+Mutating residue = SERE328 into ALA
+Mutating residue = SERF328 into ALA
+Mutating residue = SERG328 into ALA
+Mutating residue = SERH328 into ALA
+Mutating residue = SERA328 into ALA
+Mutating residue = SERB328 into ALA
+Mutating residue = SERC328 into ALA
+Mutating residue = SERD328 into ALA
+Mutating residue = SERE328 into ALA
+Mutating residue = SERF328 into ALA
+Mutating residue = SERG328 into ALA
+Mutating residue = SERH328 into ALA
+Mutating residue = SERA328 into ALA
+Mutating residue = SERB328 into ALA
+Mutating residue = SERC328 into ALA
+Mutating residue = SERD328 into ALA
+Mutating residue = SERE328 into ALA
+Mutating residue = SERF328 into ALA
+Mutating residue = SERG328 into ALA
+Mutating residue = SERH328 into ALA
+Mutating residue = SERA328 into ALA
+Mutating residue = SERB328 into ALA
+Mutating residue = SERC328 into ALA
+Mutating residue = SERD328 into ALA
+Mutating residue = SERE328 into ALA
+Mutating residue = SERF328 into ALA
+Mutating residue = SERG328 into ALA
+Mutating residue = SERH328 into ALA
+Mutating residue = SERA328 into GLY
+Mutating residue = SERB328 into GLY
+Mutating residue = SERC328 into GLY
+Mutating residue = SERD328 into GLY
+Mutating residue = SERE328 into GLY
+Mutating residue = SERF328 into GLY
+Mutating residue = SERG328 into GLY
+Mutating residue = SERH328 into GLY
+Mutating residue = SERA328 into GLY
+Mutating residue = SERB328 into GLY
+Mutating residue = SERC328 into GLY
+Mutating residue = SERD328 into GLY
+Mutating residue = SERE328 into GLY
+Mutating residue = SERF328 into GLY
+Mutating residue = SERG328 into GLY
+Mutating residue = SERH328 into GLY
+Mutating residue = SERA328 into GLY
+Mutating residue = SERB328 into GLY
+Mutating residue = SERC328 into GLY
+Mutating residue = SERD328 into GLY
+Mutating residue = SERE328 into GLY
+Mutating residue = SERF328 into GLY
+Mutating residue = SERG328 into GLY
+Mutating residue = SERH328 into GLY
+Mutating residue = THRA449 into SER
+Mutating residue = THRB449 into SER
+Mutating residue = THRC449 into SER
+Mutating residue = THRD449 into SER
+Mutating residue = THRE449 into SER
+Mutating residue = THRF449 into SER
+Mutating residue = THRG449 into SER
+Mutating residue = THRH449 into SER
+Mutating residue = THRA449 into SER
+Mutating residue = THRB449 into SER
+Mutating residue = THRC449 into SER
+Mutating residue = THRD449 into SER
+Mutating residue = THRE449 into SER
+Mutating residue = THRF449 into SER
+Mutating residue = THRG449 into SER
+Mutating residue = THRH449 into SER
+Mutating residue = THRA449 into SER
+Mutating residue = THRB449 into SER
+Mutating residue = THRC449 into SER
+Mutating residue = THRD449 into SER
+Mutating residue = THRE449 into SER
+Mutating residue = THRF449 into SER
+Mutating residue = THRG449 into SER
+Mutating residue = THRH449 into SER
+Mutating residue = THRA449 into CYS
+Mutating residue = THRB449 into CYS
+Mutating residue = THRC449 into CYS
+Mutating residue = THRD449 into CYS
+Mutating residue = THRE449 into CYS
+Mutating residue = THRF449 into CYS
+Mutating residue = THRG449 into CYS
+Mutating residue = THRH449 into CYS
+Mutating residue = THRA449 into CYS
+Mutating residue = THRB449 into CYS
+Mutating residue = THRC449 into CYS
+Mutating residue = THRD449 into CYS
+Mutating residue = THRE449 into CYS
+Mutating residue = THRF449 into CYS
+Mutating residue = THRG449 into CYS
+Mutating residue = THRH449 into CYS
+Mutating residue = THRA449 into CYS
+Mutating residue = THRB449 into CYS
+Mutating residue = THRC449 into CYS
+Mutating residue = THRD449 into CYS
+Mutating residue = THRE449 into CYS
+Mutating residue = THRF449 into CYS
+Mutating residue = THRG449 into CYS
+Mutating residue = THRH449 into CYS
+Mutating residue = VALA461 into ILE
+Mutating residue = VALB461 into ILE
+Mutating residue = VALC461 into ILE
+Mutating residue = VALD461 into ILE
+Mutating residue = VALE461 into ILE
+Mutating residue = VALF461 into ILE
+Mutating residue = VALG461 into ILE
+Mutating residue = VALH461 into ILE
+Mutating residue = VALA461 into ILE
+Mutating residue = VALB461 into ILE
+Mutating residue = VALC461 into ILE
+Mutating residue = VALD461 into ILE
+Mutating residue = VALE461 into ILE
+Mutating residue = VALF461 into ILE
+Mutating residue = VALG461 into ILE
+Mutating residue = VALH461 into ILE
+Mutating residue = VALA461 into ILE
+Mutating residue = VALB461 into ILE
+Mutating residue = VALC461 into ILE
+Mutating residue = VALD461 into ILE
+Mutating residue = VALE461 into ILE
+Mutating residue = VALF461 into ILE
+Mutating residue = VALG461 into ILE
+Mutating residue = VALH461 into ILE
+Mutating residue = META472 into VAL
+Mutating residue = METB472 into VAL
+Mutating residue = METC472 into VAL
+Mutating residue = METD472 into VAL
+Mutating residue = METE472 into VAL
+Mutating residue = METF472 into VAL
+Mutating residue = METG472 into VAL
+Mutating residue = METH472 into VAL
+Mutating residue = META472 into VAL
+Mutating residue = METB472 into VAL
+Mutating residue = METC472 into VAL
+Mutating residue = METD472 into VAL
+Mutating residue = METE472 into VAL
+Mutating residue = METF472 into VAL
+Mutating residue = METG472 into VAL
+Mutating residue = METH472 into VAL
+Mutating residue = META472 into VAL
+Mutating residue = METB472 into VAL
+Mutating residue = METC472 into VAL
+Mutating residue = METD472 into VAL
+Mutating residue = METE472 into VAL
+Mutating residue = METF472 into VAL
+Mutating residue = METG472 into VAL
+Mutating residue = METH472 into VAL
+Your file run OK
+End time of FoldX: Tue Apr 15 20:30:28 2025
+Total time spend: 370.83 seconds.
+Cleaning BuildModel...DONE

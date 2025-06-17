@@ -1,0 +1,340 @@
+   ********************************************
+   ***                                      ***
+   ***             FoldX 5.1 (c)            ***
+   ***                                      ***
+   ***     code by the FoldX Consortium     ***
+   ***                                      ***
+   ***     Jesper Borg, Frederic Rousseau   ***
+   ***    Joost Schymkowitz, Luis Serrano   ***
+   ***    Peter Vanhee, Erik Verschueren    ***
+   ***     Lies Baeten, Javier Delgado      ***
+   ***       and Francois Stricher          ***
+   *** and any other of the 9! permutations ***
+   ***   based on an original concept by    ***
+   ***   Raphael Guerois and Luis Serrano   ***
+   ********************************************
+
+ *** THIS IS AN IMPORTANT MESSAGE: 
+ >> External parametrized molecules were detected...
+ >> Final energetic values will depend of the correct parametrization of this molecules. 
+
+
+1 models read: 8ruc-assembly-clean_Repair.pdb
+1 models read: 8ruc-assembly-clean_Repair.pdb
+
+BackHbond       =               -3996.85
+SideHbond       =               -2172.91
+Energy_VdW      =               -6258.35
+Electro         =               -375.98
+Energy_SolvP    =               8709.95
+Energy_SolvH    =               -8399.37
+Energy_vdwclash =               75.39
+energy_torsion  =               5.52
+backbone_vdwclash=              858.95
+Entropy_sidec   =               3201.08
+Entropy_mainc   =               7361.29
+water bonds     =               0.00
+helix dipole    =               -16.28
+loop_entropy    =               0.00
+cis_bond        =               8.99
+disulfide       =               -7.18
+kn electrostatic=               -14.42
+partial covalent interactions = 0.00
+Energy_Ionisation =             33.24
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -1845.87
+
+
+BackHbond       =               -3996.85
+SideHbond       =               -2172.91
+Energy_VdW      =               -6258.35
+Electro         =               -375.98
+Energy_SolvP    =               8709.95
+Energy_SolvH    =               -8399.37
+Energy_vdwclash =               75.39
+energy_torsion  =               5.52
+backbone_vdwclash=              858.95
+Entropy_sidec   =               3201.08
+Entropy_mainc   =               7361.29
+water bonds     =               0.00
+helix dipole    =               -16.28
+loop_entropy    =               0.00
+cis_bond        =               8.99
+disulfide       =               -7.18
+kn electrostatic=               -14.42
+partial covalent interactions = 0.00
+Energy_Ionisation =             33.24
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -1845.87
+
+Starting BuildModel
+Reading VA475L,VB475L,VC475L,VD475L,VE475L,VF475L,VG475L,VH475L;
+Reading VA475I,VB475I,VC475I,VD475I,VE475I,VF475I,VG475I,VH475I;
+Reading MA116L,MB116L,MC116L,MD116L,ME116L,MF116L,MG116L,MH116L;
+Reading MA116S,MB116S,MC116S,MD116S,ME116S,MF116S,MG116S,MH116S;
+Reading MA116P,MB116P,MC116P,MD116P,ME116P,MF116P,MG116P,MH116P;
+Reading MA116K,MB116K,MC116K,MD116K,ME116K,MF116K,MG116K,MH116K;
+Reading VA262A,VB262A,VC262A,VD262A,VE262A,VF262A,VG262A,VH262A;
+Reading HA282F,HB282F,HC282F,HD282F,HE282F,HF282F,HG282F,HH282F;
+Residue to Mutate VALA475 has residue index 466
+Residue to Mutate VALB475 has residue index 933
+Residue to Mutate VALC475 has residue index 1400
+Residue to Mutate VALD475 has residue index 1867
+Residue to Mutate VALE475 has residue index 2334
+Residue to Mutate VALF475 has residue index 2801
+Residue to Mutate VALG475 has residue index 3268
+Residue to Mutate VALH475 has residue index 3735
+Residue to Mutate VALA475 has residue index 466
+Residue to Mutate VALB475 has residue index 933
+Residue to Mutate VALC475 has residue index 1400
+Residue to Mutate VALD475 has residue index 1867
+Residue to Mutate VALE475 has residue index 2334
+Residue to Mutate VALF475 has residue index 2801
+Residue to Mutate VALG475 has residue index 3268
+Residue to Mutate VALH475 has residue index 3735
+Residue to Mutate META116 has residue index 107
+Residue to Mutate METB116 has residue index 574
+Residue to Mutate METC116 has residue index 1041
+Residue to Mutate METD116 has residue index 1508
+Residue to Mutate METE116 has residue index 1975
+Residue to Mutate METF116 has residue index 2442
+Residue to Mutate METG116 has residue index 2909
+Residue to Mutate METH116 has residue index 3376
+Residue to Mutate META116 has residue index 107
+Residue to Mutate METB116 has residue index 574
+Residue to Mutate METC116 has residue index 1041
+Residue to Mutate METD116 has residue index 1508
+Residue to Mutate METE116 has residue index 1975
+Residue to Mutate METF116 has residue index 2442
+Residue to Mutate METG116 has residue index 2909
+Residue to Mutate METH116 has residue index 3376
+Residue to Mutate META116 has residue index 107
+Residue to Mutate METB116 has residue index 574
+Residue to Mutate METC116 has residue index 1041
+Residue to Mutate METD116 has residue index 1508
+Residue to Mutate METE116 has residue index 1975
+Residue to Mutate METF116 has residue index 2442
+Residue to Mutate METG116 has residue index 2909
+Residue to Mutate METH116 has residue index 3376
+Residue to Mutate META116 has residue index 107
+Residue to Mutate METB116 has residue index 574
+Residue to Mutate METC116 has residue index 1041
+Residue to Mutate METD116 has residue index 1508
+Residue to Mutate METE116 has residue index 1975
+Residue to Mutate METF116 has residue index 2442
+Residue to Mutate METG116 has residue index 2909
+Residue to Mutate METH116 has residue index 3376
+Residue to Mutate VALA262 has residue index 253
+Residue to Mutate VALB262 has residue index 720
+Residue to Mutate VALC262 has residue index 1187
+Residue to Mutate VALD262 has residue index 1654
+Residue to Mutate VALE262 has residue index 2121
+Residue to Mutate VALF262 has residue index 2588
+Residue to Mutate VALG262 has residue index 3055
+Residue to Mutate VALH262 has residue index 3522
+Residue to Mutate HISA282 has residue index 273
+Residue to Mutate HISB282 has residue index 740
+Residue to Mutate HISC282 has residue index 1207
+Residue to Mutate HISD282 has residue index 1674
+Residue to Mutate HISE282 has residue index 2141
+Residue to Mutate HISF282 has residue index 2608
+Residue to Mutate HISG282 has residue index 3075
+Residue to Mutate HISH282 has residue index 3542
+Mutating residue = VALA475 into LEU
+Mutating residue = VALB475 into LEU
+Mutating residue = VALC475 into LEU
+Mutating residue = VALD475 into LEU
+Mutating residue = VALE475 into LEU
+Mutating residue = VALF475 into LEU
+Mutating residue = VALG475 into LEU
+Mutating residue = VALH475 into LEU
+Mutating residue = VALA475 into LEU
+Mutating residue = VALB475 into LEU
+Mutating residue = VALC475 into LEU
+Mutating residue = VALD475 into LEU
+Mutating residue = VALE475 into LEU
+Mutating residue = VALF475 into LEU
+Mutating residue = VALG475 into LEU
+Mutating residue = VALH475 into LEU
+Mutating residue = VALA475 into LEU
+Mutating residue = VALB475 into LEU
+Mutating residue = VALC475 into LEU
+Mutating residue = VALD475 into LEU
+Mutating residue = VALE475 into LEU
+Mutating residue = VALF475 into LEU
+Mutating residue = VALG475 into LEU
+Mutating residue = VALH475 into LEU
+Mutating residue = VALA475 into ILE
+Mutating residue = VALB475 into ILE
+Mutating residue = VALC475 into ILE
+Mutating residue = VALD475 into ILE
+Mutating residue = VALE475 into ILE
+Mutating residue = VALF475 into ILE
+Mutating residue = VALG475 into ILE
+Mutating residue = VALH475 into ILE
+Mutating residue = VALA475 into ILE
+Mutating residue = VALB475 into ILE
+Mutating residue = VALC475 into ILE
+Mutating residue = VALD475 into ILE
+Mutating residue = VALE475 into ILE
+Mutating residue = VALF475 into ILE
+Mutating residue = VALG475 into ILE
+Mutating residue = VALH475 into ILE
+Mutating residue = VALA475 into ILE
+Mutating residue = VALB475 into ILE
+Mutating residue = VALC475 into ILE
+Mutating residue = VALD475 into ILE
+Mutating residue = VALE475 into ILE
+Mutating residue = VALF475 into ILE
+Mutating residue = VALG475 into ILE
+Mutating residue = VALH475 into ILE
+Mutating residue = META116 into LEU
+Mutating residue = METB116 into LEU
+Mutating residue = METC116 into LEU
+Mutating residue = METD116 into LEU
+Mutating residue = METE116 into LEU
+Mutating residue = METF116 into LEU
+Mutating residue = METG116 into LEU
+Mutating residue = METH116 into LEU
+Mutating residue = META116 into LEU
+Mutating residue = METB116 into LEU
+Mutating residue = METC116 into LEU
+Mutating residue = METD116 into LEU
+Mutating residue = METE116 into LEU
+Mutating residue = METF116 into LEU
+Mutating residue = METG116 into LEU
+Mutating residue = METH116 into LEU
+Mutating residue = META116 into LEU
+Mutating residue = METB116 into LEU
+Mutating residue = METC116 into LEU
+Mutating residue = METD116 into LEU
+Mutating residue = METE116 into LEU
+Mutating residue = METF116 into LEU
+Mutating residue = METG116 into LEU
+Mutating residue = METH116 into LEU
+Mutating residue = META116 into SER
+Mutating residue = METB116 into SER
+Mutating residue = METC116 into SER
+Mutating residue = METD116 into SER
+Mutating residue = METE116 into SER
+Mutating residue = METF116 into SER
+Mutating residue = METG116 into SER
+Mutating residue = METH116 into SER
+Mutating residue = META116 into SER
+Mutating residue = METB116 into SER
+Mutating residue = METC116 into SER
+Mutating residue = METD116 into SER
+Mutating residue = METE116 into SER
+Mutating residue = METF116 into SER
+Mutating residue = METG116 into SER
+Mutating residue = METH116 into SER
+Mutating residue = META116 into SER
+Mutating residue = METB116 into SER
+Mutating residue = METC116 into SER
+Mutating residue = METD116 into SER
+Mutating residue = METE116 into SER
+Mutating residue = METF116 into SER
+Mutating residue = METG116 into SER
+Mutating residue = METH116 into SER
+Mutating residue = META116 into PRO
+Mutating residue = METB116 into PRO
+Mutating residue = METC116 into PRO
+Mutating residue = METD116 into PRO
+Mutating residue = METE116 into PRO
+Mutating residue = METF116 into PRO
+Mutating residue = METG116 into PRO
+Mutating residue = METH116 into PRO
+Mutating residue = META116 into PRO
+Mutating residue = METB116 into PRO
+Mutating residue = METC116 into PRO
+Mutating residue = METD116 into PRO
+Mutating residue = METE116 into PRO
+Mutating residue = METF116 into PRO
+Mutating residue = METG116 into PRO
+Mutating residue = METH116 into PRO
+Mutating residue = META116 into PRO
+Mutating residue = METB116 into PRO
+Mutating residue = METC116 into PRO
+Mutating residue = METD116 into PRO
+Mutating residue = METE116 into PRO
+Mutating residue = METF116 into PRO
+Mutating residue = METG116 into PRO
+Mutating residue = METH116 into PRO
+Mutating residue = META116 into LYS
+Mutating residue = METB116 into LYS
+Mutating residue = METC116 into LYS
+Mutating residue = METD116 into LYS
+Mutating residue = METE116 into LYS
+Mutating residue = METF116 into LYS
+Mutating residue = METG116 into LYS
+Mutating residue = METH116 into LYS
+Mutating residue = META116 into LYS
+Mutating residue = METB116 into LYS
+Mutating residue = METC116 into LYS
+Mutating residue = METD116 into LYS
+Mutating residue = METE116 into LYS
+Mutating residue = METF116 into LYS
+Mutating residue = METG116 into LYS
+Mutating residue = METH116 into LYS
+Mutating residue = META116 into LYS
+Mutating residue = METB116 into LYS
+Mutating residue = METC116 into LYS
+Mutating residue = METD116 into LYS
+Mutating residue = METE116 into LYS
+Mutating residue = METF116 into LYS
+Mutating residue = METG116 into LYS
+Mutating residue = METH116 into LYS
+Mutating residue = VALA262 into ALA
+Mutating residue = VALB262 into ALA
+Mutating residue = VALC262 into ALA
+Mutating residue = VALD262 into ALA
+Mutating residue = VALE262 into ALA
+Mutating residue = VALF262 into ALA
+Mutating residue = VALG262 into ALA
+Mutating residue = VALH262 into ALA
+Mutating residue = VALA262 into ALA
+Mutating residue = VALB262 into ALA
+Mutating residue = VALC262 into ALA
+Mutating residue = VALD262 into ALA
+Mutating residue = VALE262 into ALA
+Mutating residue = VALF262 into ALA
+Mutating residue = VALG262 into ALA
+Mutating residue = VALH262 into ALA
+Mutating residue = VALA262 into ALA
+Mutating residue = VALB262 into ALA
+Mutating residue = VALC262 into ALA
+Mutating residue = VALD262 into ALA
+Mutating residue = VALE262 into ALA
+Mutating residue = VALF262 into ALA
+Mutating residue = VALG262 into ALA
+Mutating residue = VALH262 into ALA
+Mutating residue = H1SA282 into PHE
+Mutating residue = H1SB282 into PHE
+Mutating residue = H1SC282 into PHE
+Mutating residue = H1SD282 into PHE
+Mutating residue = H1SE282 into PHE
+Mutating residue = H1SF282 into PHE
+Mutating residue = H2SG282 into PHE
+Mutating residue = H2SH282 into PHE
+Mutating residue = H1SA282 into PHE
+Mutating residue = H1SB282 into PHE
+Mutating residue = H1SC282 into PHE
+Mutating residue = H1SD282 into PHE
+Mutating residue = H1SE282 into PHE
+Mutating residue = H1SF282 into PHE
+Mutating residue = H2SG282 into PHE
+Mutating residue = H2SH282 into PHE
+Mutating residue = H1SA282 into PHE
+Mutating residue = H1SB282 into PHE
+Mutating residue = H1SC282 into PHE
+Mutating residue = H1SD282 into PHE
+Mutating residue = H1SE282 into PHE
+Mutating residue = H1SF282 into PHE
+Mutating residue = H2SG282 into PHE
+Mutating residue = H2SH282 into PHE
+Your file run OK
+End time of FoldX: Tue Apr 15 20:42:10 2025
+Total time spend: 1073.05 seconds.
+Cleaning BuildModel...DONE

@@ -1,0 +1,73 @@
+   ********************************************
+   ***                                      ***
+   ***             FoldX 5.1 (c)            ***
+   ***                                      ***
+   ***     code by the FoldX Consortium     ***
+   ***                                      ***
+   ***     Jesper Borg, Frederic Rousseau   ***
+   ***    Joost Schymkowitz, Luis Serrano   ***
+   ***    Peter Vanhee, Erik Verschueren    ***
+   ***     Lies Baeten, Javier Delgado      ***
+   ***       and Francois Stricher          ***
+   *** and any other of the 9! permutations ***
+   ***   based on an original concept by    ***
+   ***   Raphael Guerois and Luis Serrano   ***
+   ********************************************
+
+ *** THIS IS AN IMPORTANT MESSAGE: 
+ >> External parametrized molecules were detected...
+ >> Final energetic values will depend of the correct parametrization of this molecules. 
+
+
+1 models read: 8ruc-assembly-clean_Repair.pdb
+1 models read: 8ruc-assembly-clean_Repair.pdb
+
+BackHbond       =               -3996.85
+SideHbond       =               -2172.91
+Energy_VdW      =               -6258.35
+Electro         =               -375.98
+Energy_SolvP    =               8709.95
+Energy_SolvH    =               -8399.37
+Energy_vdwclash =               75.39
+energy_torsion  =               5.52
+backbone_vdwclash=              858.95
+Entropy_sidec   =               3201.08
+Entropy_mainc   =               7361.29
+water bonds     =               0.00
+helix dipole    =               -16.28
+loop_entropy    =               0.00
+cis_bond        =               8.99
+disulfide       =               -7.18
+kn electrostatic=               -14.42
+partial covalent interactions = 0.00
+Energy_Ionisation =             33.24
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -1845.87
+
+
+BackHbond       =               -3996.85
+SideHbond       =               -2172.91
+Energy_VdW      =               -6258.35
+Electro         =               -375.98
+Energy_SolvP    =               8709.95
+Energy_SolvH    =               -8399.37
+Energy_vdwclash =               75.39
+energy_torsion  =               5.52
+backbone_vdwclash=              858.95
+Entropy_sidec   =               3201.08
+Entropy_mainc   =               7361.29
+water bonds     =               0.00
+helix dipole    =               -16.28
+loop_entropy    =               0.00
+cis_bond        =               8.99
+disulfide       =               -7.18
+kn electrostatic=               -14.42
+partial covalent interactions = 0.00
+Energy_Ionisation =             33.24
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -1845.87
+
+Starting BuildModel
+We were not able to find any mutation to do. We exit without doing anything.

@@ -1,0 +1,340 @@
+   ********************************************
+   ***                                      ***
+   ***             FoldX 5.1 (c)            ***
+   ***                                      ***
+   ***     code by the FoldX Consortium     ***
+   ***                                      ***
+   ***     Jesper Borg, Frederic Rousseau   ***
+   ***    Joost Schymkowitz, Luis Serrano   ***
+   ***    Peter Vanhee, Erik Verschueren    ***
+   ***     Lies Baeten, Javier Delgado      ***
+   ***       and Francois Stricher          ***
+   *** and any other of the 9! permutations ***
+   ***   based on an original concept by    ***
+   ***   Raphael Guerois and Luis Serrano   ***
+   ********************************************
+
+ *** THIS IS AN IMPORTANT MESSAGE: 
+ >> External parametrized molecules were detected...
+ >> Final energetic values will depend of the correct parametrization of this molecules. 
+
+
+1 models read: 8ruc-assembly-clean_Repair.pdb
+1 models read: 8ruc-assembly-clean_Repair.pdb
+
+BackHbond       =               -3996.85
+SideHbond       =               -2172.91
+Energy_VdW      =               -6258.35
+Electro         =               -375.98
+Energy_SolvP    =               8709.95
+Energy_SolvH    =               -8399.37
+Energy_vdwclash =               75.39
+energy_torsion  =               5.52
+backbone_vdwclash=              858.95
+Entropy_sidec   =               3201.08
+Entropy_mainc   =               7361.29
+water bonds     =               0.00
+helix dipole    =               -16.28
+loop_entropy    =               0.00
+cis_bond        =               8.99
+disulfide       =               -7.18
+kn electrostatic=               -14.42
+partial covalent interactions = 0.00
+Energy_Ionisation =             33.24
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -1845.87
+
+
+BackHbond       =               -3996.85
+SideHbond       =               -2172.91
+Energy_VdW      =               -6258.35
+Electro         =               -375.98
+Energy_SolvP    =               8709.95
+Energy_SolvH    =               -8399.37
+Energy_vdwclash =               75.39
+energy_torsion  =               5.52
+backbone_vdwclash=              858.95
+Entropy_sidec   =               3201.08
+Entropy_mainc   =               7361.29
+water bonds     =               0.00
+helix dipole    =               -16.28
+loop_entropy    =               0.00
+cis_bond        =               8.99
+disulfide       =               -7.18
+kn electrostatic=               -14.42
+partial covalent interactions = 0.00
+Energy_Ionisation =             33.24
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -1845.87
+
+Starting BuildModel
+Reading NA76S,NB76S,NC76S,ND76S,NE76S,NF76S,NG76S,NH76S;
+Reading NA95S,NB95S,NC95S,ND95S,NE95S,NF95S,NG95S,NH95S;
+Reading NA95T,NB95T,NC95T,ND95T,NE95T,NF95T,NG95T,NH95T;
+Reading VA157S,VB157S,VC157S,VD157S,VE157S,VF157S,VG157S,VH157S;
+Reading LA219C,LB219C,LC219C,LD219C,LE219C,LF219C,LG219C,LH219C;
+Reading LA219V,LB219V,LC219V,LD219V,LE219V,LF219V,LG219V,LH219V;
+Reading LA225I,LB225I,LC225I,LD225I,LE225I,LF225I,LG225I,LH225I;
+Reading YA226F,YB226F,YC226F,YD226F,YE226F,YF226F,YG226F,YH226F;
+Residue to Mutate ASNA76 has residue index 67
+Residue to Mutate ASNB76 has residue index 534
+Residue to Mutate ASNC76 has residue index 1001
+Residue to Mutate ASND76 has residue index 1468
+Residue to Mutate ASNE76 has residue index 1935
+Residue to Mutate ASNF76 has residue index 2402
+Residue to Mutate ASNG76 has residue index 2869
+Residue to Mutate ASNH76 has residue index 3336
+Residue to Mutate ASNA95 has residue index 86
+Residue to Mutate ASNB95 has residue index 553
+Residue to Mutate ASNC95 has residue index 1020
+Residue to Mutate ASND95 has residue index 1487
+Residue to Mutate ASNE95 has residue index 1954
+Residue to Mutate ASNF95 has residue index 2421
+Residue to Mutate ASNG95 has residue index 2888
+Residue to Mutate ASNH95 has residue index 3355
+Residue to Mutate ASNA95 has residue index 86
+Residue to Mutate ASNB95 has residue index 553
+Residue to Mutate ASNC95 has residue index 1020
+Residue to Mutate ASND95 has residue index 1487
+Residue to Mutate ASNE95 has residue index 1954
+Residue to Mutate ASNF95 has residue index 2421
+Residue to Mutate ASNG95 has residue index 2888
+Residue to Mutate ASNH95 has residue index 3355
+Residue to Mutate VALA157 has residue index 148
+Residue to Mutate VALB157 has residue index 615
+Residue to Mutate VALC157 has residue index 1082
+Residue to Mutate VALD157 has residue index 1549
+Residue to Mutate VALE157 has residue index 2016
+Residue to Mutate VALF157 has residue index 2483
+Residue to Mutate VALG157 has residue index 2950
+Residue to Mutate VALH157 has residue index 3417
+Residue to Mutate LEUA219 has residue index 210
+Residue to Mutate LEUB219 has residue index 677
+Residue to Mutate LEUC219 has residue index 1144
+Residue to Mutate LEUD219 has residue index 1611
+Residue to Mutate LEUE219 has residue index 2078
+Residue to Mutate LEUF219 has residue index 2545
+Residue to Mutate LEUG219 has residue index 3012
+Residue to Mutate LEUH219 has residue index 3479
+Residue to Mutate LEUA219 has residue index 210
+Residue to Mutate LEUB219 has residue index 677
+Residue to Mutate LEUC219 has residue index 1144
+Residue to Mutate LEUD219 has residue index 1611
+Residue to Mutate LEUE219 has residue index 2078
+Residue to Mutate LEUF219 has residue index 2545
+Residue to Mutate LEUG219 has residue index 3012
+Residue to Mutate LEUH219 has residue index 3479
+Residue to Mutate LEUA225 has residue index 216
+Residue to Mutate LEUB225 has residue index 683
+Residue to Mutate LEUC225 has residue index 1150
+Residue to Mutate LEUD225 has residue index 1617
+Residue to Mutate LEUE225 has residue index 2084
+Residue to Mutate LEUF225 has residue index 2551
+Residue to Mutate LEUG225 has residue index 3018
+Residue to Mutate LEUH225 has residue index 3485
+Residue to Mutate TYRA226 has residue index 217
+Residue to Mutate TYRB226 has residue index 684
+Residue to Mutate TYRC226 has residue index 1151
+Residue to Mutate TYRD226 has residue index 1618
+Residue to Mutate TYRE226 has residue index 2085
+Residue to Mutate TYRF226 has residue index 2552
+Residue to Mutate TYRG226 has residue index 3019
+Residue to Mutate TYRH226 has residue index 3486
+Mutating residue = ASNA76 into SER
+Mutating residue = ASNB76 into SER
+Mutating residue = ASNC76 into SER
+Mutating residue = ASND76 into SER
+Mutating residue = ASNE76 into SER
+Mutating residue = ASNF76 into SER
+Mutating residue = ASNG76 into SER
+Mutating residue = ASNH76 into SER
+Mutating residue = ASNA76 into SER
+Mutating residue = ASNB76 into SER
+Mutating residue = ASNC76 into SER
+Mutating residue = ASND76 into SER
+Mutating residue = ASNE76 into SER
+Mutating residue = ASNF76 into SER
+Mutating residue = ASNG76 into SER
+Mutating residue = ASNH76 into SER
+Mutating residue = ASNA76 into SER
+Mutating residue = ASNB76 into SER
+Mutating residue = ASNC76 into SER
+Mutating residue = ASND76 into SER
+Mutating residue = ASNE76 into SER
+Mutating residue = ASNF76 into SER
+Mutating residue = ASNG76 into SER
+Mutating residue = ASNH76 into SER
+Mutating residue = ASNA95 into SER
+Mutating residue = ASNB95 into SER
+Mutating residue = ASNC95 into SER
+Mutating residue = ASND95 into SER
+Mutating residue = ASNE95 into SER
+Mutating residue = ASNF95 into SER
+Mutating residue = ASNG95 into SER
+Mutating residue = ASNH95 into SER
+Mutating residue = ASNA95 into SER
+Mutating residue = ASNB95 into SER
+Mutating residue = ASNC95 into SER
+Mutating residue = ASND95 into SER
+Mutating residue = ASNE95 into SER
+Mutating residue = ASNF95 into SER
+Mutating residue = ASNG95 into SER
+Mutating residue = ASNH95 into SER
+Mutating residue = ASNA95 into SER
+Mutating residue = ASNB95 into SER
+Mutating residue = ASNC95 into SER
+Mutating residue = ASND95 into SER
+Mutating residue = ASNE95 into SER
+Mutating residue = ASNF95 into SER
+Mutating residue = ASNG95 into SER
+Mutating residue = ASNH95 into SER
+Mutating residue = ASNA95 into THR
+Mutating residue = ASNB95 into THR
+Mutating residue = ASNC95 into THR
+Mutating residue = ASND95 into THR
+Mutating residue = ASNE95 into THR
+Mutating residue = ASNF95 into THR
+Mutating residue = ASNG95 into THR
+Mutating residue = ASNH95 into THR
+Mutating residue = ASNA95 into THR
+Mutating residue = ASNB95 into THR
+Mutating residue = ASNC95 into THR
+Mutating residue = ASND95 into THR
+Mutating residue = ASNE95 into THR
+Mutating residue = ASNF95 into THR
+Mutating residue = ASNG95 into THR
+Mutating residue = ASNH95 into THR
+Mutating residue = ASNA95 into THR
+Mutating residue = ASNB95 into THR
+Mutating residue = ASNC95 into THR
+Mutating residue = ASND95 into THR
+Mutating residue = ASNE95 into THR
+Mutating residue = ASNF95 into THR
+Mutating residue = ASNG95 into THR
+Mutating residue = ASNH95 into THR
+Mutating residue = VALA157 into SER
+Mutating residue = VALB157 into SER
+Mutating residue = VALC157 into SER
+Mutating residue = VALD157 into SER
+Mutating residue = VALE157 into SER
+Mutating residue = VALF157 into SER
+Mutating residue = VALG157 into SER
+Mutating residue = VALH157 into SER
+Mutating residue = VALA157 into SER
+Mutating residue = VALB157 into SER
+Mutating residue = VALC157 into SER
+Mutating residue = VALD157 into SER
+Mutating residue = VALE157 into SER
+Mutating residue = VALF157 into SER
+Mutating residue = VALG157 into SER
+Mutating residue = VALH157 into SER
+Mutating residue = VALA157 into SER
+Mutating residue = VALB157 into SER
+Mutating residue = VALC157 into SER
+Mutating residue = VALD157 into SER
+Mutating residue = VALE157 into SER
+Mutating residue = VALF157 into SER
+Mutating residue = VALG157 into SER
+Mutating residue = VALH157 into SER
+Mutating residue = LEUA219 into CYS
+Mutating residue = LEUB219 into CYS
+Mutating residue = LEUC219 into CYS
+Mutating residue = LEUD219 into CYS
+Mutating residue = LEUE219 into CYS
+Mutating residue = LEUF219 into CYS
+Mutating residue = LEUG219 into CYS
+Mutating residue = LEUH219 into CYS
+Mutating residue = LEUA219 into CYS
+Mutating residue = LEUB219 into CYS
+Mutating residue = LEUC219 into CYS
+Mutating residue = LEUD219 into CYS
+Mutating residue = LEUE219 into CYS
+Mutating residue = LEUF219 into CYS
+Mutating residue = LEUG219 into CYS
+Mutating residue = LEUH219 into CYS
+Mutating residue = LEUA219 into CYS
+Mutating residue = LEUB219 into CYS
+Mutating residue = LEUC219 into CYS
+Mutating residue = LEUD219 into CYS
+Mutating residue = LEUE219 into CYS
+Mutating residue = LEUF219 into CYS
+Mutating residue = LEUG219 into CYS
+Mutating residue = LEUH219 into CYS
+Mutating residue = LEUA219 into VAL
+Mutating residue = LEUB219 into VAL
+Mutating residue = LEUC219 into VAL
+Mutating residue = LEUD219 into VAL
+Mutating residue = LEUE219 into VAL
+Mutating residue = LEUF219 into VAL
+Mutating residue = LEUG219 into VAL
+Mutating residue = LEUH219 into VAL
+Mutating residue = LEUA219 into VAL
+Mutating residue = LEUB219 into VAL
+Mutating residue = LEUC219 into VAL
+Mutating residue = LEUD219 into VAL
+Mutating residue = LEUE219 into VAL
+Mutating residue = LEUF219 into VAL
+Mutating residue = LEUG219 into VAL
+Mutating residue = LEUH219 into VAL
+Mutating residue = LEUA219 into VAL
+Mutating residue = LEUB219 into VAL
+Mutating residue = LEUC219 into VAL
+Mutating residue = LEUD219 into VAL
+Mutating residue = LEUE219 into VAL
+Mutating residue = LEUF219 into VAL
+Mutating residue = LEUG219 into VAL
+Mutating residue = LEUH219 into VAL
+Mutating residue = LEUA225 into ILE
+Mutating residue = LEUB225 into ILE
+Mutating residue = LEUC225 into ILE
+Mutating residue = LEUD225 into ILE
+Mutating residue = LEUE225 into ILE
+Mutating residue = LEUF225 into ILE
+Mutating residue = LEUG225 into ILE
+Mutating residue = LEUH225 into ILE
+Mutating residue = LEUA225 into ILE
+Mutating residue = LEUB225 into ILE
+Mutating residue = LEUC225 into ILE
+Mutating residue = LEUD225 into ILE
+Mutating residue = LEUE225 into ILE
+Mutating residue = LEUF225 into ILE
+Mutating residue = LEUG225 into ILE
+Mutating residue = LEUH225 into ILE
+Mutating residue = LEUA225 into ILE
+Mutating residue = LEUB225 into ILE
+Mutating residue = LEUC225 into ILE
+Mutating residue = LEUD225 into ILE
+Mutating residue = LEUE225 into ILE
+Mutating residue = LEUF225 into ILE
+Mutating residue = LEUG225 into ILE
+Mutating residue = LEUH225 into ILE
+Mutating residue = TYRA226 into PHE
+Mutating residue = TYRB226 into PHE
+Mutating residue = TYRC226 into PHE
+Mutating residue = TYRD226 into PHE
+Mutating residue = TYRE226 into PHE
+Mutating residue = TYRF226 into PHE
+Mutating residue = TYRG226 into PHE
+Mutating residue = TYRH226 into PHE
+Mutating residue = TYRA226 into PHE
+Mutating residue = TYRB226 into PHE
+Mutating residue = TYRC226 into PHE
+Mutating residue = TYRD226 into PHE
+Mutating residue = TYRE226 into PHE
+Mutating residue = TYRF226 into PHE
+Mutating residue = TYRG226 into PHE
+Mutating residue = TYRH226 into PHE
+Mutating residue = TYRA226 into PHE
+Mutating residue = TYRB226 into PHE
+Mutating residue = TYRC226 into PHE
+Mutating residue = TYRD226 into PHE
+Mutating residue = TYRE226 into PHE
+Mutating residue = TYRF226 into PHE
+Mutating residue = TYRG226 into PHE
+Mutating residue = TYRH226 into PHE
+Your file run OK
+End time of FoldX: Tue Apr 15 20:35:05 2025
+Total time spend: 648.00 seconds.
+Cleaning BuildModel...DONE

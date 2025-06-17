@@ -1,0 +1,197 @@
+IQ-TREE multicore version 2.0.3 for Mac OS X 64-bit built Dec 19 2020
+Developed by Bui Quang Minh, Nguyen Lam Tung, Olga Chernomor,
+Heiko Schmidt, Dominik Schrempf, Michael Woodhams.
+
+Host:    esc2074-dgl-leung-sage.eeb.utoronto.ca (SSE4.2, 16 GB RAM)
+Command: iqtree -s ../clean_aligned_csubst.fasta -te tmp.csubst.nwk -m ECMK07+F+R4 --seqtype CODON11 --threads-max 3 -T AUTO --ancestral --rate --redo
+Seed:    345066 (Using SPRNG - Scalable Parallel Random Number Generator)
+Time:    Mon May 20 12:16:43 2024
+Kernel:  SSE2 - auto-detect threads (8 CPU cores detected)
+
+Reading alignment file ../clean_aligned_csubst.fasta ... Fasta format detected
+Alignment most likely contains DNA/RNA sequences
+Converting to codon sequences with genetic code 11 ...
+WARNING: Sequence banksiana has ambiguous character -AA at site 10
+WARNING: Sequence praetermis has ambiguous character --T at site 25
+WARNING: Sequence attenuata has ambiguous character --T at site 25
+WARNING: Sequence kwangtunge has ambiguous character NCT at site 127
+WARNING: Sequence kwangtunge has ambiguous character CAN at site 133
+WARNING: Sequence kwangtunge has ambiguous character CCN at site 136
+WARNING: Sequence pseudostro has ambiguous character CNN at site 502
+WARNING: Sequence pseudostro has ambiguous character ANN at site 619
+WARNING: Sequence pseudostro has ambiguous character NGT at site 649
+WARNING: Sequence pseudostro has ambiguous character GNN at site 670
+WARNING: Sequence pseudostro has ambiguous character NNT at site 688
+WARNING: Sequence pseudostro has ambiguous character ATN at site 751
+WARNING: Sequence pseudostro has ambiguous character ANN at site 832
+WARNING: Sequence pseudostro has ambiguous character NTG at site 1123
+WARNING: Sequence pseudostro has ambiguous character NGN at site 1315
+WARNING: Sequence tecunumani has ambiguous character C-- at site 1336
+WARNING: Sequence banksiana has ambiguous character GA- at site 1360
+WARNING: Sequence albicaulis has ambiguous character GA- at site 1390
+WARNING: Sequence gerardiana has ambiguous character T-- at site 1405
+WARNING: Sequence pinaster has ambiguous character T-- at site 1405
+WARNING: Sequence resinosa has ambiguous character T-- at site 1405
+WARNING: Sequence flexilis has ambiguous character T-- at site 1405
+WARNING: Sequence pringlei has ambiguous character GNG at site 1411
+WARNING: Sequence lawsonii has ambiguous character GNG at site 1411
+WARNING: Sequence serotina has ambiguous character GNG at site 1411
+WARNING: Sequence pseudostro has ambiguous character GNG at site 1411
+WARNING: Sequence pseudostro has ambiguous character NNC at site 1420
+Alignment has 104 sequences with 475 columns, 213 distinct patterns
+70 parsimony-informative, 22 singleton sites, 383 constant sites
+            Gap/Ambiguity  Composition  p-value
+   1  gerardiana    1.47%    passed    100.00%
+   2  muricata      0.00%    passed    100.00%
+   3  nigra         0.00%    passed    100.00%
+   4  kesiya        0.00%    passed    100.00%
+   5  pinaster      1.47%    passed    100.00%
+   6  palustris     0.00%    passed    100.00%
+   7  remota        0.00%    passed    100.00%
+   8  montezumae    0.00%    passed    100.00%
+   9  jaliscana     0.00%    passed    100.00%
+  10  densiflora    0.00%    passed    100.00%
+  11  kwangtunge    0.63%    passed    100.00%
+  12  strobiform    0.00%    passed    100.00%
+  13  ayacahuite    1.47%    passed    100.00%
+  14  mugo          0.00%    passed    100.00%
+  15  aristata      0.00%    passed    100.00%
+  16  densata       0.00%    passed    100.00%
+  17  virginiana    0.00%    passed    100.00%
+  18  morrisonic    0.00%    passed    100.00%
+  19  massoniana    0.00%    passed    100.00%
+  20  praetermis    1.89%    passed    100.00%
+  21  oocarpa       0.00%    passed    100.00%
+  22  latteri       0.00%    passed    100.00%
+  23  teocote       0.00%    passed    100.00%
+  24  wangii        0.00%    passed    100.00%
+  25  ponderosa     0.00%    passed    100.00%
+  26  tabuliform    0.00%    passed    100.00%
+  27  nelsonii      0.00%    passed    100.00%
+  28  cembroides    0.00%    passed    100.00%
+  29  lambertian    0.00%    passed    100.00%
+  30  edulis        0.00%    passed    100.00%
+  31  culminicol    0.00%    passed    100.00%
+  32  hartwegii     0.00%    passed    100.00%
+  33  pringlei      0.21%    passed    100.00%
+  34  taeda         0.00%    passed    100.00%
+  35  maximartin    0.00%    passed    100.00%
+  36  albicaulis    2.53%    passed    100.00%
+  37  quadrifoli    0.00%    passed    100.00%
+  38  jeffreyi      0.00%    passed    100.00%
+  39  elliottii     0.00%    passed    100.00%
+  40  tecunumani    9.26%    passed    100.00%
+  41  yunnanensi    0.00%    passed    100.00%
+  42  caribaea      0.00%    passed    100.00%
+  43  glabra        0.00%    passed    100.00%
+  44  douglasian    0.00%    passed    100.00%
+  45  contorta      0.00%    passed    100.00%
+  46  attenuata     1.89%    passed    100.00%
+  47  echinata      0.00%    passed    100.00%
+  48  cembra        0.00%    passed    100.00%
+  49  coulteri      0.00%    passed    100.00%
+  50  armandii      0.00%    passed    100.00%
+  51  pinea         0.00%    passed    100.00%
+  52  balfourian    0.00%    passed    100.00%
+  53  patula        0.00%    passed    100.00%
+  54  rigida        0.00%    passed    100.00%
+  55  rzedowskii    2.11%    passed    100.00%
+  56  pungens       0.00%    passed    100.00%
+  57  discolor      0.00%    passed    100.00%
+  58  engelmanni    0.00%    passed    100.00%
+  59  parviflora    0.00%    passed    100.00%
+  60  sylvestris    0.00%    passed    100.00%
+  61  pumila        0.00%    passed    100.00%
+  62  dalatensis    0.00%    passed    100.00%
+  63  radiata       0.00%    passed    100.00%
+  64  peuce         1.47%    passed    100.00%
+  65  chiapensis    0.00%    passed    100.00%
+  66  bhutanica     0.00%    passed    100.00%
+  67  hwangshane    0.00%    passed    100.00%
+  68  lawsonii      0.21%    passed    100.00%
+  69  serotina      0.21%    passed    100.00%
+  70  sabiniana     0.00%    passed    100.00%
+  71  banksiana     5.47%    passed    100.00%
+  72  luchuensis   12.00%    passed    100.00%
+  73  taiwanensi    0.00%    passed    100.00%
+  74  leiophylla    0.00%    passed    100.00%
+  75  monophylla    0.00%    passed    100.00%
+  76  maximinoi    11.58%    passed    100.00%
+  77  brutia        0.00%    passed    100.00%
+  78  squamata      0.00%    passed    100.00%
+  79  merkusii      1.47%    passed    100.00%
+  80  roxburghii    0.00%    passed    100.00%
+  81  devoniana     0.00%    passed    100.00%
+  82  longaeva      0.00%    passed    100.00%
+  83  bungeana      0.00%    passed    100.00%
+  84  sibirica      0.00%    passed    100.00%
+  85  arizonica     0.00%    passed    100.00%
+  86  greggii       0.00%    passed    100.00%
+  87  herrerae     12.00%    passed    100.00%
+  88  halepensis    0.00%    passed    100.00%
+  89  resinosa      1.47%    passed    100.00%
+  90  dabeshanen    0.00%    passed    100.00%
+  91  strobus       0.00%    passed    100.00%
+  92  krempfii      0.00%    passed    100.00%
+  93  pinceana      0.00%    passed    100.00%
+  94  monticola     1.47%    passed    100.00%
+  95  pseudostro   10.11%    passed    100.00%
+  96  lumholtzii    0.00%    passed    100.00%
+  97  koraiensis    0.00%    passed    100.00%
+  98  clausa        1.47%    passed    100.00%
+  99  durangensi   12.00%    passed    100.00%
+ 100  wallichian    0.00%    passed    100.00%
+ 101  flexilis      1.47%    passed    100.00%
+ 102  heldreichi    0.00%    passed    100.00%
+ 103  fenzeliana    0.00%    passed    100.00%
+ 104  thunbergii    0.00%    passed    100.00%
+****  TOTAL         0.92%  0 sequences failed composition chi2 test (p-value<5%; df=60)
+WARNING: States(s) AGC, CCG rarely appear in alignment and may cause numerical problems
+Reading input tree file tmp.csubst.nwk ... rooted tree
+
+NOTE: 53 MB RAM (0 GB) is required!
+Measuring multi-threading efficiency up to 3 CPU cores
+5 trees examined
+Threads: 1 / Time: 3.482 sec / Speedup: 1.000 / Efficiency: 100% / LogL: -8638
+Threads: 2 / Time: 2.180 sec / Speedup: 1.597 / Efficiency: 80% / LogL: -8638
+Threads: 3 / Time: 1.902 sec / Speedup: 1.831 / Efficiency: 61% / LogL: -8638
+BEST NUMBER OF THREADS: 3
+
+Estimate model parameters (epsilon = 0.010)
+1. Initial log-likelihood: -87046.111
+2. Current log-likelihood: -4162.222
+3. Current log-likelihood: -4157.557
+4. Current log-likelihood: -4155.514
+5. Current log-likelihood: -4153.851
+6. Current log-likelihood: -4151.206
+7. Current log-likelihood: -4147.015
+8. Current log-likelihood: -4056.408
+9. Current log-likelihood: -4055.730
+10. Current log-likelihood: -4055.560
+11. Current log-likelihood: -4055.511
+12. Current log-likelihood: -4055.495
+Optimal log-likelihood: -4055.485
+Nonsynonymous/synonymous ratio (omega): 1.000
+Transition/transversion ratio (kappa): 1.000
+Site proportion and rates:  (0.300,0.089) (0.397,0.091) (0.123,0.492) (0.180,4.876)
+Parameters optimization took 12 rounds (35.637 sec)
+BEST SCORE FOUND : -4055.485
+Ancestral state probabilities printed to ../clean_aligned_csubst.fasta.state
+Empirical proportions for each category: 0.000 0.806 0.002 0.192
+Site rates printed to ../clean_aligned_csubst.fasta.rate
+Total tree length: 0.402
+
+Total number of iterations: 0
+CPU time used for tree search: 0.000 sec (0h:0m:0s)
+Wall-clock time used for tree search: 0.000 sec (0h:0m:0s)
+Total CPU time used: 117.763 sec (0h:1m:57s)
+Total wall-clock time used: 44.804 sec (0h:0m:44s)
+
+Analysis results written to: 
+  IQ-TREE report:                ../clean_aligned_csubst.fasta.iqtree
+  Maximum-likelihood tree:       ../clean_aligned_csubst.fasta.treefile
+  Site-specific rates:           ../clean_aligned_csubst.fasta.rate
+  Ancestral state:               ../clean_aligned_csubst.fasta.state
+  Screen log file:               ../clean_aligned_csubst.fasta.log
+
+Date and Time: Mon May 20 12:17:28 2024

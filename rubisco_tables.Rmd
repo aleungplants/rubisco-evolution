@@ -1,0 +1,559 @@
+---
+title: "summary"
+output: html_document
+date: "2025-01-17"
+---
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+
+unfill <- function(x) {
+  same <- x == dplyr::lag(x)
+  ifelse(!is.na(same) & same, "·", x)
+}
+
+here::i_am("rubisco_tables.Rmd")
+
+```
+
+# PAML lrts
+
+```{r paml_lrts}
+
+paml_lrts_v <- readr::read_csv(here::here("analyze/paml_site_mlc.csv")) %>%
+  mutate(Genus = "Viburnum")
+paml_lrts_d <- readr::read_csv(here::here("dryopteris_rubisco/paml_site_mlc.csv")) %>%
+  mutate(Genus = "Dryopteris")
+paml_lrts_l <- readr::read_csv(here::here("limonium_rubisco/paml_site_mlc.csv")) %>%
+  mutate(Genus = "Limonium")
+paml_lrts_p <- readr::read_csv(here::here("pine_rubisco/paml_site_mlc.csv")) %>%
+  mutate(Genus = "Pinus")
+
+paml_lrts <- bind_rows(paml_lrts_d, paml_lrts_l, paml_lrts_p, paml_lrts_v) %>%
+  rename(Model = NSSitesModel) %>%
+  mutate(Parameter = ifelse(Parameter == "(p1", "p1", Parameter)) %>%
+  filter(!(Model == 7 & stringr::str_detect(Parameter, "w_|p_"))) %>%
+  filter(!(Model == 8 & stringr::str_detect(Parameter, "p0|p_|w_[0-9]$")))
+
+paml_lrts_rename <- paml_lrts %>%
+  mutate(Parameter = case_when(Model == 0 & Parameter == "w" ~ "w_0",
+                               Model == 8 & Parameter == "w_10" ~ "w_P",
+                               .default = Parameter))
+
+paml_lrts_summary <- paml_lrts_rename %>%
+  tidyr::pivot_wider(names_from = "Parameter",
+                     values_from = "Value") %>%
+  rename(np = nParam,
+         `χ2` = ChiSq,
+         `κ` = K) %>%
+  mutate(PValue = scales::scientific(PValue, 3), # rounding
+         lnL = plyr::round_any(lnL, 0.1),
+         `χ2` = plyr::round_any(`χ2`, 0.1),
+         AIC = plyr::round_any(AIC, 1),
+         `κ` = plyr::round_any(`κ`, 0.01),
+         across(.cols = c("p_0", "p_1", "p_2"),
+                .fns = ~ plyr::round_any(. * 100, 0.1)),
+         across(.cols = c("w_0", "w_1", "w_2", "w_P"),
+                .fns = ~ ifelse(. > 900, 
+                                plyr::round_any(., 1) %>% as.character, 
+                                plyr::round_any(., 0.1))),
+         across(.cols = c("p", "q", "p1"),
+                .fns = ~ plyr::round_any(., 0.001)),
+         across(.cols = c(contains("p_"), "p1"),
+                .fns = ~ ifelse(!is.na(.), paste0("(", ., "%)"), .)), # add percent signs
+         across(.cols = starts_with(c("p", "q", "w", "χ2", "df")),
+                .fns = ~ ifelse(is.na(.), "", .))) %>%
+  mutate(Model = case_when(Model %in% c(1, 2) ~ paste0("M", Model, "a"), # add M to model names
+                           .default = paste0("M", Model)),
+         w_0 = paste(w_0, p_0), # combine w and proportions
+         w_1 = paste(w_1, p_1),
+         w_2 = paste(w_2, p_2),
+         w_P = paste(w_P, p1),
+         .keep = "unused") %>%
+  mutate(across(.cols = starts_with(c("p", "q", "w", "χ2", "df")),
+         .fns = ~ stringr::str_remove(., "^ "))) %>%  # remove spaces at the start of line
+  mutate(`w0/α` = paste0(w_0, p), # combine columns
+         `w1/β` = paste0(w_1, q),
+         `w2/wP` = paste0(w_2, w_P),
+         p = PValue,
+         .keep = "unused") %>%
+  relocate(Model, np, AIC, lnL, `κ`, .before = "w0/α") %>% # rearrange columns
+  relocate(`χ2`, df, p, .after = last_col()) %>%
+  arrange(Genus, Model) %>%
+  mutate(Genus = unfill(Genus))
+
+writexl::write_xlsx(paml_lrts_summary, here::here("table_PAML_LRTs.xlsx"))
+
+```
+
+# CSUBST tests
+
+```{r csubst}
+
+conv_subs_v <- readxl::read_xlsx(here::here("analyze/convergent_subs.xlsx")) %>%
+  mutate(Genus = "Viburnum")
+conv_subs_d <- readxl::read_xlsx(here::here("dryopteris_rubisco/convergent_subs.xlsx")) %>%
+  mutate(Genus = "Dryopteris")
+conv_subs_l <- readxl::read_xlsx(here::here("limonium_rubisco/convergent_subs.xlsx")) %>%
+  mutate(Genus = "Limonium")
+conv_subs_p <- readxl::read_xlsx(here::here("pine_rubisco/convergent_subs.xlsx")) %>%
+  mutate(Genus = "Pinus")
+
+conv_subs <- bind_rows(conv_subs_d, conv_subs_l, conv_subs_p, conv_subs_v) %>%
+  relocate(Genus, .before = "Site") %>%
+  arrange(Genus, Site, substitution) %>%
+  mutate(across(.cols = c("Genus", "Site", "aa_root"),
+                .fns = ~ unfill(.))) %>%
+  mutate(substitution = stringr::str_replace(substitution, "([:alpha:][:digit:]+)(.+)", "\\1→\\2"))
+
+writexl::write_xlsx(conv_subs, here::here("table_CSUBST.xlsx"))
+
+```
+
+# Binary tests
+
+```{r pagel}
+
+pagel_v <- readxl::read_xlsx(here::here("analyze/pagels_test_cold.xlsx")) %>%
+  mutate(Genus = "Viburnum")
+pagel_d <- readxl::read_xlsx(here::here("dryopteris_rubisco/pagels_test_rainforest_0.xlsx")) %>%
+  mutate(Genus = "Dryopteris")
+pagel_l <- readxl::read_xlsx(here::here("limonium_rubisco/pagels_test_desert_0.xlsx")) %>%
+  mutate(Genus = "Limonium")
+pagel_p <- readxl::read_xlsx(here::here("pine_rubisco/pagels_test_fire.xlsx")) %>%
+  mutate(Genus = "Pinus")
+
+pagel_v_re <- readxl::read_xlsx(here::here("analyze/pagels_test_cold_reverse.xlsx")) %>%
+  mutate(Genus = "Viburnum")
+pagel_d_re <- readxl::read_xlsx(here::here("dryopteris_rubisco/pagels_test_rainforest_reverse_0.xlsx")) %>%
+  mutate(Genus = "Dryopteris")
+pagel_l_re <- readxl::read_xlsx(here::here("limonium_rubisco/pagels_test_desert_reverse_0.xlsx")) %>%
+  mutate(Genus = "Limonium")
+pagel_p_re <- readxl::read_xlsx(here::here("pine_rubisco/pagels_test_fire_reverse.xlsx")) %>%
+  mutate(Genus = "Pinus")
+
+dep_y_pagel <- bind_rows(pagel_d, pagel_l, pagel_p, pagel_v) %>%
+  rowwise() %>%
+  mutate(Min_AIC = min(AIC_Dependent, AIC_Independent)) %>%
+  select(Genus, Substitution, Min_AIC)
+dep_x_pagel <- bind_rows(pagel_d_re, pagel_l_re, pagel_p_re, pagel_v_re) %>%
+  rowwise() %>%
+  mutate(Min_AIC_Re = min(AIC_Dependent, AIC_Independent)) %>%
+  select(Genus, Substitution, Min_AIC_Re)
+best_models <- full_join(dep_y_pagel, dep_x_pagel) %>%
+  mutate(BestDepVar = ifelse(Min_AIC < Min_AIC_Re, "climate", "amino acid"))
+
+dep_y_sites <- best_models %>%
+  filter(BestDepVar == "climate") %>%
+  select(Genus, Substitution)
+dep_x_sites <- best_models %>%
+  filter(BestDepVar == "amino acid") %>%
+  select(Genus, Substitution)
+
+dep_y_pagel <- bind_rows(pagel_d, pagel_l, pagel_p, pagel_v) %>%
+  semi_join(dep_y_sites) %>%
+  mutate(BestDepVar = "climate")
+dep_x_pagel <- bind_rows(pagel_d_re, pagel_l_re, pagel_p_re, pagel_v_re) %>%
+  semi_join(dep_x_sites) %>%
+  mutate(BestDepVar = "amino acid")
+
+pagel <- bind_rows(dep_y_pagel, dep_x_pagel) %>%
+  mutate(Site = stringr::str_extract(Substitution, "[:digit:]+") %>% as.numeric(),
+         Substitution = stringr::str_replace(Substitution, "([:alpha:][:digit:]+)(.+)", "\\1→\\2"),
+         p = plyr::round_any(p, 0.001),
+         deltaAIC = plyr::round_any(-deltaAIC, 0.1),
+         StateFavouredbyAA = stringr::str_replace(StateFavouredbyAA, "rforest", "rainforest"),
+         across(.cols = c("BestDepVar", "FasterAA", "StateFavouredbyAA"),
+                .fns = ~ ifelse(p < 0.05, ., ""))) %>% 
+  distinct() %>%
+  arrange(Genus, Site, Substitution) %>%
+  mutate(across(.cols = c("Genus", "Site"),
+                .fns = ~ unfill(.))) %>%
+  select(Genus, Site, Substitution, deltaAIC, p, BestDepVar, StateFavouredbyAA) 
+
+writexl::write_xlsx(pagel, here::here("table_Pagel_tests.xlsx"))
+
+```
+
+# Binary tests - supplementary tests
+
+```{r pagel_supp}
+pagel_d <- readxl::read_xlsx(here::here("dryopteris_rubisco/pagels_test_rainforest_0.xlsx")) %>%
+  mutate(Genus = "Dryopteris0")
+pagel_l <- readxl::read_xlsx(here::here("limonium_rubisco/pagels_test_desert_0.xlsx")) %>%
+  mutate(Genus = "Limonium0")
+pagel_d_1 <- readxl::read_xlsx(here::here("dryopteris_rubisco/pagels_test_rainforest_10.xlsx")) %>%
+  mutate(Genus = "Dryopteris10")
+pagel_l_1 <- readxl::read_xlsx(here::here("limonium_rubisco/pagels_test_desert_10.xlsx")) %>%
+  mutate(Genus = "Limonium10")
+pagel_d_2 <- readxl::read_xlsx(here::here("dryopteris_rubisco/pagels_test_rainforest_20.xlsx")) %>%
+  mutate(Genus = "Dryopteris20")
+pagel_l_2 <- readxl::read_xlsx(here::here("limonium_rubisco/pagels_test_desert_20.xlsx")) %>%
+  mutate(Genus = "Limonium20")
+
+pagel_d_re <- readxl::read_xlsx(here::here("dryopteris_rubisco/pagels_test_rainforest_reverse_0.xlsx")) %>%
+  mutate(Genus = "Dryopteris0")
+pagel_l_re <- readxl::read_xlsx(here::here("limonium_rubisco/pagels_test_desert_reverse_0.xlsx")) %>%
+  mutate(Genus = "Limonium0")
+pagel_d_re_1 <- readxl::read_xlsx(here::here("dryopteris_rubisco/pagels_test_rainforest_reverse_10.xlsx")) %>%
+  mutate(Genus = "Dryopteris10")
+pagel_l_re_1 <- readxl::read_xlsx(here::here("limonium_rubisco/pagels_test_desert_reverse_10.xlsx")) %>%
+  mutate(Genus = "Limonium10")
+pagel_d_re_2 <- readxl::read_xlsx(here::here("dryopteris_rubisco/pagels_test_rainforest_reverse_20.xlsx")) %>%
+  mutate(Genus = "Dryopteris20")
+pagel_l_re_2 <- readxl::read_xlsx(here::here("limonium_rubisco/pagels_test_desert_reverse_20.xlsx")) %>%
+  mutate(Genus = "Limonium20")
+
+dep_y_pagel <- bind_rows(pagel_d, pagel_l, pagel_d_1, pagel_l_1, pagel_d_2, pagel_l_2) %>%
+  rowwise() %>%
+  mutate(Min_AIC = min(AIC_Dependent, AIC_Independent)) %>%
+  select(Genus, Substitution, Min_AIC)
+dep_x_pagel <- bind_rows(pagel_d_re, pagel_l_re, pagel_d_re_1, pagel_l_re_1, pagel_d_re_2, pagel_l_re_2) %>%
+  rowwise() %>%
+  mutate(Min_AIC_Re = min(AIC_Dependent, AIC_Independent)) %>%
+  select(Genus, Substitution, Min_AIC_Re)
+best_models <- full_join(dep_y_pagel, dep_x_pagel) %>%
+  mutate(BestDepVar = ifelse(Min_AIC < Min_AIC_Re, "climate", "amino acid"))
+
+dep_y_sites <- best_models %>%
+  filter(BestDepVar == "climate") %>%
+  select(Genus, Substitution)
+dep_x_sites <- best_models %>%
+  filter(BestDepVar == "amino acid") %>%
+  select(Genus, Substitution)
+
+dep_y_pagel <- bind_rows(pagel_d, pagel_l, pagel_d_1, pagel_l_1, pagel_d_2, pagel_l_2) %>%
+  semi_join(dep_y_sites) %>%
+  mutate(BestDepVar = "climate")
+dep_x_pagel <- bind_rows(pagel_d_re, pagel_l_re, pagel_d_re_1, pagel_l_re_1, pagel_d_re_2, pagel_l_re_2) %>%
+  semi_join(dep_x_sites) %>%
+  mutate(BestDepVar = "amino acid")
+
+pagel <- bind_rows(dep_y_pagel, dep_x_pagel) %>%
+  mutate(Site = stringr::str_extract(Substitution, "[:digit:]+") %>% as.numeric(),
+         Substitution = stringr::str_replace(Substitution, "([:alpha:][:digit:]+)(.+)", "\\1→\\2"),
+         p = ifelse(p < 0.05, "*", "")) %>%
+  select(Genus, Site, Substitution, p) %>% 
+  distinct() %>%
+  mutate(expansion = Genus %>% stringr::str_extract("[:digit:]+"),
+         Genus = Genus %>% stringr::str_remove("[:digit:]+")) %>%
+  tidyr::pivot_wider(names_from = "expansion",
+                     names_prefix = "p",
+                     values_from = "p")
+
+writexl::write_xlsx(pagel, here::here("supp_table_Pagel_sensitivity.xlsx"))
+
+```
+
+# FoldX analyses - substitutions
+
+```{r foldx}
+
+library(ggplot2)
+
+ggplot2::theme_set(cowplot::theme_cowplot(line_size = 0.25, font_size = 10) +
+                     theme(axis.line = element_blank(),
+                           axis.ticks.length = unit(-3, "pt"),
+                           axis.ticks = element_line(linewidth = 0.25),
+                           strip.background = element_blank(),
+                           strip.placement = "outside",
+                           axis.text.x.top = element_blank(),
+                           axis.text.y.right = element_blank(),
+                           axis.title.x.top = element_blank(),
+                           axis.title.y.right = element_blank()))
+
+H_BONDABLE <- c("S", # OH (hydroxyl)
+                "T", # OH
+                "Y", # OH
+                "N", # CONH2 (amide)
+                "Q", # CONH2
+                "C", # SH (thiol) - not really, but can participate in dipole interactions with other thiols
+                "H", # imidazole ring
+                "D", # -COO- (carboxylate)
+                "E", # -COO-
+                "R", # guanidine
+                "K") # -NH2 (amine)
+
+# pagel_focused <- readxl::read_xlsx(here::here("table_Pagel_tests.xlsx")) %>%
+#   select(Genus, Site, Substitution, FasterAA, StateFavouredbyAA) %>%
+#   mutate(across(.cols = c("Genus", "Site"),
+#                 .fns = ~ ifelse(. == "·", NA, .))) %>%
+#   mutate(Site = as.numeric(Site)) %>%
+#   tidyr::fill(Genus, Site) %>%
+#   mutate(AA = stringr::str_sub(Substitution, 1, 1),
+#          AA_Ancestral = stringr::str_sub(Substitution, -1, -1)) %>%
+#   mutate(AA_HBondable = ifelse(AA %in% H_BONDABLE, TRUE, FALSE),
+#          AA_A_HBondable = ifelse(AA_Ancestral %in% H_BONDABLE, TRUE, FALSE),
+#          BondableChange = case_when(AA_HBondable == FALSE & AA_A_HBondable == TRUE ~ "Removed", 
+#                                     AA_HBondable == TRUE & AA_A_HBondable == FALSE ~ "Added",
+#                                     .default = "None"),
+#          .keep = "unused")
+
+foldx <- readr::read_csv(here::here("foldx_subs/ddG_values.csv")) %>%
+  mutate(Substitution = stringr::str_replace(Substitution, "([:alpha:][:digit:]+)(.+)", "\\1→\\2")) %>%
+  mutate(AA_Ancestral = stringr::str_sub(Substitution, 1, 1),
+         AA = stringr::str_sub(Substitution, -1, -1)) %>%
+  mutate(AA_HBondable = ifelse(AA %in% H_BONDABLE, TRUE, FALSE),
+         AA_A_HBondable = ifelse(AA_Ancestral %in% H_BONDABLE, TRUE, FALSE),
+         BondableChange = case_when(AA_HBondable == FALSE & AA_A_HBondable == TRUE ~ "Removed", 
+                                    AA_HBondable == TRUE & AA_A_HBondable == FALSE ~ "Added",
+                                    .default = "None"),
+         .keep = "unused")
+
+COMPONENTS <- c("Total", "Hydrogen bonds", 
+                # "Solvation, polar", 
+                "Solvation, hydrophobic")
+
+foldx_focused <- foldx %>%
+  rename(Total = totalenergy,
+         `Hydrogen bonds` = HBond,
+         # `Solvation, polar` = SolvationPolar,
+         `Solvation, hydrophobic` = SolvationHydrophobic) %>% 
+  filter(!is.na(Total)) %>%
+  select(Genus, Site, Substitution, BondableChange, SD, COMPONENTS)  %>%
+  tidyr::pivot_longer(cols = c("Total", "Hydrogen bonds", 
+                               # "Solvation, polar", 
+                               "Solvation, hydrophobic"),
+                      names_to = "Parameter",
+                      values_to = "Value") %>%
+  mutate(Value = Value / 8) # normalize per L subunit
+
+residues <- foldx_focused %>%
+  group_by(Parameter, BondableChange) %>%
+  distinct(Parameter, Substitution, .keep_all = TRUE) %>%
+  rstatix::t_test(Value ~ 1, mu = 0,
+                  p.adjust.method = "fdr") %>%
+  rstatix::add_y_position(step.increase = 0.04) %>%
+  mutate(p.signif = case_when(p < 0.001 ~ "***",
+                              p < 0.01 ~ "**",
+                              p < 0.05 ~ "*")) %>%
+  filter(Parameter %in% COMPONENTS) %>%
+  mutate(Tag = case_when(Parameter == "Hydrogen bonds" ~ "A",
+                         Parameter == "Solvation, hydrophobic" ~ "B",
+                         # Parameter == "Solvation, polar" ~ "C",
+                         Parameter == "Total" ~ "C"))
+
+writexl::write_xlsx(foldx_focused, here::here("supp_table_FoldX.xlsx"))
+  
+foldx_fig <- foldx_focused %>%
+  full_join(residues) %>%
+  distinct(Parameter, Substitution, .keep_all = TRUE) %>%
+  filter(Parameter %in% COMPONENTS) %>%
+  ggplot(aes(x = BondableChange, y = Value)) +
+  geom_hline(aes(yintercept = 0), 
+             linetype = "dotted",
+             linewidth = 0.25) +
+  ggbeeswarm::geom_quasirandom(width = 0.25,
+                               size = 0.5,
+                               shape = 21) + 
+  stat_summary(geom = "pointrange",
+               position = position_nudge(x = 0.4),
+               size = 0.25,
+               linewidth = 0.4,
+               fatten = 2) +
+  geom_text(aes(y = y.position,
+                label = p.signif),
+            data = residues,
+            size = 5) +
+  geom_text(aes(label = Tag, x = -Inf, y = Inf),
+            hjust = -0.5, vjust = 1.5,
+            fontface = "bold") +
+  labs(x = "Changes in oxygen, nitrogen, and/or sulfur atoms",
+       y = bquote(atop("← more stable       less stable →",
+                       Delta*Delta*italic("G")[fold]~"(kcal "*mol^-1~large~subunit^-1*")"))) +
+  scale_y_continuous(limits = c(-5.25, 5.25), breaks = seq(-5, 5, 2.5)) +
+  theme(axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 0, l = 0)),
+        axis.text.x = element_text(hjust = 1,
+                                   angle = 30)) +
+  cowplot::panel_border(color = "black", size = 0.5) +
+  coord_cartesian(clip = "off") +
+  # ggpubr::stat_pvalue_manual(residues %>% filter(Parameter %in% COMPONENTS),
+  #                            label = "label",
+  #                            tip.length = 0.02,
+  #                            hide.ns = FALSE) +
+  facet_grid(~ factor(Parameter))
+
+ggsave(here::here("figure_FoldX.tif"), foldx_fig, width = 4.75, height = 2.75, bg = "white", dpi = 1000)
+
+```
+# FoldX analyses - species
+
+```{r foldx_species}
+
+#full specific epithets (fse)
+fse_d <- readr::read_csv(here::here("dryopteris_rubisco/tree_names.csv")) %>%
+  rename(Species = Taxon) %>%
+  mutate(Genus = "D.") %>%
+  select(Genus, Species, ShortName) %>%
+  mutate(Species = stringr::word(Species, 1, 2))
+fse_l <- readr::read_csv(here::here("limonium_rubisco/accessions.csv")) %>%
+  mutate(ShortName = stringr::str_sub(stringr::word(species, 2), 1, 10), .before = "species") %>%
+  rename(Species = species) %>%
+  mutate(Genus = "L.") %>%
+  select(Genus, Species, ShortName) %>%
+  mutate(Species = stringr::word(Species, 1, 2) %>% 
+           stringr::str_replace("L.", "Limonium"))
+fse_p <- readr::read_csv(here::here("pine_rubisco/accessions.csv")) %>%
+  mutate(ShortName = stringr::str_sub(stringr::word(Species, 2), 1, 10), .before = "Species") %>%
+  mutate(Genus = "P.") %>%
+  select(Genus, Species, ShortName) 
+fse_v <- readr::read_csv(here::here("download", "metadata.csv")) %>%
+  mutate(ShortName = stringr::str_sub(species, 1, 10), .before = "species") %>%
+  rename(Species = gb_species) %>%
+  mutate(Genus = "V.") %>%
+  select(Genus, Species, ShortName) 
+fse <- bind_rows(fse_d, fse_l, fse_p, fse_v) %>%
+  distinct(Genus, Species, ShortName)
+
+species_seqs <- readr::read_csv(here::here("combined_stability/aa_sequences.csv"))
+seq_nums <- readr::read_csv(here::here("combined_stability/seqs_in_order.txt"), col_names = FALSE) %>%
+  rename(seq = X1) %>%
+  mutate(SeqNum = row_number())
+species_names <- full_join(species_seqs, seq_nums)
+
+file_list <- list.files(here::here("foldx_species/runs"), pattern = "Dif_run")
+
+runs <- readr::read_tsv(here::here("foldx_species/runs/Dif_run_1_8ruc-assembly-clean_Repair.fxout"), skip = 8) %>%
+  mutate(Run = 1 %>% as.numeric(),
+         # SeqNum = row_number(),
+         SeqNum = rep(1:(n()/3), each = 3),
+         .before = "Pdb") #%>%
+  # select(Run, SeqNum, Pdb, `total energy`)
+
+run_num_seq_num <- c("1" = 0,
+                     "2" = 22,
+                     "3" = 44,
+                     "4" = 66,
+                     "5" = 88,
+                     "6" = 110,
+                     "7" = 132,
+                     "8" = 153)
+
+for (file in file_list) {
+  run_num <- file %>% stringr::str_extract("(?<=run_)[:digit:]+") %>% as.character
+  print(paste("Run", run_num))
+  if (run_num == "1") {next}
+  
+  print(paste("Starting at sequence", run_num_seq_num[run_num]))
+  run_data <- readr::read_tsv(here::here("foldx_species", "runs", file), skip = 8) %>%
+    filter(stringr::str_detect(Pdb, "^8ruc")) %>%
+    mutate(Run = run_num  %>% as.numeric(),
+           # SeqNum = row_number() + run_num_seq_num[run_num],
+           SeqNum = rep(1:(n()/3), each = 3) + run_num_seq_num[run_num],
+           .before = "Pdb") #%>%
+    # select(Run, SeqNum, Pdb, `total energy`)
+  prev_seq_num <- run_data %>% pull(SeqNum) %>% max(., na.rm = TRUE)
+  runs <- bind_rows(runs, run_data)
+}
+
+runs_summary <- runs %>%
+  filter(!(SeqNum == 87 & Pdb == "8ruc-assembly-clean_Repair_2_0.pdb")) %>%
+  group_by(Run, SeqNum) %>%
+  summarise(across(.cols = !c(Pdb),
+                   .fns = mean))
+
+species_stability <- full_join(species_names, runs_summary) %>%
+  rename(ShortName = species) %>%
+  select(!seq) %>%
+  rename_with(~stringr::str_remove_all(., " ")) %>%
+  mutate(across(.cols = !c("ShortName", "SeqNum", "Run"),
+                .fns = ~ plyr::round_any(., 0.01))) %>%
+  mutate(HBond = BackboneHbond + SidechainHbond,
+         Clashes = VanderWaalsclashes + torsionalclash + backboneclash,
+         .after = totalenergy) %>%
+  right_join(fse, .) %>%
+  select(Genus, Species, ShortName, totalenergy, BackboneHbond, SidechainHbond,
+         SolvationPolar, SolvationHydrophobic, VanderWaalsclashes, torsionalclash, backboneclash,
+         VanderWaals, Electrostatics)
+
+writexl::write_xlsx(species_stability, here::here("combined_stability/ddG_species.xlsx"))
+
+```
+
+# Summary
+
+``` {r summary}
+H_BONDABLE <- c("S", # OH (hydroxyl)
+                "T", # OH
+                "Y", # OH
+                "N", # CONH2 (amide)
+                "Q", # CONH2
+                "C", # SH (thiol) - not really, but can participate in dipole interactions with other thiols
+                "H", # imidazole ring
+                "D", # -COO- (carboxylate)
+                "E", # -COO-
+                "R", # guanidine
+                "K") # -NH2 (amine)
+
+pos_conv_sites_v <- readr::read_csv(here::here("analyze/pos_selected_conv_sites.csv")) %>%
+  mutate(Genus = "Viburnum")
+pos_conv_sites_d <- readr::read_csv(here::here("dryopteris_rubisco/pos_selected_conv_sites.csv")) %>%
+  mutate(Genus = "Dryopteris")
+pos_conv_sites_l <- readr::read_csv(here::here("limonium_rubisco/pos_selected_conv_sites.csv")) %>%
+  mutate(Genus = "Limonium")
+pos_conv_sites_p <- readr::read_csv(here::here("pine_rubisco/pos_selected_conv_sites.csv")) %>%
+  mutate(Genus = "Pinus")
+pos_conv_sites <- bind_rows(pos_conv_sites_v, pos_conv_sites_d, pos_conv_sites_l, pos_conv_sites_p)%>%
+  mutate(ConvEvol = ifelse(OCNany2spe >= 0.95, "*", ""),
+         PosSel = ifelse(PosteriorProb >= 0.95, "*", "")) %>%
+  distinct(Genus, Site, PosSel, ConvEvol)
+
+pagel <- readxl::read_xlsx(here::here("table_Pagel_tests.xlsx")) %>%
+  mutate(across(.cols = c("Genus", "Site"),
+                .fns = ~ ifelse(. == "·", NA, .))) %>%
+  tidyr::fill(Genus, Site) %>%
+  mutate(Site = as.numeric(Site))
+
+foldx <- readr::read_csv(here::here("foldx5_1/ddG_values.csv")) %>%
+  mutate(Substitution = stringr::str_replace(Substitution, "([:alpha:][:digit:]+)(.+)", "\\1→\\2")) %>%
+  mutate(StabilityChange = ifelse(totalenergy < 0, "stabilizing", "destabilizing")) %>%
+  mutate(AA = stringr::str_sub(Substitution, 1, 1),
+         AA_Ancestral = stringr::str_sub(Substitution, -1, -1)) %>%
+  mutate(AA_HBondable = ifelse(AA %in% H_BONDABLE, TRUE, FALSE),
+         AA_A_HBondable = ifelse(AA_Ancestral %in% H_BONDABLE, TRUE, FALSE),
+         BondableChange = case_when(AA_HBondable == FALSE & AA_A_HBondable == TRUE ~ "removed", 
+                                    AA_HBondable == TRUE & AA_A_HBondable == FALSE ~ "added",
+                                    .default = "none"),
+         .keep = "unused") %>%
+  select(Genus, Site, Substitution, BondableChange, StabilityChange)
+
+summary <- pos_conv_sites %>% 
+  full_join(foldx) %>%
+  full_join(pagel) %>%
+  arrange(Site, Substitution, Genus) %>%
+  mutate(BondableChange = case_when(BondableChange == "added" ~ "+",
+                                    BondableChange == "removed" ~ "-",
+                                    .default = ""),
+         StabilityChange = case_when(StabilityChange == "stabilizing" ~ "+",
+                                     StabilityChange == "destabilizing" ~ "-",
+                                     is.na(StabilityChange) ~ "ND"),
+         StateFavouredbyAA = case_when(is.na(StateFavouredbyAA) ~ "",
+                                       StateFavouredbyAA == "symmetrical" ~ "*",
+                                       StateFavouredbyAA %in% c("non-cold", "non-rainforest", "fire", "desert") ~ "+",
+                                       .default = "-"),
+         StateFavouredbyAA = ifelse(is.na(StateFavouredbyAA), "", StateFavouredbyAA)) %>%
+  distinct(Site, Genus, Substitution, PosSel, ConvEvol, BondableChange, StabilityChange, StateFavouredbyAA) %>%
+  rename(`Positive selection` = PosSel,
+         `Convergent evolution` = ConvEvol,
+         `Change in polar atoms` = BondableChange,
+         `Change in stability` = StabilityChange,
+         `Climate favored by derived residue` = StateFavouredbyAA) %>%
+  mutate(Site = unfill(Site))
+
+
+writexl::write_xlsx(summary, here::here("table_Summary.xlsx"))
+
+summary %>% filter(Site != "·") %>% pull(Site) %>% unique() %>% paste0(collapse = "+")
+
+temp <- summary %>% filter(`Change in polar atoms` == "+" & `Change in stability` == "+" | `Change in polar atoms` == "-" & `Change in stability` == "-")
+
+temp <- summary %>% filter(`Climate favored by derived residue` == "+" & `Change in stability` == "+" | `Climate favored by derived residue` == "-" & `Change in stability` == "-")
+
+temp <- summary %>% filter(`Change in polar atoms` == "+" & `Climate favored by derived residue` == "+"  | `Change in polar atoms` == "-" & `Climate favored by derived residue` == "-")
+
+temp <- summary %>% filter(`Change in polar atoms` == "-" & `Climate favored by derived residue` == "+" & `Change in stability` == "-" | `Change in polar atoms` == "+" & `Climate favored by derived residue` == "-" & `Change in stability` == "-")
+
+```
+

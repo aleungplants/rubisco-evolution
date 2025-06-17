@@ -1,0 +1,2624 @@
+---
+title: "Viburnum rubisco evolution"
+author: "Arthur Leung"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+here::i_am("analyze/analyze.Rmd")
+
+ggplot2::theme_set(cowplot::theme_cowplot(line_size = 0.25, font_size = 10) +
+                     theme(axis.ticks.length = unit(-3, "pt"),
+                           axis.ticks = element_line(linewidth = 0.25),
+                           strip.background = element_blank(),
+                           strip.placement = "outside",
+                           axis.text.x.top = element_blank(),
+                           axis.text.y.right = element_blank(),
+                           axis.title.x.top = element_blank(),
+                           axis.title.y.right = element_blank()))
+```
+
+# Selection analyses
+
+## LRTs and model parameters from PAML site analyses. 
+
+The M1a vs. M0 comparison was used to determine whether there were a class of codon sites with nearly neutral evolution (0 \< ω \< 1), where ω is the ratio of nonsynonymous to synonymous codon substitutions. The M3 vs. M0 tested for variable ω between sites. The M2a vs. M1a and M8a vs. M7 comparisons were used were used to determined if there were codon sites under positive selection (ω \> 1). The M2a vs. M1a test is more stringent than M8 vs. M7, so to prevent false positives we used only the results of M2a for downstream analyses; also this was the better fitting model based on AIC.
+
+```{r paml}
+
+mlc <- readr::read_csv(here::here("analyze", "paml_site_mlc.csv")) %>%
+  mutate(across(.cols = !c(Parameter, Value),
+                .fns = ~ifelse(!is.na(.) & !is.na(lag(.)) & . == lag(.), NA, .)))
+writexl::write_xlsx(mlc, here::here("analyze", "paml_site_mlc_unfill.xlsx"))
+
+```
+
+
+## Get PAML and amino acid data
+
+```{r aa}
+
+arc <- readr::read_csv(here::here("analyze", "paml_site_arc.csv")) %>%
+  filter(ID == 149) %>% # node 149 is the root node
+  dplyr::select(Site, AA, PosteriorProb) %>%
+  rename(AA_Ancestral = AA,
+         AA_A_PosteriorProb = PosteriorProb)
+
+pos_sel <- readr::read_csv(here::here("analyze", "aa_at_sites.csv")) %>%
+  tidyr::pivot_longer(cols = matches(stringr::regex("[:digit:]+")),
+                      names_to = "Site",
+                      values_to = "AA") %>%
+  mutate(Site = as.numeric(Site))
+
+aa <- inner_join(pos_sel, arc, by = "Site") %>%
+  mutate(Ancestral = ifelse(AA == AA_Ancestral,
+                            TRUE,
+                            ifelse(AA == "-",
+                                   NA,
+                                   FALSE)))
+
+sub_groups <- aa %>%
+  filter(Ancestral == FALSE) %>%
+  group_by(Site, AA_Ancestral, Ancestral) %>%
+  summarise(Substitution = paste(unique(AA), collapse = "/")) %>%
+  mutate(Substitution = paste(AA_Ancestral, Site, Substitution, sep = "")) %>%
+  dplyr::select(!c(AA_Ancestral, Ancestral))
+
+aa <- full_join(aa, sub_groups, by = c("Site", "AA_Ancestral"))
+
+readr::write_csv(aa, here::here("analyze", "aa_at_sites_ancestral.csv"))
+
+```
+
+## Model parameters from CSUBST analysis. 
+
+Branch pairs with at least one convergent substitution are shown.
+
+```{r csubst}
+
+ancestral_aa <- readr::read_csv(here::here("analyze", "aa_at_sites_ancestral.csv"))
+
+csubst_site <- readr::read_csv(here::here("csubst", "analysis", "csubst_site_merged.csv")) %>%
+  filter(OCNany2spe > 0.95) %>%
+  distinct() %>%
+  mutate(Site = codon_site_alignment + 31) %>% # align with full cds position
+  dplyr::select(!codon_site_alignment) %>%
+  full_join(ancestral_aa) %>% # get root aa
+  filter(aa_1 != AA_Ancestral & aa_2 != AA_Ancestral) %>% # no reversals
+  mutate(substitution_1 = paste0(aa_1_anc, Site, aa_1),
+         substitution_2 = paste0(aa_2_anc, Site, aa_2)) %>% 
+  rename(aa_root = AA_Ancestral) %>%
+  dplyr::select(Site, branch_id_1, branch_id_2, aa_root, substitution_1, substitution_2) %>%
+  tidyr::pivot_longer(
+    cols = ends_with(c("_1", "_2")),
+    names_to = c(".value", "id"),
+    names_pattern = "(.*)_(1|2)$"
+  ) %>% # pivot longer
+  dplyr::select(!id) %>%
+  distinct() %>% # distinct
+  group_by(Site, aa_root, substitution) %>%
+  summarise(branch_ids = paste(branch_id, collapse = ", "))
+
+writexl::write_xlsx(csubst_site, here::here("analyze/convergent_subs.xlsx"))
+
+```
+
+## Positively selected, convergent sites
+
+```{r omega}
+ancestral_aa <- readr::read_csv(here::here("analyze", "aa_at_sites_ancestral.csv")) %>%
+  select(Site, AA_Ancestral) %>%
+  mutate(Site = as.character(Site))
+
+rst <- readr::read_csv(here::here("analyze", "paml_site_omega.csv")) %>%
+  filter(NSSitesModel == 2) %>%
+  mutate(Site = as.character(Site)) %>%
+  filter(PosteriorProb > 0.95)
+convergent_sites <- readr::read_csv(here::here("csubst", "analysis", "csubst_site_merged.csv")) %>%
+  filter(OCNany2spe > 0.95) %>%
+  distinct() %>%
+  mutate(Site = as.character(codon_site_alignment + 31)) %>% # align with full cds position
+  dplyr::select(!codon_site_alignment) %>%
+  full_join(ancestral_aa) %>%
+  filter(aa_1 != AA_Ancestral & aa_2 != AA_Ancestral) %>%
+  dplyr::select(branch_id_1, branch_id_2, node1, node2, Site, OCNany2spe)
+
+pos_sel_sites <- rst %>% pull(Site)
+length(pos_sel_sites)
+conv_evo_sites <- convergent_sites %>% pull(Site)
+length(conv_evo_sites)
+
+combined_sites <- full_join(rst, convergent_sites)
+length(combined_sites %>% pull(Site) %>% unique())
+
+readr::write_csv(combined_sites, here::here("analyze", "pos_selected_conv_sites.csv")) 
+
+```
+
+
+
+### Figure: Omega
+
+```{r}
+
+rst_labels <- readr::read_csv(here::here("analyze", "paml_site_omega.csv")) %>%
+  filter(NSSitesModel == 2) %>%
+  mutate(Site = as.character(Site)) %>% 
+  full_join(convergent_sites) %>%
+  mutate(PosSelectedSite = ifelse(PosteriorProb > 0.95, Site, ""),
+         ConvergentSite = ifelse(OCNany2spe > 0.95, "*", "")) %>%
+  mutate(ConvergentSite = tidyr::replace_na(ConvergentSite, "")) %>%
+  mutate(Label = PosSelectedSite) %>%
+  mutate(Label = paste(PosSelectedSite, ConvergentSite, sep = "")) %>%
+  distinct(Label, .keep_all = TRUE) %>%
+  filter(stringr::str_detect(Label, stringr::regex("^[:digit:]")))
+
+fig_omega <- readr::read_csv(here::here("analyze", "paml_site_omega.csv")) %>%
+  filter(NSSitesModel == 2) %>%
+  mutate(Site = as.character(Site)) %>% 
+  ggplot(aes(x = as.numeric(Site), y = w)) +
+  geom_ribbon(aes(ymin = w-SE, ymax = w+SE), fill = "grey60") +
+  geom_line(linewidth = 0.25) +
+  geom_point(data = filter(rst, PosteriorProb > 0.95),
+             shape = 21,
+             color = "black",
+             fill = "black",
+             size = 1,
+             alpha = 0.5,
+             stroke = 0.25) +
+  geom_text(data = filter(rst_labels, Site %in% c(76)), 
+                           aes(label = Label),
+                           size = 2.5,
+                           nudge_x = -2, nudge_y = 0.5) +
+  geom_text(data = filter(rst_labels, Site %in% c(95)), 
+                           aes(label = Label),
+                           size = 2.5,
+                           nudge_x = 2, nudge_y = 0.5) +
+  geom_text(data = filter(rst_labels, Site %in% c(157)), 
+                           aes(label = Label),
+                           size = 2.5,
+                           nudge_x = 0, nudge_y = 0.5) +
+  geom_text(data = filter(rst_labels, Site %in% c(219)), 
+                           aes(label = Label),
+                           size = 2.5,
+                           nudge_x = -18, nudge_y = 0) +
+  ggrepel::geom_text_repel(data = filter(rst_labels, Site %in% c(225)), 
+                           aes(label = Label),
+                           size = 2.5,
+                           min.segment.length = 0.1,
+                           segment.linetype = "dotted",
+                           segment.size = 0.25,
+                           xlim = c(NA, 232), ylim = c(10.5, NA)) +
+  ggrepel::geom_text_repel(data = filter(rst_labels, Site %in% c(226)),
+                           aes(label = Label),
+                           size = 2.5,
+                           segment.linetype = "dotted",
+                           segment.size = 0.25,
+                           nudge_x = -5, nudge_y = 2) +
+  ggrepel::geom_text_repel(data = filter(rst_labels, Site %in% c(230)),
+                           aes(label = Label),
+                           size = 2.5,
+                           segment.linetype = "dotted",
+                           segment.size = 0.25,
+                           nudge_x = 6, nudge_y = 1.65) +
+  ggrepel::geom_text_repel(data = filter(rst_labels, Site %in% c(249)),
+                           aes(label = Label),
+                           size = 2.5,
+                           segment.linetype = "dotted",
+                           segment.size = 0.25,
+                           nudge_x = 0, nudge_y = 2.5) +
+  ggrepel::geom_text_repel(data = filter(rst_labels, Site %in% c(251)),
+                           aes(label = Label),
+                           size = 2.5,
+                           segment.linetype = "dotted",
+                           segment.size = 0.25,
+                           nudge_x = 14, nudge_y = 1.9) +
+  ggrepel::geom_text_repel(data = filter(rst_labels, Site %in% c(255)),
+                           aes(label = Label),
+                           size = 2.5,
+                           segment.linetype = "dotted",
+                           segment.size = 0.25,
+                           nudge_x = 28, nudge_y = 2.5) +
+  ggrepel::geom_text_repel(data = filter(rst_labels, Site %in% c(262)),
+                           aes(label = Label),
+                           size = 2.5,
+                           segment.linetype = "dotted",
+                           segment.size = 0.25,
+                           nudge_x = 28, nudge_y = 1.3) +
+  geom_text(data = filter(rst_labels, Site %in% c(279)),
+                           aes(label = Label),
+                           size = 2.5,
+                           nudge_x = 14, nudge_y = 0.4) +
+  ggrepel::geom_text_repel(data = filter(rst_labels, Site %in% c(309)),
+                           aes(label = Label),
+                           size = 2.5,
+                           segment.linetype = "dotted",
+                           segment.size = 0.25,
+                           nudge_x = 0, nudge_y = 2.2) +
+  ggrepel::geom_text_repel(data = filter(rst_labels, Site %in% c(317)),
+                           aes(label = Label),
+                           size = 2.5,
+                           segment.linetype = "dotted",
+                           segment.size = 0.25,
+                           nudge_x = 10, nudge_y = 1.6) +
+  ggrepel::geom_text_repel(data = filter(rst_labels, Site %in% c(328)),
+                           aes(label = Label),
+                           size = 2.5,
+                           min.segment.length = 0.1,
+                           segment.linetype = "dotted",
+                           segment.size = 0.25,
+                           nudge_x = 15, nudge_y = 1) +
+  geom_text(data = filter(rst_labels, Site %in% c(340)),
+                           aes(label = Label),
+                           size = 2.5,
+                           nudge_x = 18, nudge_y = 0) +
+  ggrepel::geom_text_repel(data = filter(rst_labels, Site %in% c(449)),
+                           aes(label = Label),
+                           size = 2.5,
+                           min.segment.length = 0.1,
+                           segment.linetype = "dotted",
+                           segment.size = 0.25,
+                           nudge_x = -10, nudge_y = 1) +
+  ggrepel::geom_text_repel(data = filter(rst_labels, Site %in% c(461)),
+                           aes(label = Label),
+                           size = 2.5,
+                           min.segment.length = 0.1,
+                           segment.linetype = "dotted",
+                           segment.size = 0.25,
+                           nudge_x = 0, nudge_y = 2.2) +
+  ggrepel::geom_text_repel(data = filter(rst_labels, Site %in% c(472)),
+                           aes(label = Label),
+                           size = 2.5,
+                           min.segment.length = 0.1,
+                           segment.linetype = "dotted",
+                           segment.size = 0.25,
+                           nudge_x = 5, nudge_y = 1) +
+  geom_text(data = filter(rst_labels, Site %in% c(475)),
+                           aes(label = Label),
+                           size = 2.5,
+                           nudge_x = 20, nudge_y = 0) +
+  cowplot::theme_cowplot() +
+  xlab("Codon site") + 
+  scale_x_continuous(limits = c(25, 525), breaks = seq(from = 50, to = 500, by = 100), expand = c(0,0)) +
+  ylab(expression(italic(d)[N]*"/"*italic(d)[S]))
+ggsave(here::here("analyze", "plots", "s3_dnds_viburnum.svg"), width = 4, height = 3)
+
+```
+
+# Pymol analyses
+
+## Hydrogen bonds?
+
+```{r h_bonds}
+aa <- readr::read_csv(here::here("analyze", "aa_at_sites_ancestral.csv")) %>% 
+  filter(AA != "-") 
+# Define residues that can form H-bonds, and also categorize amino acid types
+H_BONDABLE <- c("S", # OH (hydroxyl)
+                "T", # OH
+                "Y", # OH
+                "N", # CONH2 (amide)
+                "Q", # CONH2
+                "C", # SH (thiol) - not really, but can participate in dipole interactions with other thiols
+                "H", # imidazole ring
+                "D", # -COO- (carboxylate)
+                "E", # -COO-
+                "R", # guanidine
+                "K") # -NH2 (amine)
+
+ALIPHATIC <- c("A", "G", "I", "L", "P", "V")
+AROMATIC <- c("F", "W", "Y")
+ACIDIC <- c("D", "E")
+BASIC <- c("R", "H", "K")
+HYDROXYLIC <- c("S", "T")
+SULFUR_CONTAINING <- c("C", "M")
+AMIDIC <- c("N", "Q")
+SITES_OF_INTEREST <- readr::read_csv(here::here("analyze", "pos_selected_conv_sites.csv")) %>%
+  pull(Site) %>%
+  unique()
+
+# See which residues go from non-H-bondable to H-bondable
+h_bonds <- aa %>%
+  filter(Site %in% SITES_OF_INTEREST, AA != "-") %>%
+  ungroup() %>%
+  select(Site, AA, AA_Ancestral) %>%
+  unique() %>%
+  filter(AA != AA_Ancestral) %>%
+  mutate(AA_HBondable = ifelse(AA %in% H_BONDABLE, TRUE, FALSE),
+         AA_A_HBondable = ifelse(AA_Ancestral %in% H_BONDABLE, TRUE, FALSE)) %>%
+  rowwise() %>%
+  mutate(across(c(AA, AA_Ancestral),
+                .fns = ~ case_when(. %in% ALIPHATIC ~ "aliphatic",
+                                   . %in% AROMATIC ~ "aromatic",
+                                   . %in% ACIDIC ~ "acidic",
+                                   . %in% BASIC ~ "basic",
+                                   . %in% HYDROXYLIC ~ "hydroxylic",
+                                   . %in% SULFUR_CONTAINING ~ "sulfur_containing",
+                                   . %in% AMIDIC ~ "amidic"),
+                .names = "{.col}_Type")) %>%
+  filter(AA_HBondable == TRUE & AA_A_HBondable == FALSE |
+           AA_HBondable == FALSE & AA_A_HBondable == TRUE) %>%
+  arrange(AA_A_HBondable, AA_HBondable) %>%
+  arrange(as.numeric(Site))
+h_bonds
+
+writexl::write_xlsx(h_bonds, here::here("analyze/h_bonds.xlsx"))
+
+```
+
+# Ancestral state figures
+
+
+``` {r}
+
+library(phytools)
+
+full_specific_epithet <- readr::read_csv(here::here("download", "metadata.csv")) %>%
+  rename(Species = species) %>%
+  mutate(Species = stringr::str_replace(Species, "_", "-")) %>%
+  mutate(Species = stringr::str_replace(Species, "rigidum", "rugosum")) %>%
+  dplyr::select(Species) %>%
+  mutate(ShortName = stringr::str_sub(Species, 1, 10), .before = "Species")
+
+dep_y_pagel <- readxl::read_xlsx(here::here("analyze/pagels_test_cold.xlsx")) %>%
+  rowwise() %>%
+  mutate(Min_AIC = min(AIC_Dependent, AIC_Independent)) %>%
+  select(Substitution, Min_AIC, p)
+dep_x_pagel <- readxl::read_xlsx(here::here("analyze/pagels_test_cold_reverse.xlsx"))  %>%
+  rowwise() %>%
+  mutate(Min_AIC_Re = min(AIC_Dependent, AIC_Independent)) %>%
+  rename(p_Re = p) %>%
+  select(Substitution, Min_AIC_Re, p_Re)
+best_models <- full_join(dep_y_pagel, dep_x_pagel) %>%
+  mutate(BestDepVar = case_when(Min_AIC < Min_AIC_Re & p < 0.05 ~ "y",
+                                Min_AIC > Min_AIC_Re & p_Re < 0.05 ~ "x")) %>%
+  filter(!is.na(BestDepVar)) %>%
+  distinct(Substitution) %>%
+  mutate(Site = stringr::str_extract(Substitution, "[:digit:]+") %>% as.numeric())
+sites_of_interest <- best_models %>%
+  pull(Site) %>%
+  unique()
+subs_of_interest <- best_models %>%
+  pull(Substitution) %>%
+  unique()
+
+aa <- readr::read_csv(here::here("analyze", "aa_at_sites_ancestral.csv")) %>%
+  filter(Site %in% sites_of_interest) %>%
+  full_join(full_specific_epithet, ., by = "ShortName") %>%
+  mutate(Species = stringr::str_replace(Species, "_", "-")) %>%
+  mutate(Species = stringr::str_replace(Species, "rigidum", "rugosum"))  %>%
+  filter(AA != "-") %>%
+  select(Species, Site, AA) %>%
+  full_join(best_models) %>%
+  mutate(Ancestral = ifelse(AA == stringr::str_sub(Substitution, -1, -1), "1", "0")) %>%
+  select(Species, Substitution, Ancestral)
+
+tree <- ape::read.tree(here::here("csubst", "radseq_pruned_csubst.tre")) %>%
+  treeio::rename_taxa(full_specific_epithet) %>%
+  bind.tip(., tip.label = "ROOT", edge.length = 0, where = Ntip(.) + 1)
+```
+
+## Biome
+
+``` {r biome}
+biomes <- readr::read_csv(here::here("landis_biome_range", "landis_biomes.csv")) %>%
+  mutate(Species = stringr::str_replace(Species, "_", "-")) %>%
+  mutate(Species = stringr::str_replace(Species, "rigidum", "rugosum")) %>%
+  mutate(Biome = stringr::str_to_lower(Biome)) %>%
+  mutate(Biome = stringr::str_replace(Biome, "temperate", "temperate")) %>%
+  mutate(Biome = stringr::str_replace(Biome, "lucidophyllous", "warm temperate")) %>%
+  mutate(Biome = ifelse(Biome == "temperate", "1", "0")) %>%
+  add_row(Species = "ROOT", Biome = "0")
+
+SUBSTITUTION = "L219C"
+OVERWRITE = TRUE
+
+for (SUBSTITUTION in subs_of_interest) {
+  
+  file_list <- list.files(here::here("analyze/plots/simmaps"))
+  
+  if (OVERWRITE == FALSE & paste("coldtemp", SUBSTITUTION, ".svg", sep = "") %in% file_list) {
+    print("File exists, continuing")
+    next
+    }
+  
+  print(paste("Doing site", SUBSTITUTION))
+
+  aa_site <- aa %>%
+    filter(Substitution == SUBSTITUTION) %>%
+    select(!Substitution)
+
+  common_species <- intersect(pull(biomes, Species), pull(aa_site, Species))
+
+  pruned_tree <- tree %>% ape::keep.tip(common_species)
+
+  ER_aa <- fitMk(pruned_tree,
+                 aa_site %>% filter(Species %in% common_species) %>% tibble::deframe(),
+                 model = "ER",
+                 pi = c("0" = 1, "1" = 0))
+  ARD_aa <- fitMk(pruned_tree,
+                  aa_site %>% filter(Species %in% common_species) %>% tibble::deframe(),
+                  model = "ARD",
+                  pi = c("0" = 1, "1" = 0))
+  if (AIC(ER_aa) < AIC(ARD_aa)) {
+    print("Choosing ER")
+    sim_tree_aa <- simmap(ER_aa, nsim = 100)
+  } else {
+    print("Choosing ARD")
+    sim_tree_aa <- simmap(ARD_aa, nsim = 100)
+  }
+  dmap_aa <- densityMap(sim_tree_aa)
+  dmap_aa_color <- setMap(dmap_aa, c("black", "#fde725"))
+
+  ER_biome <- fitMk(pruned_tree,
+                    biomes %>% filter(Species %in% common_species) %>% tibble::deframe(),
+                    model = "ER",
+                    pi = c("0" = 1, "1" = 0))
+  ARD_biome <- fitMk(pruned_tree,
+                     biomes %>% filter(Species %in% common_species) %>% tibble::deframe(),
+                     model = "ARD",
+                     pi = c("0" = 1, "1" = 0))
+  if (AIC(ER_biome) < AIC(ARD_biome)) {
+    print("Choosing ER")
+    sim_tree_biome <- simmap(ER_biome, nsim = 100)
+  } else {
+    print("Choosing ARD")
+    sim_tree_biome <- simmap(ARD_biome, nsim = 100)
+  }
+  dmap_biome <- densityMap(sim_tree_biome)
+  dmap_biome_color <- setMap(dmap_biome, c("black", "#5ec962"))
+
+  svg(here::here("analyze/plots/simmaps", paste("coldtemp", SUBSTITUTION, ".svg", sep = "")),
+      height = 5, width = 5)
+  layout(matrix(1:2,1,2),widths=c(1,1))
+  par(oma=c(0,0,0,0))
+  par(mar=c(0,0,0,0))
+  plot(dmap_aa_color, lwd = 2, ftype="off", legend = FALSE, no.margin=T)
+  plot(dmap_biome_color, lwd = 2, direction="leftwards", ftype="off", legend = FALSE,no.margin=T)
+  dev.off()
+}
+```
+
+<!-- ## Habit -->
+
+<!-- ```{r} -->
+
+<!-- habit <- readr::read_csv(here::here("edwards", "120_taxa_data.csv")) %>% -->
+<!--   mutate(Species = species, -->
+<!--          Habit = ifelse(habit == "evergreen", "0", "1")) %>% -->
+<!--   select(Species, Habit) %>% -->
+<!--   mutate(Species = stringr::str_replace(Species, "_", "-")) %>% -->
+<!--   mutate(Species = stringr::str_replace(Species, "rigidum", "rugosum"), -->
+<!--          Species = stringr::str_replace(Species, "annamensis", "anamensis"), -->
+<!--          Species = stringr::str_replace(Species, "clemensae", "clemensiae")) %>% -->
+<!--   add_row(Species = "ROOT", Habit = "0")  -->
+
+
+<!-- SITE = 219 -->
+<!-- OVERWRITE = FALSE -->
+
+<!-- for (SITE in sites_of_interest) { -->
+
+<!--   file_list <- list.files(here::here("analyze/plots/simmaps")) -->
+
+<!--   if (OVERWRITE == FALSE & paste("habit", SITE, ".svg", sep = "") %in% file_list) { -->
+<!--     print("File exists, continuing") -->
+<!--     next -->
+<!--     } -->
+
+<!--   print(paste("Doing site", SITE)) -->
+
+<!--   aa_site <- aa %>% -->
+<!--     filter(Site == SITE) %>% -->
+<!--     select(!Site) -->
+
+<!--   common_species <- intersect(pull(habit, Species), pull(aa_site, Species)) -->
+
+<!--   pruned_tree <- tree %>% ape::keep.tip(common_species) -->
+
+<!--   ER_aa <- fitMk(pruned_tree, -->
+<!--                  aa_site %>% filter(Species %in% common_species) %>% tibble::deframe(), -->
+<!--                  model = "ER", -->
+<!--                  pi = c("0" = 1, "1" = 0)) -->
+<!--   ARD_aa <- fitMk(pruned_tree, -->
+<!--                   aa_site %>% filter(Species %in% common_species) %>% tibble::deframe(), -->
+<!--                   model = "ARD", -->
+<!--                   pi = c("0" = 1, "1" = 0)) -->
+<!--   if (AIC(ER_aa) < AIC(ARD_aa)) { -->
+<!--     print("Choosing ER") -->
+<!--     sim_tree_aa <- simmap(ER_aa, nsim = 100) -->
+<!--   } else { -->
+<!--     print("Choosing ARD") -->
+<!--     sim_tree_aa <- simmap(ARD_aa, nsim = 100) -->
+<!--   } -->
+<!--   dmap_aa <- densityMap(sim_tree_aa) -->
+<!--   dmap_aa_color <- setMap(dmap_aa, c("black", "#fde725")) -->
+
+<!--   ER_habit <- fitMk(pruned_tree, -->
+<!--                     habit %>% filter(Species %in% common_species) %>% tibble::deframe(), -->
+<!--                     model = "ER", -->
+<!--                     pi = c("0" = 1, "1" = 0)) -->
+<!--   ARD_habit <- fitMk(pruned_tree, -->
+<!--                      habit %>% filter(Species %in% common_species) %>% tibble::deframe(), -->
+<!--                      model = "ARD", -->
+<!--                      pi = c("0" = 1, "1" = 0)) -->
+<!--   if (AIC(ER_habit) < AIC(ARD_habit)) { -->
+<!--     print("Choosing ER") -->
+<!--     sim_tree_habit <- simmap(ER_habit, nsim = 100) -->
+<!--   } else { -->
+<!--     print("Choosing ARD") -->
+<!--     sim_tree_habit <- simmap(ARD_habit, nsim = 100) -->
+<!--   } -->
+<!--   dmap_habit <- densityMap(sim_tree_habit) -->
+<!--   dmap_habit_color <- setMap(dmap_habit, c("black", "#dd57fd")) -->
+
+<!--   svg(here::here("analyze/plots/simmaps", paste("habit", SITE, ".svg", sep = "")), -->
+<!--       height = 5, width = 5) -->
+<!--   layout(matrix(1:2,1,2),widths=c(1,1)) -->
+<!--   par(oma=c(0,0,0,0)) -->
+<!--   par(mar=c(0,0,0,0)) -->
+<!--   plot(dmap_aa_color, lwd = 2, ftype="off", legend = FALSE, no.margin=T) -->
+<!--   plot(dmap_habit_color, lwd = 2, direction="leftwards", ftype="off", legend = FALSE,no.margin=T) -->
+<!--   dev.off() -->
+<!-- } -->
+
+<!-- ``` -->
+
+<!-- # Tree with amino acid heatmap -->
+
+<!-- ```{r} -->
+
+<!-- library(ggtree) -->
+<!-- sites_of_interest <- readr::read_csv(here::here("analyze", "pos_selected_conv_sites.csv")) %>% -->
+<!--   arrange(Site) %>% -->
+<!--   pull(Site) %>% -->
+<!--   unique() -->
+
+<!-- full_specific_epithet <- readr::read_csv(here::here("download", "metadata.csv")) %>% -->
+<!--   dplyr::select(species) %>% -->
+<!--   mutate(ShortName = stringr::str_sub(species, 1, 10), .before = "species") -->
+<!-- tree_file <- ape::read.tree(here::here("csubst", "radseq_pruned_csubst.tre")) %>% -->
+<!--   treeio::rename_taxa(full_specific_epithet) -->
+
+<!-- # chatelet_habit <- readxl::read_xlsx(here::here("edwards", "chatelet_tableb1.xlsx"), skip = 3) %>% -->
+<!-- #   select(Species, `Leafing Habitat`) %>% -->
+<!-- #   rename(Habit = `Leafing Habitat`) %>% -->
+<!-- #   filter(!is.na(Species)) %>% -->
+<!-- #   mutate(Species = stringr::word(Species, 2, -1), -->
+<!-- #          Habit = ifelse(Habit == "semi_deciduous", "evergreen", Habit)) %>% -->
+<!-- #   filter(!stringr::str_detect(Species, " ")) -->
+
+<!-- habit <- readr::read_csv(here::here("edwards", "120_taxa_data.csv")) %>% -->
+<!--   select(species, habit) %>% -->
+<!--   rename(Species = species, -->
+<!--          Habit = habit) %>% -->
+<!--   mutate(Species = stringr::str_replace(Species, "_", "-")) %>% -->
+<!--   mutate(Species = stringr::str_replace(Species, "rigidum", "rugosum"), -->
+<!--          Species = stringr::str_replace(Species, "annamensis", "anamensis"), -->
+<!--          Species = stringr::str_replace(Species, "clemensae", "clemensiae")) -->
+
+<!-- landis_biomes <- readr::read_csv(here::here("landis_biome_range", "landis_biomes.csv")) %>% -->
+<!--   mutate(Species = stringr::str_replace(Species, "_", "-")) %>% -->
+<!--   mutate(Species = stringr::str_replace(Species, "rigidum", "rugosum")) %>% -->
+<!--   mutate(Biome = stringr::str_to_lower(Biome)) %>% -->
+<!--   mutate(Biome = stringr::str_replace(Biome, "temperate", "cold temperate")) %>% -->
+<!--   mutate(Biome = stringr::str_replace(Biome, "lucidophyllous", "warm temperate")) -->
+<!-- freezing_expert <- readr::read_csv(here::here("edwards", "120_taxa_data.csv"))%>% -->
+<!--   distinct(species, freezing_expert) %>% -->
+<!--   na.omit() %>% -->
+<!--   rename(Species = species, -->
+<!--          Freezing = freezing_expert) %>% -->
+<!--   mutate(Species = stringr::str_replace(Species, "_", "-")) %>% -->
+<!--   mutate(Species = stringr::str_replace(Species, "rigidum", "rugosum")) -->
+
+<!-- leaf_shape <- readr::read_csv(here::here("edwards", "schmerler_data.csv")) %>% -->
+<!--   mutate( -->
+<!--     Margin = ifelse(Margin != "entire", "non-entire", Margin), -->
+<!--     Species = stringr::str_replace(Species, "_", "-"), -->
+<!--     Species = stringr::str_replace(Species, "rigidum", "rugosum"), -->
+<!--     Species = stringr::str_replace(Species, "annamensis", "anamensis"), -->
+<!--     Species = stringr::str_replace(Species, "clemensae", "clemensiae") -->
+<!--   ) -->
+
+<!-- habit_biomes <- purrr::reduce(list(habit, landis_biomes, freezing_expert, leaf_shape), full_join) %>% -->
+<!--   tidyr::pivot_longer(cols = c("Habit", "Biome", "Freezing", "Margin"), -->
+<!--                       names_to = "Character", -->
+<!--                       values_to = "Value") %>% -->
+<!--   filter(!is.na(Value)) -->
+
+<!-- aa <- readr::read_csv(here::here("analyze", "aa_at_sites_ancestral.csv")) %>% -->
+<!--   filter(Site %in% sites_of_interest) %>% -->
+<!--   mutate(Ancestral = ifelse(AA == AA_Ancestral, -->
+<!--                             TRUE, -->
+<!--                             ifelse(AA == "-", -->
+<!--                                    NA, -->
+<!--                                    FALSE))) %>% -->
+<!--   filter(!is.na(Ancestral)) %>% -->
+<!--   full_join(full_specific_epithet, by = "ShortName") %>% -->
+<!--   rename(Species = species) %>% -->
+<!--   relocate(Species, .before = "ShortName") -->
+
+<!-- heatmap <- ggplot(aa, aes(x = factor(as.character(Site), levels = sites_of_interest),  -->
+<!--                           y = Species, fill = Ancestral)) + -->
+<!--   geom_tile(color = "black", linewidth = 0.25) + -->
+<!--   geom_text(aes(color = Ancestral, label = AA), size = 1.5) + -->
+<!--   scale_color_manual(values = c("white", "black")) + -->
+<!--   scale_fill_manual(values = c("black", "white")) + -->
+<!--   cowplot::theme_cowplot(font_size = 10) + -->
+<!--   coord_cartesian(expand = FALSE) + -->
+<!--   theme(axis.title.x = element_blank(), -->
+<!--         axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5), -->
+<!--         axis.title.y = element_blank(), -->
+<!--         axis.text.y = element_blank(), -->
+<!--         axis.line.y = element_blank(), -->
+<!--         axis.ticks.y = element_blank(), -->
+<!--         legend.position = "none") -->
+
+<!-- BREAKS <- c("Biome", "Freezing", "Habit", "Margin", -->
+<!--             "tropical", "warm temperate", "cloud", "cold temperate",   -->
+<!--             "non-freezing", "freezing",  -->
+<!--             "evergreen", "deciduous",  -->
+<!--             "entire", "non-entire") -->
+
+<!-- habit_biome <- ggplot(habit_biomes, aes(x = Character, y = Species)) + -->
+<!--   geom_tile(aes(fill = factor(Character, levels = BREAKS)), color = "white", linewidth = 0.5) + -->
+<!--   geom_point(aes(fill = factor(Value, levels = BREAKS)), shape = 21) + -->
+<!--   scale_fill_manual(breaks = BREAKS, -->
+<!--                     values = c("#fef392", "#95e0bc", "#88b6d6", "#eeabfe", -->
+<!--                                "white", "grey", "#4CA6DC", "black", -->
+<!--                                "white", "black", -->
+<!--                                "white", "black", -->
+<!--                                "white", "black")) + -->
+<!--   cowplot::theme_cowplot(font_size = 10) + -->
+<!--   coord_cartesian(expand = FALSE) + -->
+<!--   theme(axis.title.x = element_blank(), -->
+<!--         axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5), -->
+<!--         axis.title.y = element_blank(), -->
+<!--         axis.text.y = element_blank(), -->
+<!--         axis.line.y = element_blank(), -->
+<!--         axis.ticks.y = element_blank(), -->
+<!--         legend.title = element_blank()) -->
+
+
+<!-- CLADE_LABEL_OFFSET <- 10 -->
+
+<!-- tree <- ggtree(tree_file) + -->
+<!--   geom_tiplab(hjust = 0, size = 2, fontface = "italic", align = TRUE) + -->
+<!--   # geom_cladelabel(node = 194, label = "Succotinus", offset = CLADE_LABEL_OFFSET) + -->
+<!--   # geom_cladelabel(node = 220, label = "Lobata", offset = CLADE_LABEL_OFFSET) + -->
+<!--   # geom_cladelabel(node = 223, label = "Sambucina", offset = CLADE_LABEL_OFFSET) + -->
+<!--   # geom_cladelabel(node = 230, label = "Coriacea", offset = CLADE_LABEL_OFFSET) + -->
+<!--   # geom_cladelabel(node = 232, label = "Opulus", offset = CLADE_LABEL_OFFSET) + -->
+<!--   # geom_cladelabel(node = 154, label = "Oreinotinus", offset = CLADE_LABEL_OFFSET) + -->
+<!--   # geom_cladelabel(node = 185, label = "Dentata", offset = CLADE_LABEL_OFFSET) + -->
+<!--   # geom_cladelabel(node = 187, label = "Mollotinus", offset = CLADE_LABEL_OFFSET) + -->
+<!--   # geom_cladelabel(node = 235, label = "Tinus", offset = CLADE_LABEL_OFFSET) + -->
+<!--   # geom_cladelabel(node = 247, label = "Solenotinus", offset = CLADE_LABEL_OFFSET) + -->
+<!--   # geom_cladelabel(node = 262, label = "Lutescentia", offset = CLADE_LABEL_OFFSET) + -->
+<!--   # geom_cladelabel(node = 268, label = "Euviburnum", offset = CLADE_LABEL_OFFSET) + -->
+<!--   # geom_cladelabel(node = 284, label = "Lentago", offset = CLADE_LABEL_OFFSET) + -->
+<!--   # geom_cladelabel(node = 290, label = "Punctata", offset = CLADE_LABEL_OFFSET) + -->
+<!--   # geom_cladelabel(node = 292, label = "Pseudotinus", offset = CLADE_LABEL_OFFSET) + -->
+<!--   # geom_cladelabel(node = 295, label = "Urceolata", offset = CLADE_LABEL_OFFSET) + -->
+<!--   # geom_cladelabel(node = 191, label = "Laminotinus", angle = 90, hjust = 0.5, vjust = 1, -->
+<!--   #                 offset = CLADE_LABEL_OFFSET + 12) + -->
+<!--   # geom_cladelabel(node = 152, label = "Porphyrotinus", angle = 90, hjust = 0.5, vjust = 1, -->
+<!--   #                 offset = CLADE_LABEL_OFFSET + 12) + -->
+<!--   # geom_cladelabel(node = 246, label = "Crenotinus", angle = 90, hjust = 0.5, vjust = 1, -->
+<!--   #                 offset = CLADE_LABEL_OFFSET + 12) + -->
+<!--   # geom_cladelabel(node = 267, label = "Valvotinus", angle = 90, hjust = 0.5, vjust = 1, -->
+<!--   #                 offset = CLADE_LABEL_OFFSET + 12) + -->
+<!--   # geom_nodelab(aes(subset = node == 154, -->
+<!--   #                  x = x - branch.length * 0.5, -->
+<!--   #                  label = "I475L"), -->
+<!--   #              hjust = 0.5, nudge_y = 0.45, size = 1.75) + -->
+<!--   # geom_nodelab(aes(subset = node == 174, -->
+<!--   #                  x = x - branch.length * 0.5, -->
+<!--   #                  label = "N76S"), -->
+<!--   #              hjust = 0.5, nudge_y = 0.45, size = 1.75) + -->
+<!--   # geom_nodelab(aes(subset = node == 187, -->
+<!--   #                  x = x - branch.length * 0.5, -->
+<!--   #                  label = "E340D"), -->
+<!--   #              hjust = 0.5, nudge_y = 0.45, size = 1.75) + -->
+<!--   # geom_nodelab(aes(subset = node == 194, -->
+<!--   #                  x = x - branch.length * 0.5, -->
+<!--   #                  label = "I225L"), -->
+<!--   #              hjust = 0.5, nudge_y = 0.45, size = 1.75) + -->
+<!--   # geom_nodelab(aes(subset = node == 195, -->
+<!--   #                  x = x - branch.length * 0.5, -->
+<!--   #                  label = "Y226F, D249E, V252A, A317G"), -->
+<!--   #              hjust = 0.5, nudge_x = -2.65, nudge_y = 0.45, size = 1.75) + -->
+<!--   # geom_label2(aes(subset = node == 195, -->
+<!--   #                 x = x - branch.length * 0.5, -->
+<!--   #                 label = "A317G"), -->
+<!--   #             hjust = 0.5, size = 1.5, -->
+<!--   #             label.padding = unit(0.1, "lines")) + -->
+<!--   # geom_label2(aes(subset = node == 204, -->
+<!--   #                  x = x - branch.length * 0.5, -->
+<!--   #                  label = "L225I"), -->
+<!--   #             hjust = 0.5, size = 1.5, -->
+<!--   #             label.padding = unit(0.1, "lines")) + -->
+<!--   # # geom_label2(aes(subset = node == 223, -->
+<!--   # #                  x = x - branch.length * 0.5, -->
+<!--   # #                  label = "T95S, L219V, D340E"), -->
+<!--   # #              hjust = 0.5, nudge_x = -0.15, nudge_y = 0.45, size = 1.3) + -->
+<!--   # geom_label2(aes(subset = node == 223, -->
+<!--   #                  x = x - branch.length * 0.5, -->
+<!--   #                  label = "L219V, D340E"), -->
+<!--   #             hjust = 0.5, size = 1.5, -->
+<!--   #             label.padding = unit(0.1, "lines")) + -->
+<!--   # # geom_label2(aes(subset = node == 224, -->
+<!--   # #                  x = x - branch.length * 0.5, -->
+<!--   # #                  label = "D249E, A449S"), -->
+<!--   # #              hjust = 0.5, nudge_y = 0.45, size = 1.75) + -->
+<!--   # geom_label2(aes(subset = node == 228, -->
+<!--   #                  x = x - branch.length * 0.5, -->
+<!--   #                  label = "E340D"), -->
+<!--   #             hjust = 0.5, size = 1.5, -->
+<!--   #             label.padding = unit(0.1, "lines")) + -->
+<!--   # geom_label2(aes(subset = node == 232, -->
+<!--   #                  x = x - branch.length * 0.5, -->
+<!--   #                  label = "M309I"), -->
+<!--   #             hjust = 0.5, size = 1.5, -->
+<!--   #             label.padding = unit(0.1, "lines")) + -->
+<!--   # # geom_label2(aes(subset = node == 233, -->
+<!--   # #                  x = x - branch.length * 0.5, -->
+<!--   # #                  label = "Y226F"), -->
+<!--   # #              hjust = 0.5, nudge_y = 0.45, size = 1.75) + -->
+<!--   # # geom_label2(aes(subset = node == 245, -->
+<!--   # #                  x = x - branch.length * 0.5, -->
+<!--   # #                  label = "M251I"), -->
+<!--   # #              hjust = 0.5, nudge_y = 0.45, size = 1.75) + -->
+<!--   # # geom_label2(aes(subset = node == 246, -->
+<!--   # #                  x = x - branch.length * 0.5, -->
+<!--   # #                  label = "C449S"), -->
+<!--   # #              hjust = 0.5, nudge_y = 0.45, size = 1.75) + -->
+<!--   # # geom_label2(aes(subset = node == 249, -->
+<!--   # #                  x = x - branch.length * 0.5, -->
+<!--   # #                  label = "I251M, S279T"), -->
+<!--   # #              hjust = 0.5, nudge_x = -0.75, nudge_y = 0.45, size = 1.75) + -->
+<!--   # # geom_label2(aes(subset = node == 258, -->
+<!--   # #                  x = x - branch.length * 0.5, -->
+<!--   # #                  label = "M251I, T279S /"), -->
+<!--   # #              hjust = 0.5, nudge_x = -0.35, nudge_y = 0.9, size = 1.3) + -->
+<!--   # geom_label2(aes(subset = node == 258, -->
+<!--   #                  x = x - branch.length * 0.5, -->
+<!--   #                  label = "M309I, A328S"), -->
+<!--   #             hjust = 0.5, size = 1.5, -->
+<!--   #             nudge_y = 1, -->
+<!--   #             label.padding = unit(0.1, "lines")) + -->
+<!--   # # geom_label2(aes(subset = node == 264, -->
+<!--   # #                  x = x - branch.length * 0.5, -->
+<!--   # #                  label = "I251M, S279T, A328S"), -->
+<!--   # #              hjust = 0.5, nudge_y = 0.45, size = 1.75) + -->
+<!--   # geom_label2(aes(subset = node == 264, -->
+<!--   #                  x = x - branch.length * 0.5, -->
+<!--   #                  label = "A328S"), -->
+<!--   #             hjust = 0.5, size = 1.5, -->
+<!--   #             label.padding = unit(0.1, "lines")) + -->
+<!--   # geom_label2(aes(subset = node == 267, -->
+<!--   #                  x = x - branch.length * 0.5, -->
+<!--   #                  label = "L225I"), -->
+<!--   #             hjust = 0.5, size = 1.5, -->
+<!--   #             label.padding = unit(0.1, "lines")) + -->
+<!--   # # geom_label2(aes(subset = node == 284, -->
+<!--   # #                  x = x - branch.length * 0.5, -->
+<!--   # #                  label = "C449S"), -->
+<!--   # #              hjust = 0.5, nudge_y = 0.45, size = 1.75) + -->
+<!--   # geom_label2(aes(subset = node == 289, -->
+<!--   #                  x = x - branch.length * 0.5, -->
+<!--   #                  label = "I225L"), -->
+<!--   #             hjust = 0.5, size = 1.5, -->
+<!--   #             label.padding = unit(0.1, "lines")) + -->
+<!--   # geom_label2(aes(subset = node == 290, -->
+<!--   #                  x = x - branch.length * 0.5, -->
+<!--   #                  label = "L219V, V255I, A317G"), -->
+<!--   #             hjust = 0.5, size = 1.5, -->
+<!--   #             label.padding = unit(0.1, "lines")) + -->
+<!--   # # geom_label2(aes(subset = node == 295, -->
+<!--   # #                  x = x - branch.length * 0.5, -->
+<!--   # #                  label = "C449S"), -->
+<!--   # #              hjust = 0.5, nudge_y = 0.45, size = 1.75) + -->
+<!--   # # geom_label2(aes(subset = label == "acerifolium", -->
+<!--   # #                 x = x - branch.length * 0.5, -->
+<!--   # #                 label = "T95S, D340E, A449S, I475L"), -->
+<!--   # #              hjust = 0.5, nudge_y = 0.45, size = 1.3) + -->
+<!--   # geom_label2(aes(subset = label == "acerifolium", -->
+<!--   #                 x = x - branch.length * 0.5, -->
+<!--   #                 label = "D340E"), -->
+<!--   #             hjust = 0.5, size = 1.5, -->
+<!--   #             label.padding = unit(0.1, "lines")) + -->
+<!--   # # geom_label2(aes(subset = label == "clemensiae", -->
+<!--   # #                 x = x - branch.length * 0.5, -->
+<!--   # #                 label = "L219V, T279S"), -->
+<!--   # #              hjust = 0.5, nudge_y = 0.45, size = 1.75) + -->
+<!--   # geom_label2(aes(subset = label == "clemensiae", -->
+<!--   #                 x = x - branch.length * 0.5, -->
+<!--   #                 label = "L219V"), -->
+<!--   #             hjust = 0.5, size = 1.5, -->
+<!--   #             label.padding = unit(0.1, "lines")) + -->
+<!--   # # geom_label2(aes(subset = label == "lantanoides", -->
+<!--   # #                 x = x - branch.length * 0.5, -->
+<!--   # #                 label = "V255I, V262A, T279S"), -->
+<!--   # #              hjust = 0.5, nudge_y = 0.45, size = 1.75) + -->
+<!--   # geom_label2(aes(subset = label == "lantanoides", -->
+<!--   #                 x = x - branch.length * 0.5, -->
+<!--   #                 label = "V255I, V262A"), -->
+<!--   #             hjust = 0.5, size = 1.5, -->
+<!--   #             label.padding = unit(0.1, "lines")) + -->
+<!--   # # geom_label2(aes(subset = label == "nervosum", -->
+<!--   # #                 x = x - branch.length * 0.5, -->
+<!--   # #                 label = "M251I, T279S, M309I, A328S"), -->
+<!--   # #              hjust = 0.5, nudge_y = 0.45, size = 1.75) + -->
+<!--   # geom_label2(aes(subset = label == "nervosum", -->
+<!--   #                 x = x - branch.length * 0.5, -->
+<!--   #                 label = "M309I, A328S"), -->
+<!--   #             hjust = 0.5, size = 1.5, -->
+<!--   #             label.padding = unit(0.1, "lines")) + -->
+<!--   # # geom_label2(aes(subset = label == "obtusatum", -->
+<!--   # #                 x = x - branch.length * 0.5, -->
+<!--   # #                 label = "N76S"), -->
+<!--   # #             hjust = 0.5, size = 1.5, -->
+<!--   # #             label.padding = unit(0.1, "lines")) + -->
+<!--   # # geom_label2(aes(subset = label == "orientale", -->
+<!--   # #                 x = x - branch.length * 0.5, -->
+<!--   # #                 label = "I225L, Y226F, D249E, V255I, V262A, A317G"), -->
+<!--   # #              hjust = 0.5, nudge_x = -5, nudge_y = 0.45, size = 1.75) + -->
+<!--   # geom_label2(aes(subset = label == "orientale", -->
+<!--   #                 x = x - branch.length * 0.5, -->
+<!--   #                 label = "I225L, V255I, V262A, A317G"), -->
+<!--   #             hjust = 0.5, size = 1.5, -->
+<!--   #             label.padding = unit(0.1, "lines")) + -->
+<!--   # # geom_label2(aes(subset = label == "subalpinum", -->
+<!--   # #                 x = x - branch.length * 0.5, -->
+<!--   # #                 label = "S279T, A328S"), -->
+<!--   # #              hjust = 0.5, nudge_y = 0.45, size = 1.75) + -->
+<!--   # geom_label2(aes(subset = label == "subalpinum", -->
+<!--   #                 x = x - branch.length * 0.5, -->
+<!--   #                 label = "A328S"), -->
+<!--   #             hjust = 0.5, size = 1.5, -->
+<!--   #             label.padding = unit(0.1, "lines")) + -->
+<!--   # # geom_label2(aes(subset = label == "trilobum", -->
+<!--   # #                 x = x - branch.length * 0.5, -->
+<!--   # #                 label = "M251I, T279S"), -->
+<!--   # #              hjust = 0.5, nudge_y = 0.45, size = 1.75) + -->
+<!--   hexpand(0.01, direction = 1) + -->
+<!--   # coord_cartesian(clip = "off") + -->
+<!--   # cowplot::draw_plot(cowplot::get_legend(habit_biome), x = 0.1, y = 137.5, width = 1.5, height = 1.5) + -->
+<!--   theme(legend.position = "none") -->
+
+
+
+<!-- tree_heatmap <- heatmap %>% -->
+<!--   aplot::insert_left(habit_biome + theme(legend.position = "none"), width = 0.35) %>% -->
+<!--   aplot::insert_left(tree, width = 4) -->
+
+<!-- cowplot::save_plot(here::here("analyze", "plots", "s1_phylogeny.svg"), plot = tree_heatmap, base_width = 11, base_height = 13, dpi = 1000) -->
+
+<!-- ``` -->
+
+
+# Tables: Leaf habit and biome transitions ~ amino acids
+
+``` {r}
+
+library(phytools)
+
+
+full_specific_epithet <- readr::read_csv(here::here("download", "metadata.csv")) %>%
+  dplyr::select(species) %>%
+  mutate(ShortName = stringr::str_sub(species, 1, 10), .before = "species") %>%
+  rename(Species = species)
+
+# below are for dependency analysis with pagel's 1994 test
+biomes <- readr::read_csv(here::here("landis_biome_range", "landis_biomes.csv")) %>%
+  mutate(Species = stringr::str_replace(Species, "_", "-")) %>%
+  mutate(Species = stringr::str_replace(Species, "rigidum", "rugosum")) %>%
+  mutate(Biome = stringr::str_to_lower(Biome)) %>%
+  mutate(Biome = stringr::str_replace(Biome, "temperate", "temperate")) %>%
+  mutate(Biome = stringr::str_replace(Biome, "lucidophyllous", "warm temperate")) %>%
+  add_row(Species = "ROOT", Biome = "warm temperate")
+
+subs <- readr::read_csv(here::here("analyze", "aa_at_sites_ancestral.csv")) %>%
+  rowwise() %>%
+  filter(!AA %in% c(AA_Ancestral, "-")) %>%
+  distinct(Site, AA_Ancestral, Site, AA) %>%
+  mutate(Substitution = paste0(AA_Ancestral, Site, AA)) %>%
+  rename(AA_Derived = AA)
+
+aa_root <- readr::read_csv(here::here("analyze", "aa_at_sites_ancestral.csv")) %>%
+  distinct(Site, AA_Ancestral) %>%
+  mutate(Species = "ROOT",
+         AA = AA_Ancestral,
+         .keep = "unused") 
+aa <- readr::read_csv(here::here("analyze", "aa_at_sites_ancestral.csv")) %>%
+  full_join(full_specific_epithet, ., by = "ShortName") %>%
+  mutate(Species = stringr::str_replace(Species, "_", "-")) %>%
+  mutate(Species = stringr::str_replace(Species, "rigidum", "rugosum"))  %>%
+  filter(AA != "-") %>%
+  ungroup() %>%
+  select(Species, Site, AA) %>%
+  bind_rows(aa_root) %>%
+  full_join(subs) %>%
+  mutate(Ancestral = ifelse(AA == AA_Derived, FALSE, TRUE))
+
+tree <- ape::read.tree(here::here("csubst", "radseq_pruned_csubst.tre")) %>%
+  treeio::rename_taxa(full_specific_epithet) %>%
+  bind.tip(., tip.label = "ROOT", edge.length = 0, where = Ntip(.) + 1)
+```
+
+<!-- ## Net diversification rate -->
+
+<!-- ```{r} -->
+
+<!-- bisse_tree <- ape::read.tree(here::here("csubst", "radseq_pruned_csubst.tre")) %>% -->
+<!--   treeio::rename_taxa(full_specific_epithet) %>% -->
+<!--   phytools::force.ultrametric(method = "extend") -->
+
+<!-- SITE = 255 -->
+
+<!-- aovs_bisse <- tibble::tibble(Site = numeric(), -->
+<!--                              Name = character(), -->
+<!--                              Df = numeric(), -->
+<!--                              lnLik = numeric(), -->
+<!--                              AIC = numeric()) -->
+
+<!-- for (SUB in subs) { -->
+
+<!--   print(paste("NDR analyses for site", SITE, "...")) -->
+
+<!--   aa_site <- aa %>% -->
+<!--     filter(Substitution == SUB) %>% -->
+<!--     mutate(Ancestral = ifelse(Ancestral, 0, 1)) %>% -->
+<!--     filter(Species != "ROOT") %>% -->
+<!--     select(Species, Ancestral) %>% -->
+<!--     tibble::deframe() -->
+
+<!--   bisse_species <- names(aa_site) -->
+
+<!--   bisse_model <- diversitree::make.bisse(ape::keep.tip(bisse_tree, bisse_species), aa_site) -->
+<!--   bisse_initial_pars <- diversitree::starting.point.bisse(bisse_tree) -->
+<!--   bisse_equal_sp_ex <- diversitree::constrain(bisse_model, lambda0 ~ lambda1, mu0 ~ mu1) -->
+<!--   fit_bisse_equal_sp_ex <- diversitree::find.mle(bisse_equal_sp_ex, bisse_initial_pars[c("lambda1", "mu1", "q01", "q10")], control = list(maxit = 1e8)) -->
+
+<!--   # full -->
+<!--   print(paste(SITE, "full")) -->
+<!--   fit_bisse <- diversitree::find.mle(bisse_model, bisse_initial_pars, control = list(maxit = 1e8)) -->
+<!--   if (SITE == 255) {fit_bisse <- diversitree::find.mle(bisse_model, bisse_initial_pars)} -->
+<!--   aov_equal_sp_ex <- as_tibble(anova(fit_bisse_equal_sp_ex, constrain = fit_bisse), rownames = "Name") %>% -->
+<!--     mutate(Name = case_when(Name == "constrain" ~ "4. full", -->
+<!--                             Name == "minimal" ~ "1. equal sp. and ex. rate")) %>% -->
+<!--     # select(Name, Df, lnLik, AIC) %>% -->
+<!--     bind_cols(tibble::enframe(fit_bisse_equal_sp_ex$par) %>%  -->
+<!--                 tidyr::pivot_wider(names_from = "name", values_from = "value")) %>% -->
+<!--     mutate(lambda0 = lambda1, -->
+<!--            mu0 = mu1) -->
+
+<!--   # equal speciation rate -->
+<!--   print(paste(SITE, "equal sp.")) -->
+<!--   bisse_equal_sp <- diversitree::constrain(bisse_model, lambda0 ~ lambda1) -->
+<!--   fit_bisse_equal_sp <- diversitree::find.mle(bisse_equal_sp,  -->
+<!--                                               bisse_initial_pars[c("lambda1", "mu0", "mu1", "q01", "q10")],  -->
+<!--                                               control = list(maxit = 1e8)) -->
+<!--   if (SITE == 328) {fit_bisse_equal_sp <- diversitree::find.mle(bisse_equal_sp,  -->
+<!--                                               bisse_initial_pars[c("lambda1", "mu0", "mu1", "q01", "q10")], -->
+<!--                                               method = "optim")} -->
+<!--   aov_equal_sp <- as_tibble(anova(fit_bisse_equal_sp_ex, constrain = fit_bisse_equal_sp), rownames = "Name") %>% -->
+<!--     filter(Name == "constrain") %>% -->
+<!--     mutate(Name = ifelse(Name == "constrain", "2. equal sp. rate", Name)) %>% -->
+<!--     # select(Name, Df, lnLik, AIC) %>% -->
+<!--     bind_cols(tibble::enframe(fit_bisse_equal_sp$par) %>%  -->
+<!--                 tidyr::pivot_wider(names_from = "name", values_from = "value")) %>% -->
+<!--     mutate(lambda0 = ifelse(Name != "full", lambda1, lambda0), -->
+<!--            .before = "lambda1") -->
+
+<!--   # equal extinction rate -->
+<!--   print(paste(SITE, "equal ex.")) -->
+<!--   bisse_equal_ex <- diversitree::constrain(bisse_model, mu0 ~ mu1) -->
+<!--   fit_bisse_equal_ex<- diversitree::find.mle(bisse_equal_ex,  -->
+<!--                                              bisse_initial_pars[c("lambda0", "lambda1", "mu1", "q01", "q10")], -->
+<!--                                              control = list(maxit = 1e8)) -->
+<!--   aov_equal_ex <- as_tibble(anova(fit_bisse_equal_sp_ex, constrain = fit_bisse_equal_ex), rownames = "Name") %>% -->
+<!--     filter(Name == "constrain") %>% -->
+<!--     mutate(Name = "3. equal ex. rate") %>% -->
+<!--     # select(Name, Df, lnLik, AIC) %>% -->
+<!--     bind_cols(tibble::enframe(fit_bisse_equal_ex$par) %>%  -->
+<!--                 tidyr::pivot_wider(names_from = "name", values_from = "value")) %>% -->
+<!--     mutate(mu0 = mu1) -->
+
+<!--   aov_bisse <- bind_rows(aov_equal_sp_ex, aov_equal_sp, aov_equal_ex) %>% -->
+<!--     mutate(Site = SITE, .before = "Name") %>% -->
+<!--     arrange(Name) %>% -->
+<!--     mutate(Name = stringr::word(Name, 2, -1)) -->
+<!--   aovs_bisse <- bind_rows(aovs_bisse, aov_bisse) %>% -->
+<!--     arrange(Site) -->
+
+<!--   best_bisse <- aov_bisse %>% -->
+<!--     slice_min(AIC, n = 1) %>% -->
+<!--     pull(Name) -->
+<!--   print(paste("Best fit model for site", SITE, "is", best_bisse)) -->
+
+<!--   writexl::write_xlsx(aovs_bisse, here::here("analyze", "bisse.xlsx")) -->
+<!-- } -->
+
+<!-- ``` -->
+
+## Biome - cold
+
+```{r}
+
+cold_temp <- biomes %>%
+  mutate(Cold = ifelse(Biome == "temperate", "b", "a")) %>%
+  select(Species, Cold) %>%
+  distinct(Species, .keep_all = TRUE)
+
+cold_lrts <- tibble(Substitution = character(),
+                    model = character(),
+                    Q_Ancestral = numeric(),
+                    Q_Derived = numeric(),
+                    deltaQ_Ancestral = numeric(),
+                    deltaQ_Derived = numeric(),
+                    FasterAA = character(),
+                    StateFavouredbyAA = character(),
+                    AIC_Dependent = numeric(),
+                    AIC_Independent = numeric(),
+                    deltaAIC = numeric(),
+                    p = numeric())
+
+SUB = "L219C"
+
+for (SUB in subs %>% pull(Substitution)) {
+  
+  print(paste("fitPagels for substitution", SUB, "..."))
+  
+  aa_site <- aa %>%
+    filter(Substitution == SUB) %>%
+    mutate(Ancestral = ifelse(Ancestral, 0, 1)) %>%
+    filter(Species != "ROOT") %>%
+    select(Species, Ancestral)
+  
+  cold_species <- intersect(cold_temp$Species, aa_site$Species) # get common species
+  
+  cold_fit_ER <- fitPagel(ape::keep.tip(tree, cold_species), # prune tree
+                          aa_site %>% 
+                            filter(Species %in% cold_species) %>% 
+                            tibble::deframe(), # have to turn into named list
+                          cold_temp %>% 
+                            filter(Species %in% cold_species) %>% 
+                            tibble::deframe(),
+                          dep.var = "y", 
+                          model = "ER")
+  cold_fit_SYM <- fitPagel(ape::keep.tip(tree, cold_species), # prune tree
+                           aa_site %>% 
+                             filter(Species %in% cold_species) %>% 
+                             tibble::deframe(), # have to turn into named list
+                           cold_temp %>% 
+                             filter(Species %in% cold_species) %>% 
+                             tibble::deframe(),
+                           dep.var = "y", 
+                           model = "SYM")
+  cold_fit_ARD <- fitPagel(ape::keep.tip(tree, cold_species), # prune tree
+                           aa_site %>% 
+                             filter(Species %in% cold_species) %>% 
+                             tibble::deframe(), # have to turn into named list
+                           cold_temp %>% 
+                             filter(Species %in% cold_species) %>% 
+                             tibble::deframe(),
+                           dep.var = "y", 
+                           model = "ARD")
+  
+  cold_AICs <- tibble::tibble(model = "ER", 
+                              AIC_dep = cold_fit_ER$dependent.AIC, 
+                              AIC_indep = cold_fit_ER$independent.AIC) %>%
+    add_row(model = "SYM", 
+            AIC_dep = cold_fit_SYM$dependent.AIC, 
+            AIC_indep = cold_fit_SYM$independent.AIC) %>%
+    add_row(model = "ARD", 
+            AIC_dep = cold_fit_ARD$dependent.AIC, 
+            AIC_indep = cold_fit_ARD$independent.AIC)
+  
+  best_model <- cold_AICs %>%
+    slice_min(AIC_dep, n = 1) %>%
+    pull(model)
+  
+  if (best_model[1] == "ARD") {
+    best_cold_fit <- cold_fit_ARD
+  } else if (best_model[1] == "SYM") {
+    best_cold_fit <- cold_fit_SYM
+  } else {
+    best_cold_fit <- cold_fit_ER
+  }
+  
+  cold_lrts <- cold_lrts %>%
+    add_row(Substitution = SUB,
+            model = best_model[1],
+            Q_Ancestral = best_cold_fit$dependent.Q["0|a", "0|b"],
+            Q_Derived = best_cold_fit$dependent.Q["1|a", "1|b"],
+            deltaQ_Ancestral = best_cold_fit$dependent.Q["0|a", "0|b"]-best_cold_fit$dependent.Q["0|b", "0|a"],
+            deltaQ_Derived = best_cold_fit$dependent.Q["1|a", "1|b"]-best_cold_fit$dependent.Q["1|b", "1|a"],
+            FasterAA = case_when(Q_Derived-Q_Ancestral > 0 ~ "derived",
+                                      Q_Derived-Q_Ancestral < 0 ~ "ancestral",
+                                      Q_Derived-Q_Ancestral == 0 ~ "same"),
+            StateFavouredbyAA = case_when(deltaQ_Derived > 0 ~ "cold",
+                                      deltaQ_Derived < 0 ~ "non-cold",
+                                      deltaQ_Derived == 0 ~ "symmetrical"),
+            AIC_Independent = best_cold_fit$independent.AIC[1],
+            AIC_Dependent = best_cold_fit$dependent.AIC[1],
+            deltaAIC = AIC_Independent-AIC_Dependent,
+            p = best_cold_fit$P[1]) 
+  
+  writexl::write_xlsx(cold_lrts, here::here("analyze", "pagels_test_cold.xlsx"))
+  
+}
+
+
+```
+
+## Biome - cold, reverse dependency
+
+```{r}
+
+cold_lrts <- tibble(Substitution = character(),
+                    model = character(),
+                    Q_Ancestral = numeric(),
+                    Q_Derived = numeric(),
+                    deltaQ_Ancestral = numeric(),
+                    deltaQ_Derived = numeric(),
+                    FasterAA = character(),
+                    StateFavouredbyAA = character(),
+                    AIC_Dependent = numeric(),
+                    AIC_Independent = numeric(),
+                    deltaAIC = numeric(),
+                    p = numeric())
+
+SUB = "L219C"
+
+for (SUB in subs %>% pull(Substitution)) {
+  
+  print(paste("fitPagels for substitution", SUB, "..."))
+  
+  aa_site <- aa %>%
+    filter(Substitution == SUB) %>%
+    mutate(Ancestral = ifelse(Ancestral, 0, 1)) %>%
+    filter(Species != "ROOT") %>%
+    select(Species, Ancestral)
+  
+  cold_species <- intersect(cold_temp$Species, aa_site$Species) # get common species
+  
+  cold_fit_ER <- fitPagel(ape::keep.tip(tree, cold_species), # prune tree
+                          aa_site %>% 
+                            filter(Species %in% cold_species) %>% 
+                            tibble::deframe(), # have to turn into named list
+                          cold_temp %>% 
+                            filter(Species %in% cold_species) %>% 
+                            tibble::deframe(),
+                          dep.var = "x", 
+                          model = "ER")
+  cold_fit_SYM <- fitPagel(ape::keep.tip(tree, cold_species), # prune tree
+                           aa_site %>% 
+                             filter(Species %in% cold_species) %>% 
+                             tibble::deframe(), # have to turn into named list
+                           cold_temp %>% 
+                             filter(Species %in% cold_species) %>% 
+                             tibble::deframe(),
+                           dep.var = "x", 
+                           model = "SYM")
+  cold_fit_ARD <- fitPagel(ape::keep.tip(tree, cold_species), # prune tree
+                           aa_site %>% 
+                             filter(Species %in% cold_species) %>% 
+                             tibble::deframe(), # have to turn into named list
+                           cold_temp %>% 
+                             filter(Species %in% cold_species) %>% 
+                             tibble::deframe(),
+                           dep.var = "x", 
+                           model = "ARD")
+  
+  cold_AICs <- tibble::tibble(model = "ER", 
+                              AIC_dep = cold_fit_ER$dependent.AIC, 
+                              AIC_indep = cold_fit_ER$independent.AIC) %>%
+    add_row(model = "SYM", 
+            AIC_dep = cold_fit_SYM$dependent.AIC, 
+            AIC_indep = cold_fit_SYM$independent.AIC) %>%
+    add_row(model = "ARD", 
+            AIC_dep = cold_fit_ARD$dependent.AIC, 
+            AIC_indep = cold_fit_ARD$independent.AIC)
+  
+  best_model <- cold_AICs %>%
+    slice_min(AIC_dep, n = 1) %>%
+    pull(model)
+  
+  if (best_model[1] == "ARD") {
+    best_cold_fit <- cold_fit_ARD
+  } else if (best_model[1] == "SYM") {
+    best_cold_fit <- cold_fit_SYM
+  } else {
+    best_cold_fit <- cold_fit_ER
+  }
+  
+  cold_lrts <- cold_lrts %>%
+    add_row(Substitution = SUB,
+            model = best_model[1],
+            Q_Ancestral = best_cold_fit$dependent.Q["0|a", "0|b"],
+            Q_Derived = best_cold_fit$dependent.Q["1|a", "1|b"],
+            deltaQ_Ancestral = best_cold_fit$dependent.Q["0|a", "0|b"]-best_cold_fit$dependent.Q["0|b", "0|a"],
+            deltaQ_Derived = best_cold_fit$dependent.Q["1|a", "1|b"]-best_cold_fit$dependent.Q["1|b", "1|a"],
+            FasterAA = case_when(Q_Derived-Q_Ancestral > 0 ~ "derived",
+                                      Q_Derived-Q_Ancestral < 0 ~ "ancestral",
+                                      Q_Derived-Q_Ancestral == 0 ~ "same"),
+            StateFavouredbyAA = case_when(deltaQ_Derived > 0 ~ "cold",
+                                      deltaQ_Derived < 0 ~ "non-cold",
+                                      deltaQ_Derived == 0 ~ "symmetrical"),
+            AIC_Independent = best_cold_fit$independent.AIC[1],
+            AIC_Dependent = best_cold_fit$dependent.AIC[1],
+            deltaAIC = AIC_Independent-AIC_Dependent,
+            p = best_cold_fit$P[1]) 
+  
+  writexl::write_xlsx(cold_lrts, here::here("analyze", "pagels_test_cold_reverse.xlsx"))
+  
+}
+
+```
+
+
+## Biome - tropical
+
+```{r}
+
+tropical_temp <- biomes %>%
+  mutate(tropical = ifelse(Biome == "tropical", "b", "a")) %>%
+  select(Species, tropical) %>%
+  distinct(Species, .keep_all = TRUE)
+
+tropical_lrts <- tibble(Substitution = character(),
+                    model = character(),
+                    Q_Ancestral = numeric(),
+                    Q_Derived = numeric(),
+                    deltaQ_Ancestral = numeric(),
+                    deltaQ_Derived = numeric(),
+                    FasterAA = character(),
+                    StateFavouredbyAA = character(),
+                    AIC_Dependent = numeric(),
+                    AIC_Independent = numeric(),
+                    deltaAIC = numeric(),
+                    p = numeric())
+
+SUB = "L219C"
+
+for (SUB in subs %>% pull(Substitution)) {
+  
+  print(paste("fitPagels for substitution", SUB, "..."))
+  
+  aa_site <- aa %>%
+    filter(Substitution == SUB) %>%
+    mutate(Ancestral = ifelse(Ancestral, 0, 1)) %>%
+    filter(Species != "ROOT") %>%
+    select(Species, Ancestral)
+  
+  tropical_species <- intersect(tropical_temp$Species, aa_site$Species) # get common species
+  
+  tropical_fit_ER <- fitPagel(ape::keep.tip(tree, tropical_species), # prune tree
+                          aa_site %>% 
+                            filter(Species %in% tropical_species) %>% 
+                            tibble::deframe(), # have to turn into named list
+                          tropical_temp %>% 
+                            filter(Species %in% tropical_species) %>% 
+                            tibble::deframe(),
+                          dep.var = "y", 
+                          model = "ER")
+  tropical_fit_SYM <- fitPagel(ape::keep.tip(tree, tropical_species), # prune tree
+                           aa_site %>% 
+                             filter(Species %in% tropical_species) %>% 
+                             tibble::deframe(), # have to turn into named list
+                           tropical_temp %>% 
+                             filter(Species %in% tropical_species) %>% 
+                             tibble::deframe(),
+                           dep.var = "y", 
+                           model = "SYM")
+  tropical_fit_ARD <- fitPagel(ape::keep.tip(tree, tropical_species), # prune tree
+                           aa_site %>% 
+                             filter(Species %in% tropical_species) %>% 
+                             tibble::deframe(), # have to turn into named list
+                           tropical_temp %>% 
+                             filter(Species %in% tropical_species) %>% 
+                             tibble::deframe(),
+                           dep.var = "y", 
+                           model = "ARD")
+  
+  tropical_AICs <- tibble::tibble(model = "ER", 
+                              AIC_dep = tropical_fit_ER$dependent.AIC, 
+                              AIC_indep = tropical_fit_ER$independent.AIC) %>%
+    add_row(model = "SYM", 
+            AIC_dep = tropical_fit_SYM$dependent.AIC, 
+            AIC_indep = tropical_fit_SYM$independent.AIC) %>%
+    add_row(model = "ARD", 
+            AIC_dep = tropical_fit_ARD$dependent.AIC, 
+            AIC_indep = tropical_fit_ARD$independent.AIC)
+  
+  best_model <- tropical_AICs %>%
+    slice_min(AIC_dep, n = 1) %>%
+    pull(model)
+  
+  if (best_model[1] == "ARD") {
+    best_tropical_fit <- tropical_fit_ARD
+  } else if (best_model[1] == "SYM") {
+    best_tropical_fit <- tropical_fit_SYM
+  } else {
+    best_tropical_fit <- tropical_fit_ER
+  }
+  
+  tropical_lrts <- tropical_lrts %>%
+    add_row(Substitution = SUB,
+            model = best_model[1],
+            Q_Ancestral = best_tropical_fit$dependent.Q["0|a", "0|b"],
+            Q_Derived = best_tropical_fit$dependent.Q["1|a", "1|b"],
+            deltaQ_Ancestral = best_tropical_fit$dependent.Q["0|a", "0|b"]-best_tropical_fit$dependent.Q["0|b", "0|a"],
+            deltaQ_Derived = best_tropical_fit$dependent.Q["1|a", "1|b"]-best_tropical_fit$dependent.Q["1|b", "1|a"],
+            FasterAA = case_when(Q_Derived-Q_Ancestral > 0 ~ "derived",
+                                      Q_Derived-Q_Ancestral < 0 ~ "ancestral",
+                                      Q_Derived-Q_Ancestral == 0 ~ "same"),
+            StateFavouredbyAA = case_when(deltaQ_Derived > 0 ~ "tropical",
+                                      deltaQ_Derived < 0 ~ "non-tropical",
+                                      deltaQ_Derived == 0 ~ "symmetrical"),
+            AIC_Independent = best_tropical_fit$independent.AIC[1],
+            AIC_Dependent = best_tropical_fit$dependent.AIC[1],
+            deltaAIC = AIC_Independent-AIC_Dependent,
+            p = best_tropical_fit$P[1]) 
+  
+  writexl::write_xlsx(tropical_lrts, here::here("analyze", "pagels_test_tropical.xlsx"))
+  
+}
+
+
+```
+
+## Biome - tropical, reverse dependency
+
+```{r}
+
+tropical_lrts <- tibble(Substitution = character(),
+                    model = character(),
+                    Q_Ancestral = numeric(),
+                    Q_Derived = numeric(),
+                    deltaQ_Ancestral = numeric(),
+                    deltaQ_Derived = numeric(),
+                    FasterAA = character(),
+                    StateFavouredbyAA = character(),
+                    AIC_Dependent = numeric(),
+                    AIC_Independent = numeric(),
+                    deltaAIC = numeric(),
+                    p = numeric())
+
+SUB = "L219C"
+
+for (SUB in subs %>% pull(Substitution)) {
+  
+  print(paste("fitPagels for substitution", SUB, "..."))
+  
+  aa_site <- aa %>%
+    filter(Substitution == SUB) %>%
+    mutate(Ancestral = ifelse(Ancestral, 0, 1)) %>%
+    filter(Species != "ROOT") %>%
+    select(Species, Ancestral)
+  
+  tropical_species <- intersect(tropical_temp$Species, aa_site$Species) # get common species
+  
+  tropical_fit_ER <- fitPagel(ape::keep.tip(tree, tropical_species), # prune tree
+                          aa_site %>% 
+                            filter(Species %in% tropical_species) %>% 
+                            tibble::deframe(), # have to turn into named list
+                          tropical_temp %>% 
+                            filter(Species %in% tropical_species) %>% 
+                            tibble::deframe(),
+                          dep.var = "x", 
+                          model = "ER")
+  tropical_fit_SYM <- fitPagel(ape::keep.tip(tree, tropical_species), # prune tree
+                           aa_site %>% 
+                             filter(Species %in% tropical_species) %>% 
+                             tibble::deframe(), # have to turn into named list
+                           tropical_temp %>% 
+                             filter(Species %in% tropical_species) %>% 
+                             tibble::deframe(),
+                           dep.var = "x", 
+                           model = "SYM")
+  tropical_fit_ARD <- fitPagel(ape::keep.tip(tree, tropical_species), # prune tree
+                           aa_site %>% 
+                             filter(Species %in% tropical_species) %>% 
+                             tibble::deframe(), # have to turn into named list
+                           tropical_temp %>% 
+                             filter(Species %in% tropical_species) %>% 
+                             tibble::deframe(),
+                           dep.var = "x", 
+                           model = "ARD")
+  
+  tropical_AICs <- tibble::tibble(model = "ER", 
+                              AIC_dep = tropical_fit_ER$dependent.AIC, 
+                              AIC_indep = tropical_fit_ER$independent.AIC) %>%
+    add_row(model = "SYM", 
+            AIC_dep = tropical_fit_SYM$dependent.AIC, 
+            AIC_indep = tropical_fit_SYM$independent.AIC) %>%
+    add_row(model = "ARD", 
+            AIC_dep = tropical_fit_ARD$dependent.AIC, 
+            AIC_indep = tropical_fit_ARD$independent.AIC)
+  
+  best_model <- tropical_AICs %>%
+    slice_min(AIC_dep, n = 1) %>%
+    pull(model)
+  
+  if (best_model[1] == "ARD") {
+    best_tropical_fit <- tropical_fit_ARD
+  } else if (best_model[1] == "SYM") {
+    best_tropical_fit <- tropical_fit_SYM
+  } else {
+    best_tropical_fit <- tropical_fit_ER
+  }
+  
+  tropical_lrts <- tropical_lrts %>%
+    add_row(Substitution = SUB,
+            model = best_model[1],
+            Q_Ancestral = best_tropical_fit$dependent.Q["0|a", "0|b"],
+            Q_Derived = best_tropical_fit$dependent.Q["1|a", "1|b"],
+            deltaQ_Ancestral = best_tropical_fit$dependent.Q["0|a", "0|b"]-best_tropical_fit$dependent.Q["0|b", "0|a"],
+            deltaQ_Derived = best_tropical_fit$dependent.Q["1|a", "1|b"]-best_tropical_fit$dependent.Q["1|b", "1|a"],
+            FasterAA = case_when(Q_Derived-Q_Ancestral > 0 ~ "derived",
+                                      Q_Derived-Q_Ancestral < 0 ~ "ancestral",
+                                      Q_Derived-Q_Ancestral == 0 ~ "same"),
+            StateFavouredbyAA = case_when(deltaQ_Derived > 0 ~ "tropical",
+                                      deltaQ_Derived < 0 ~ "non-tropical",
+                                      deltaQ_Derived == 0 ~ "symmetrical"),
+            AIC_Independent = best_tropical_fit$independent.AIC[1],
+            AIC_Dependent = best_tropical_fit$dependent.AIC[1],
+            deltaAIC = AIC_Independent-AIC_Dependent,
+            p = best_tropical_fit$P[1]) 
+  
+  writexl::write_xlsx(tropical_lrts, here::here("analyze", "pagels_test_tropical_reverse.xlsx"))
+  
+}
+
+```
+
+<!-- ## Habit -->
+
+<!-- ``` {r} -->
+
+<!-- habit <- readr::read_csv(here::here("edwards", "120_taxa_data.csv")) %>% -->
+<!--   mutate(Species = species, -->
+<!--          Habit = ifelse(habit == "evergreen", "a", "b")) %>% -->
+<!--   select(Species, Habit) %>% -->
+<!--   mutate(Species = stringr::str_replace(Species, "_", "-")) %>% -->
+<!--   mutate(Species = stringr::str_replace(Species, "rigidum", "rugosum"), -->
+<!--          Species = stringr::str_replace(Species, "annamensis", "anamensis"), -->
+<!--          Species = stringr::str_replace(Species, "clemensae", "clemensiae")) %>% -->
+<!--   add_row(Species = "ROOT", Habit = "a") -->
+
+<!-- habit_lrts <- tibble(Substitution = character(), -->
+<!--                      model = character(), -->
+<!--                      Q_Ancestral = numeric(), -->
+<!--                      Q_Derived = numeric(), -->
+<!--                      deltaQ_Ancestral = numeric(), -->
+<!--                      deltaQ_Derived = numeric(), -->
+<!--                      FasterAA = character(), -->
+<!--                      StateFavouredbyAA = character(), -->
+<!--                      AIC_Dependent = numeric(), -->
+<!--                      AIC_Independent = numeric(), -->
+<!--                      deltaAIC = numeric(), -->
+<!--                      p = numeric()) -->
+
+<!-- for (SUB in subs %>% pull(Substitution)) { -->
+
+<!--   print(paste("fitPagels for substitution", SUB, "...")) -->
+
+<!--   aa_site <- aa %>% -->
+<!--     filter(Substitution == SUB) %>% -->
+<!--     mutate(Ancestral = ifelse(Ancestral, 0, 1)) %>% -->
+<!--     filter(Species != "ROOT") %>% -->
+<!--     select(Species, Ancestral) -->
+
+<!--   habit_species <- intersect(habit$Species, aa_site$Species) # get common species -->
+
+<!--   habit_fit_ER <- fitPagel(ape::keep.tip(tree, habit_species), # prune tree -->
+<!--                           aa_site %>%  -->
+<!--                             filter(Species %in% habit_species) %>%  -->
+<!--                             tibble::deframe(), # have to turn into named list -->
+<!--                           habit %>%  -->
+<!--                             filter(Species %in% habit_species) %>%  -->
+<!--                             tibble::deframe(), -->
+<!--                           dep.var = "y",  -->
+<!--                           model = "ER") -->
+<!--   habit_fit_SYM <- fitPagel(ape::keep.tip(tree, habit_species), # prune tree -->
+<!--                            aa_site %>%  -->
+<!--                              filter(Species %in% habit_species) %>%  -->
+<!--                              tibble::deframe(), # have to turn into named list -->
+<!--                            habit %>%  -->
+<!--                              filter(Species %in% habit_species) %>%  -->
+<!--                              tibble::deframe(), -->
+<!--                            dep.var = "y",  -->
+<!--                            model = "SYM") -->
+<!--   habit_fit_ARD <- fitPagel(ape::keep.tip(tree, habit_species), # prune tree -->
+<!--                            aa_site %>%  -->
+<!--                              filter(Species %in% habit_species) %>%  -->
+<!--                              tibble::deframe(), # have to turn into named list -->
+<!--                            habit %>%  -->
+<!--                              filter(Species %in% habit_species) %>%  -->
+<!--                              tibble::deframe(), -->
+<!--                            dep.var = "y",  -->
+<!--                            model = "ARD") -->
+
+<!--   habit_AICs <- tibble::tibble(model = "ER",  -->
+<!--                               AIC_dep = habit_fit_ER$dependent.AIC,  -->
+<!--                               AIC_indep = habit_fit_ER$independent.AIC) %>% -->
+<!--     add_row(model = "SYM",  -->
+<!--             AIC_dep = habit_fit_SYM$dependent.AIC,  -->
+<!--             AIC_indep = habit_fit_SYM$independent.AIC) %>% -->
+<!--     add_row(model = "ARD",  -->
+<!--             AIC_dep = habit_fit_ARD$dependent.AIC,  -->
+<!--             AIC_indep = habit_fit_ARD$independent.AIC) -->
+
+<!--   best_model <- habit_AICs %>% -->
+<!--     slice_min(AIC_dep, n = 1) %>% -->
+<!--     pull(model) -->
+
+<!--   if (best_model[1] == "ARD") { -->
+<!--     best_habit_fit <- habit_fit_ARD -->
+<!--   } else if (best_model[1] == "SYM") { -->
+<!--     best_habit_fit <- habit_fit_SYM -->
+<!--   } else { -->
+<!--     best_habit_fit <- habit_fit_ER -->
+<!--   } -->
+
+<!--   habit_lrts <- habit_lrts %>% -->
+<!--     add_row(Substitution = SUB, -->
+<!--             model = best_model[1], -->
+<!--             Q_Ancestral = best_habit_fit$dependent.Q["0|a", "0|b"], -->
+<!--             Q_Derived = best_habit_fit$dependent.Q["1|a", "1|b"], -->
+<!--             deltaQ_Ancestral = best_habit_fit$dependent.Q["0|a", "0|b"]-best_habit_fit$dependent.Q["0|b", "0|a"], -->
+<!--             deltaQ_Derived = best_habit_fit$dependent.Q["1|a", "1|b"]-best_habit_fit$dependent.Q["1|b", "1|a"], -->
+<!--             FasterAA = case_when(Q_Derived-Q_Ancestral > 0 ~ "derived", -->
+<!--                                       Q_Derived-Q_Ancestral < 0 ~ "ancestral", -->
+<!--                                       Q_Derived-Q_Ancestral == 0 ~ "same"), -->
+<!--             StateFavouredbyAA = case_when(deltaQ_Derived > 0 ~ "habit", -->
+<!--                                       deltaQ_Derived < 0 ~ "non-habit", -->
+<!--                                       deltaQ_Derived == 0 ~ "symmetrical"), -->
+<!--             AIC_Independent = best_habit_fit$independent.AIC[1], -->
+<!--             AIC_Dependent = best_habit_fit$dependent.AIC[1], -->
+<!--             deltaAIC = AIC_Independent-AIC_Dependent, -->
+<!--             p = best_habit_fit$P[1])  -->
+
+<!--   writexl::write_xlsx(habit_lrts, here::here("analyze", "pagels_test_habit.xlsx")) -->
+
+<!-- } -->
+
+<!-- ``` -->
+
+<!-- ## Leaf Shape -->
+
+<!-- ``` {r} -->
+
+<!-- margin <- readr::read_csv(here::here("edwards", "schmerler_data.csv")) %>% -->
+<!--   mutate( -->
+<!--     Margin = ifelse(Margin != "entire", "non-entire", Margin), -->
+<!--     Species = stringr::str_replace(Species, "_", "-"), -->
+<!--     Species = stringr::str_replace(Species, "rigidum", "rugosum"), -->
+<!--     Species = stringr::str_replace(Species, "annamensis", "anamensis"), -->
+<!--     Species = stringr::str_replace(Species, "clemensae", "clemensiae") -->
+<!--   ) %>% -->
+<!--   mutate(Margin = ifelse(Margin == "entire", "a", "b")) %>% -->
+<!--   select(Species, Margin) %>% -->
+<!--   add_row(Species = "ROOT", Margin = "a") -->
+
+<!-- margin_lrts <- tibble(Substitution = character(), -->
+<!--                      model = character(), -->
+<!--                      Q_Ancestral = numeric(), -->
+<!--                      Q_Derived = numeric(), -->
+<!--                      deltaQ_Ancestral = numeric(), -->
+<!--                      deltaQ_Derived = numeric(), -->
+<!--                      FasterAA = character(), -->
+<!--                      StateFavouredbyAA = character(), -->
+<!--                      AIC_Dependent = numeric(), -->
+<!--                      AIC_Independent = numeric(), -->
+<!--                      deltaAIC = numeric(), -->
+<!--                      p = numeric()) -->
+
+<!-- for (SUB in subs %>% pull(Substitution)) { -->
+
+<!--   print(paste("fitPagels for substitution", SUB, "...")) -->
+
+<!--   aa_site <- aa %>% -->
+<!--     filter(Substitution == SUB) %>% -->
+<!--     mutate(Ancestral = ifelse(Ancestral, 0, 1)) %>% -->
+<!--     filter(Species != "ROOT") %>% -->
+<!--     select(Species, Ancestral) -->
+
+<!--   margin_species <- intersect(margin$Species, aa_site$Species) # get common species -->
+
+<!--   margin_fit_ER <- fitPagel(ape::keep.tip(tree, margin_species), # prune tree -->
+<!--                             aa_site %>%  -->
+<!--                               filter(Species %in% margin_species) %>%  -->
+<!--                               tibble::deframe(), # have to turn into named list -->
+<!--                             margin %>%  -->
+<!--                               filter(Species %in% margin_species) %>%  -->
+<!--                               tibble::deframe(), -->
+<!--                             dep.var = "y",  -->
+<!--                             model = "ER") -->
+<!--   margin_fit_SYM <- fitPagel(ape::keep.tip(tree, margin_species), # prune tree -->
+<!--                              aa_site %>%  -->
+<!--                                filter(Species %in% margin_species) %>%  -->
+<!--                                tibble::deframe(), # have to turn into named list -->
+<!--                              margin %>%  -->
+<!--                                filter(Species %in% margin_species) %>%  -->
+<!--                                tibble::deframe(), -->
+<!--                              dep.var = "y",  -->
+<!--                              model = "SYM") -->
+<!--   margin_fit_ARD <- fitPagel(ape::keep.tip(tree, margin_species), # prune tree -->
+<!--                              aa_site %>%  -->
+<!--                                filter(Species %in% margin_species) %>%  -->
+<!--                                tibble::deframe(), # have to turn into named list -->
+<!--                              margin %>%  -->
+<!--                                filter(Species %in% margin_species) %>%  -->
+<!--                                tibble::deframe(), -->
+<!--                              dep.var = "y",  -->
+<!--                              model = "ARD") -->
+
+<!--   margin_AICs <- tibble::tibble(model = "ER",  -->
+<!--                                 AIC_dep = margin_fit_ER$dependent.AIC,  -->
+<!--                                 AIC_indep = margin_fit_ER$independent.AIC) %>% -->
+<!--     add_row(model = "SYM",  -->
+<!--             AIC_dep = margin_fit_SYM$dependent.AIC,  -->
+<!--             AIC_indep = margin_fit_SYM$independent.AIC) %>% -->
+<!--     add_row(model = "ARD",  -->
+<!--             AIC_dep = margin_fit_ARD$dependent.AIC,  -->
+<!--             AIC_indep = margin_fit_ARD$independent.AIC) -->
+
+<!--   best_model <- margin_AICs %>% -->
+<!--     slice_min(AIC_dep, n = 1) %>% -->
+<!--     pull(model) -->
+
+<!--   if (best_model[1] == "ARD") { -->
+<!--     best_margin_fit <- margin_fit_ARD -->
+<!--   } else if (best_model[1] == "SYM") { -->
+<!--     best_margin_fit <- margin_fit_SYM -->
+<!--   } else { -->
+<!--     best_margin_fit <- margin_fit_ER -->
+<!--   } -->
+
+<!--   margin_lrts <- margin_lrts %>% -->
+<!--     add_row(Substitution = SUB, -->
+<!--             model = best_model[1], -->
+<!--             Q_Ancestral = best_margin_fit$dependent.Q["0|a", "0|b"], -->
+<!--             Q_Derived = best_margin_fit$dependent.Q["1|a", "1|b"], -->
+<!--             deltaQ_Ancestral = best_margin_fit$dependent.Q["0|a", "0|b"]-best_margin_fit$dependent.Q["0|b", "0|a"], -->
+<!--             deltaQ_Derived = best_margin_fit$dependent.Q["1|a", "1|b"]-best_margin_fit$dependent.Q["1|b", "1|a"], -->
+<!--             FasterAA = case_when(Q_Derived-Q_Ancestral > 0 ~ "derived", -->
+<!--                                  Q_Derived-Q_Ancestral < 0 ~ "ancestral", -->
+<!--                                  Q_Derived-Q_Ancestral == 0 ~ "same"), -->
+<!--             StateFavouredbyAA = case_when(deltaQ_Derived > 0 ~ "margin", -->
+<!--                                           deltaQ_Derived < 0 ~ "non-margin", -->
+<!--                                           deltaQ_Derived == 0 ~ "symmetrical"), -->
+<!--             AIC_Independent = best_margin_fit$independent.AIC[1], -->
+<!--             AIC_Dependent = best_margin_fit$dependent.AIC[1], -->
+<!--             deltaAIC = AIC_Independent-AIC_Dependent, -->
+<!--             p = best_margin_fit$P[1])  -->
+
+<!--   writexl::write_xlsx(margin_lrts, here::here("analyze", "pagels_test_margin.xlsx")) -->
+
+<!-- } -->
+
+<!-- ``` -->
+
+
+<!-- ## Palisade mesophyll morphology -->
+
+<!-- ``` {r} -->
+
+<!-- mesophyll <- readr::read_csv(here::here("edwards", "chatelet_mesophyll.csv")) %>% -->
+<!--   mutate(Species = stringr::str_replace(Species, "_", "-"), -->
+<!--          Species = stringr::str_replace(Species, "rigidum", "rugosum"), -->
+<!--          Species = stringr::str_replace(Species, "annamensis", "anamensis"), -->
+<!--          Species = stringr::str_replace(Species, "clemensae", "clemensiae")) %>% -->
+<!--   mutate(Species = stringr::word(Species, 1)) %>% -->
+<!--   mutate(Mesophyll = ifelse(stringr::str_detect(Mesophyll, "H"), "H", "I")) %>% -->
+<!--   distinct(Species, Mesophyll) -->
+
+<!-- mesophyll_aa <- inner_join(mesophyll, aa_associations) %>% -->
+<!--   group_by(Site) %>% -->
+<!--   mutate(AA = as.numeric(factor(AA, levels = unique(AA)))-1, -->
+<!--          Mesophyll = as.numeric(factor(Mesophyll, levels = unique(Mesophyll)))-1 -->
+<!--          # Mesophyll = ifelse(Mesophyl == "H1", 0, 1) -->
+<!--          ) -->
+
+<!-- mesophyll_fits <- mesophyll_aa %>% -->
+<!--   group_by(Site) %>% -->
+<!--   distinct(Species, Mesophyll, .keep_all = TRUE) %>% -->
+<!--   tidyr::nest() %>% -->
+<!--   rowwise() %>% -->
+<!--   mutate(p = binaryPGLMM( -->
+<!--     formula = Mesophyll ~ AA,  -->
+<!--     data = data %>% tibble::column_to_rownames(var = "Species"),  -->
+<!--     phy = ape::keep.tip(tree, data %>% purrr::pluck("Species")))$B.pvalue[2] -->
+<!--   ) %>% -->
+<!--   select(!data) -->
+
+<!-- writexl::write_xlsx(mesophyll_fits, here::here("analyze", "pglmm_mesophyll.xlsx"))  -->
+
+<!-- ``` -->
+
+<!-- # Table 1: Binary test results -->
+
+<!-- ``` {r} -->
+<!-- cold_lrts <- readxl::read_xlsx(here::here("analyze", "pagels_test_cold.xlsx")) %>% -->
+<!--   arrange(Site) %>% -->
+<!--   select(!model) %>% -->
+<!--   mutate(Biome_p = p, -->
+<!--          .keep = "unused") -->
+<!-- freezing_lrts <- readxl::read_xlsx(here::here("analyze", "pagels_test_freezing.xlsx")) %>% -->
+<!--   arrange(Site) %>% -->
+<!--   select(p) %>% -->
+<!--   mutate(Freezing_p = p, -->
+<!--          .keep = "unused") -->
+<!-- habit_pglmms <- readxl::read_xlsx(here::here("analyze", "pglmm_habit.xlsx")) %>% -->
+<!--   arrange(Site) %>% -->
+<!--   select(p) %>% -->
+<!--   rename(Habit_p = p) -->
+<!-- leaf_shape_pglmms <- readxl::read_xlsx(here::here("analyze", "pglmm_leaf_shape.xlsx")) %>% -->
+<!--   arrange(Site) %>% -->
+<!--   select(p) %>% -->
+<!--   rename(Margin_p = p) -->
+
+<!-- binary_p <- purrr::reduce(list(cold_lrts, freezing_lrts, habit_pglmms, leaf_shape_pglmms), bind_cols) %>% -->
+<!--   mutate(across(ends_with("p"),  -->
+<!--                 ~ sprintf("%.3f", round(., digits = 3))), -->
+<!--          .keep = "unused") %>% -->
+<!--   rowwise() %>% -->
+<!--   mutate(across(ends_with("p"),  -->
+<!--                 ~ ifelse(. < 0.05, paste0(., "*"), .))) -->
+
+<!-- writexl::write_xlsx(binary_p, here::here("analyze", "plots", "table_1.xlsx")) -->
+
+<!-- ``` -->
+
+
+
+<!-- # Gene tree - supplemental -->
+
+<!-- ```{r gene_tree} -->
+
+<!-- library(ggtree) -->
+
+<!-- full_specific_epithet <- readr::read_csv(here::here("download", "metadata.csv")) %>% -->
+<!--   dplyr::select(species) %>% -->
+<!--   mutate(ShortName = stringr::str_sub(species, 1, 10), .before = "species") -->
+
+<!-- clades <- readr::read_csv(here::here("csubst", "analysis", "landis_clades.csv")) %>% -->
+<!--   rename(ShortName = Taxa) %>% -->
+<!--   full_join(full_specific_epithet) %>% -->
+<!--   mutate(Clade = stringr::str_to_title(Clade)) %>% -->
+<!--   filter(!Clade %in% c("Laminotinus", "Porphyrotinus", "Crenotinus", "Valvatotinus")) %>% -->
+<!--   relocate(species, .before = "Clade") -->
+
+<!-- gene_tree <- ape::read.tree(here::here("iqtree", "clean_aligned.phylip.treefile")) %>%  -->
+<!--   treeio::rename_taxa(full_specific_epithet) %>% -->
+<!--   ape::root("clemensiae") -->
+
+<!-- gene_tree_plot <- ggtree(gene_tree) %<+% clades + -->
+<!--   geom_tippoint(aes(fill = Clade, shape = Clade)) + -->
+<!--   geom_tiplab(size = 2.5, fontface = "italic", offset = 0.001) + -->
+<!--   geom_text2(aes(subset = !isTip, label=label, hjust = -0.25), size = 1.5) + -->
+<!--   # theme(legend.position = "none") + -->
+<!--   scale_fill_manual(labels = function(breaks) {breaks[is.na(breaks)] <- "none"; breaks}, -->
+<!--                     values = c("#7FC97F", "#7FC97F", "#7FC97F",  -->
+<!--                                "#BEAED4", "#BEAED4", "#BEAED4",  -->
+<!--                                "#FDC086", "#FDC086", "#FDC086",  -->
+<!--                                "#FFFF99", "#FFFF99", "#FFFF99",  -->
+<!--                                "#386CB0", "#386CB0", "#386CB0",  -->
+<!--                                "#F0027F", "#F0027F")) + -->
+<!--   scale_shape_manual(labels = function(breaks) {breaks[is.na(breaks)] <- "none"; breaks}, -->
+<!--                      values = c(21, 23, 24,  -->
+<!--                                 21, 23, 24,  -->
+<!--                                 21, 23, 24,  -->
+<!--                                 21, 23, 24,  -->
+<!--                                 21, 23, 24,  -->
+<!--                                 21, 1)) + -->
+<!--   labs(fill = "Clade", shape = "Clade") + -->
+<!--   coord_cartesian(clip="off") -->
+<!-- gene_tree_plot -->
+
+<!-- ggsave(here::here("analyze", "plots", "s2_genetree.svg"), plot = gene_tree_plot, width = 8.5, height = 11, dpi = 1000) -->
+
+<!-- ``` -->
+
+
+# Climate analyses
+
+## Extract climate
+
+```{r worldclim}
+
+# Read data
+gbif <- readr::read_csv(here::here("download_gbif", "gbif_data", "clean.csv")) %>%
+  dplyr::filter(!if_any(c(decimalLongitude, decimalLatitude), ~ is.na(.)))
+taxon_keys <- readr::read_csv(here::here("download_gbif", "supplemental", "taxon_keys.csv")) %>%
+  dplyr::select(speciesKey, verbatim_name) %>%
+  distinct()
+
+# Create SpatialPointsDataFrame
+gbif_coords <- gbif %>%
+  dplyr::select(decimalLongitude, decimalLatitude) %>%
+  sp::SpatialPointsDataFrame(coords = ., data = gbif)
+
+# Get list of Bioclim files, specify files of interest using regex
+bioclim_files <- list.files(here::here("download_gbif", "worldclim"),
+                              pattern = ".tif")
+# Iterate over the list of files and raster each, returning a list of raster objects
+bioclim_raster <-  purrr::map(here::here("download_gbif", "worldclim", bioclim_files), ~ raster::raster(.))
+# Stack the raster objects
+bioclim_stack <- raster::stack(bioclim_raster)
+# Extract data from the raster stack
+bioclim_extracted_raw <- raster::extract(bioclim_stack, gbif_coords, method = 'simple', sp = TRUE) %>%
+  as.data.frame() %>%
+  rename(
+    MeanTempAnnual = wc2.1_10m_bio_1,
+    MaxTempWarmestMonth = wc2.1_10m_bio_5,
+    PrecAnnual = wc2.1_10m_bio_12,
+    TempJan = wc2.1_10m_tavg_01,
+    TempFeb = wc2.1_10m_tavg_02,
+    TempMar = wc2.1_10m_tavg_03,
+    TempApr = wc2.1_10m_tavg_04,
+    TempMay = wc2.1_10m_tavg_05,
+    TempJun = wc2.1_10m_tavg_06,
+    TempJul = wc2.1_10m_tavg_07,
+    TempAug = wc2.1_10m_tavg_08,
+    TempSep = wc2.1_10m_tavg_09,
+    TempOct = wc2.1_10m_tavg_10,
+    TempNov = wc2.1_10m_tavg_11,
+    TempDec = wc2.1_10m_tavg_12,
+    PrecJan = wc2.1_10m_prec_01,
+    PrecFeb = wc2.1_10m_prec_02,
+    PrecMar = wc2.1_10m_prec_03,
+    PrecApr = wc2.1_10m_prec_04,
+    PrecMay = wc2.1_10m_prec_05,
+    PrecJun = wc2.1_10m_prec_06,
+    PrecJul = wc2.1_10m_prec_07,
+    PrecAug = wc2.1_10m_prec_08,
+    PrecSep = wc2.1_10m_prec_09,
+    PrecOct = wc2.1_10m_prec_10,
+    PrecNov = wc2.1_10m_prec_11,
+    PrecDec = wc2.1_10m_prec_12
+    ) %>%
+  dplyr::select(!verbatim_name) %>% # species key = query term, from the name from the phylogeny > genbank accession
+  right_join(., taxon_keys, by = "speciesKey", relationship = "many-to-many") %>%
+  filter(!if_any(c(MeanTempAnnual, PrecAnnual), ~ is.na(.x))) %>%
+  tidyr::pivot_longer(cols = starts_with("Temp") | starts_with("Prec") & !PrecAnnual,
+                      names_to = c(".value", "Month"),
+                      names_pattern = "(Temp|Prec)(.{3}$)")
+bioclim_extracted <- bioclim_extracted_raw %>%
+  filter(Temp >= 5) %>%
+  arrange(match(Month, month.abb)) %>%
+  group_by(gbifID) %>%
+  slice_max(order_by = Prec,
+            n = 3,
+            na_rm = TRUE) %>%
+  mutate(GrowingSeasonTemp = mean(Temp), .keep = "unused") %>%
+  ungroup()
+
+
+# Get short name (match phylogeny) and write file
+bioclim <- bioclim_extracted %>%
+  rename(Species = verbatim_name) %>%
+  dplyr::select(c(Species, contains(c("Temp", "Prec")))) %>%
+  mutate(ShortName = stringr::str_extract(Species, stringr::regex("(?<=\\s)(.{1,10})")), .after = Species)
+
+readr::write_csv(bioclim, here::here("analyze", "bioclim.csv"))
+
+# Get summary statistics and write to file
+bioclim_summary <- bioclim %>%
+  group_by(Species, ShortName) %>%
+  summarise(across(.cols = c(contains(c("Temp", "Prec"))), 
+                   .fns = list(n = ~ length(!is.na(.)),
+                               mean = ~ mean(., na.rm = TRUE),
+                               se = ~ sd(., na.rm = TRUE)/length(!is.na(.)),
+                               median = ~ median(., na.rm = TRUE),
+                               q10 = ~ quantile(., 0.1, na.rm = TRUE),
+                               q90 = ~ quantile(., 0.9, na.rm = TRUE)),
+                   .names = "{.col}_{.fn}")) %>%
+  filter(if_any(ends_with("_n"), ~ . >= 3))
+
+bioclim_summary %>%
+  ggplot(aes(x = MeanTempAnnual_mean, y = GrowingSeasonTemp_mean)) +
+  geom_point() +
+  scale_x_continuous(limits = c(0, NA)) +
+  scale_y_continuous(limits = c(0, NA))
+
+readr::write_csv(bioclim_summary, here::here("analyze", "bioclim_summary.csv"))
+
+```
+
+
+
+# Climate figure
+
+## Leung et al.
+
+### Read data
+
+```{r clim_vars_stats}
+
+bioclim_summary <- readr::read_csv(here::here("analyze", "bioclim_summary.csv"))
+aa <- readr::read_csv(here::here("analyze", "aa_at_sites_ancestral.csv"))
+
+sites_of_interest <- readr::read_csv(here::here("analyze", "pos_selected_conv_sites.csv")) %>%
+  pull(Site) %>%
+  unique()
+
+bioclim_aa <- inner_join(bioclim_summary, aa, by = "ShortName") %>%
+  filter(!is.na(Ancestral),
+         Site %in% sites_of_interest) %>%
+  mutate(AA = reorder(AA, desc(Ancestral))) %>%
+  dplyr::select(!contains(c("_median", "_se", "_q10", "_q90"))) %>%
+  tidyr::pivot_longer(cols = contains(c("_mean", "PC1")),
+                      names_to = "ClimateVariable",
+                      values_to = "ClimateValue") %>%
+  group_by(ClimateVariable) %>%
+  arrange(Site, Ancestral, ClimateValue, .by_group = TRUE) %>%
+  distinct(Site, AA, ClimateVariable, ClimateValue, .keep_all = TRUE)
+ancestral_aa <- bioclim_aa %>%
+  ungroup() %>%
+  select(Site, AA_Ancestral) %>%
+  unique()
+
+bioclim_aa_summary <- bioclim_aa %>%
+  group_by(ClimateVariable, Site, AA) %>%
+  summarise(across(.cols = ClimateValue,
+                   .fns = list(n = length,
+                               Mean = mean,
+                               SE = ~sd(.)/length(.),
+                               SD = ~sd(.)),
+                   .names = "{.col}{.fn}"))
+readr::write_csv(bioclim_aa_summary, here::here("analyze", "bioclim_aa_summary.csv"))
+
+# NONPHYLOGENETIC STATS
+
+pairwise_tests <- bioclim_aa %>%
+  filter(ClimateVariable != "coordinatePrecision_mean") %>%
+  group_by(ClimateVariable, Site) %>%
+  rstatix::t_test(formula = ClimateValue ~ AA, p.adjust.method =  "bonferroni", ref.group = "all") %>%
+  rstatix::add_significance(cutpoints = c(0, 0.001, 0.01, 0.05, 1),
+                            symbols = c("***", "**", "*", "")) %>%
+  # filter(p.adj.signif != "ns") %>%
+  group_by(ClimateVariable) %>%
+  rstatix::add_xy_position(fun = "mean_se", x = "AA", scales = "free", step.increase = 0) %>%
+  full_join(., ancestral_aa, by = "Site") %>%
+  mutate(AA = group1,
+         Ancestral = ifelse(AA == AA_Ancestral, TRUE, FALSE),
+         ClimateValue = y.position)
+```
+
+### Stats
+
+No need to run if already ran
+
+```{r phy_anova1}
+# PHYLOGENETIC ANOVA
+
+tree <- ape::read.tree(here::here("csubst", "radseq_pruned_csubst.tre"))
+
+stats <- bioclim_aa %>%
+  filter(ClimateVariable != "coordinatePrecision_mean") %>%
+  select(ShortName, Site, AA, ClimateVariable, ClimateValue) %>%
+  mutate(ClimateValue = sign(ClimateValue) * (abs(ClimateValue))^(1/3)) %>%
+  group_by(Site, ClimateVariable) %>%
+  tidyr::nest(.key = "Data") %>%
+  mutate(Tree = purrr::map(Data, ~ ape::keep.tip(tree, .$ShortName))) %>%
+  mutate(Groups = purrr::map(Data, ~ select(., "ShortName", "AA") %>% tibble::deframe())) %>%
+  mutate(ResponseVar = purrr::map(Data, ~ select(., "ShortName", "ClimateValue") %>% tibble::deframe())) %>% # select + deframe is more readable than setNames
+  rowwise() %>%
+  # head(1) %>% # for testing with a smaller dataframe
+  # mutate(ANOVAP = phytools::phylANOVA(tree = purrr::pluck(Tree),
+  #                                    x = purrr::pluck(Groups) %>% droplevels(), # droplevels will drop the unused levels
+  #                                    y = purrr::pluck(ResponseVar),
+  #                                    posthoc = TRUE,
+  #                                    nsim = 1000,
+  #                                    p.adj = "none")$Pf) %>%  # Pt attribute has the adjusted P values
+  mutate(PostHoc = phytools::phylANOVA(tree = purrr::pluck(Tree),
+                                     x = purrr::pluck(Groups) %>% droplevels(), # droplevels will drop the unused levels
+                                     y = purrr::pluck(ResponseVar),
+                                     posthoc = TRUE,
+                                     nsim = 1000,
+                                     p.adj = "none")$Pt %>%  # Pt attribute has the adjusted P values
+           as_tibble(rownames = "group1") %>%
+           list()) %>% # list puts the tibble into an object of length 1 (to fit into one cell)
+  mutate(PostHoc = tidyr::pivot_longer(PostHoc, cols = !contains("group"), names_to = "group2", values_to = "p") %>%
+           list()) %>% # turn table with combos of groups and p values to group1, group2, p
+  tidyr::unnest(PostHoc) %>%
+  rowwise() %>%
+  filter(group1 != group2) %>%
+  mutate(groups = stringr::str_flatten(sort(c(group1, group2)), collapse = "-"), .before = "p") %>%
+  distinct(groups, .keep_all = TRUE) %>%
+  group_by(Site, ClimateVariable) %>%
+  mutate(p.adj = p.adjust(p, method = "fdr"))
+
+stats_adj <- stats %>%
+  select(Site, ClimateVariable, groups, p.adj) %>%
+  group_by(Site, ClimateVariable) %>%
+  tidyr::nest(.key = "PostHoc") %>%
+  mutate(PostHoc = purrr::map(PostHoc, ~ tibble::deframe(.))) %>%
+  mutate(Letters = purrr::map(PostHoc, ~ multcompView::multcompLetters(.)$Letters %>%
+           as_tibble(rownames = "AA") %>%
+           rename(Letter = value))) %>%
+  tidyr::unnest(Letters) %>%
+  rowwise() %>%
+  mutate(Signif = any(purrr::pluck(PostHoc) < 0.05)) %>%
+  mutate(Letter = ifelse(Signif, Letter, ""))
+
+readr::write_csv(stats_adj, here::here("analyze", "phy_anova.csv"))
+
+
+```
+
+<!-- ## Edwards 2017 Am Nat -->
+
+<!-- ### Read data -->
+
+<!-- ```{r} -->
+
+<!-- climond <- readr::read_csv(here::here("edwards", "120_taxa_data.csv")) %>% -->
+<!--   select(species, bio06, bio15) %>% -->
+<!--   rename(Species = species, -->
+<!--          MeanTempColdWeek = bio06, -->
+<!--          PrecipSeasonality = bio15) -->
+
+<!-- sites_of_interest <- readr::read_csv(here::here("analyze", "pos_selected_conv_sites.csv")) %>% -->
+<!--   pull(Site) %>% -->
+<!--   unique() -->
+
+<!-- full_specific_epithet <- readr::read_csv(here::here("download", "metadata.csv")) %>% -->
+<!--   dplyr::select(species) %>% -->
+<!--   mutate(ShortName = stringr::str_sub(species, 1, 10), .before = "species") -->
+
+<!-- aa <- readr::read_csv(here::here("analyze", "aa_at_sites_ancestral.csv")) %>% -->
+<!--   full_join(full_specific_epithet) %>% -->
+<!--   filter(AA != "-") %>% -->
+<!--   rename(Species = species) -->
+
+<!-- ancestral_aa <- aa %>% -->
+<!--   ungroup() %>% -->
+<!--   select(Site, AA_Ancestral) %>% -->
+<!--   unique() -->
+
+<!-- climond_aa <- inner_join(climond, aa) %>% -->
+<!--   filter(!is.na(Ancestral), -->
+<!--          Site %in% sites_of_interest) %>% -->
+<!--   mutate(AA = reorder(AA, desc(Ancestral))) %>% -->
+<!--   tidyr::pivot_longer(cols = c(MeanTempColdWeek, PrecipSeasonality), -->
+<!--                       names_to = "ClimateVariable", -->
+<!--                       values_to = "ClimateValue") %>% -->
+<!--   group_by(ClimateVariable) %>% -->
+<!--   arrange(Site, Ancestral, ClimateValue, .by_group = TRUE) %>% -->
+<!--   distinct(Site, AA, ClimateVariable, ClimateValue, .keep_all = TRUE) -->
+
+<!-- climond_aa_summary <- climond_aa %>% -->
+<!--   group_by(ClimateVariable, Site, AA) %>% -->
+<!--   summarise(across(.cols = ClimateValue, -->
+<!--                    .fns = list(n = length, -->
+<!--                                Mean = mean, -->
+<!--                                SE = ~sd(.)/length(.), -->
+<!--                                SD = ~sd(.)), -->
+<!--                    .names = "{.col}{.fn}")) -->
+
+<!-- readr::write_csv(climond_aa_summary, here::here("analyze", "climond_aa_summary.csv")) -->
+<!-- # NONPHYLOGENETIC TEST -->
+<!-- # -->
+<!-- # pairwise_tests <- climond_aa %>% -->
+<!-- #   group_by(ClimateVariable, Site) %>% -->
+<!-- #   rstatix::t_test(formula = ClimateValue ~ AA, p.adjust.method =  "bonferroni", ref.group = "all") %>% -->
+<!-- #   rstatix::add_significance(cutpoints = c(0, 0.001, 0.01, 0.05, 1), -->
+<!-- #                             symbols = c("***", "**", "*", "")) %>% -->
+<!-- #   group_by(ClimateVariable) %>% -->
+<!-- #   rstatix::add_xy_position(fun = "mean_se", x = "AA", scales = "free", step.increase = 0) %>% -->
+<!-- #   full_join(., ancestral_aa, by = "Site") %>% -->
+<!-- #   mutate(AA = group1, -->
+<!-- #          Ancestral = ifelse(AA == AA_Ancestral, TRUE, FALSE), -->
+<!-- #          ClimateValue = y.position) -->
+
+<!-- ``` -->
+
+<!-- ### Stats -->
+
+<!-- No need to run if already ran -->
+
+<!-- ```{r phyanova2} -->
+
+<!-- # PHYLOGENETIC ANOVA -->
+
+<!-- tree <- ape::read.tree(here::here("csubst", "radseq_pruned_csubst.tre")) %>% -->
+<!--   treeio::rename_taxa(full_specific_epithet) -->
+
+<!-- stats <- climond_aa %>% -->
+<!--   select(Species, Site, AA, ClimateVariable, ClimateValue) %>% -->
+<!--   mutate(ClimateValue = sign(ClimateValue) * (abs(ClimateValue))^(1/3)) %>% -->
+<!--   group_by(Site, ClimateVariable) %>% -->
+<!--   tidyr::nest(.key = "Data") %>% -->
+<!--   mutate(Tree = purrr::map(Data, ~ ape::keep.tip(tree, .$Species))) %>% -->
+<!--   mutate(Groups = purrr::map(Data, ~ select(., "Species", "AA") %>% tibble::deframe())) %>% -->
+<!--   mutate(ResponseVar = purrr::map(Data, ~ select(., "Species", "ClimateValue") %>% tibble::deframe())) %>% # select + deframe is more readable than setNames -->
+<!--   rowwise() %>% -->
+<!--   # head(1) %>% # for testing with a smaller dataframe -->
+<!--   # mutate(ANOVAP = phytools::phylANOVA(tree = purrr::pluck(Tree), -->
+<!--   #                                    x = purrr::pluck(Groups), # droplevels will drop the unused levels -->
+<!--   #                                    y = purrr::pluck(ResponseVar), -->
+<!--   #                                    posthoc = TRUE, -->
+<!--   #                                    nsim = 1000, -->
+<!--   #                                    p.adj = "none")$Pf) %>%  # Pt attribute has the adjusted P values -->
+<!--   mutate(PostHoc = phytools::phylANOVA(tree = purrr::pluck(Tree), -->
+<!--                                      x = purrr::pluck(Groups) %>% droplevels(), # droplevels will drop the unused levels -->
+<!--                                      y = purrr::pluck(ResponseVar), -->
+<!--                                      posthoc = TRUE, -->
+<!--                                      nsim = 1000, -->
+<!--                                      p.adj = "none")$Pt %>%  # Pt attribute has the adjusted P values -->
+<!--            as_tibble(rownames = "group1") %>% -->
+<!--            list()) %>% # list puts the tibble into an object of length 1 (to fit into one cell) -->
+<!--   mutate(PostHoc = tidyr::pivot_longer(PostHoc, cols = !contains("group"), names_to = "group2", values_to = "p") %>% -->
+<!--            list()) %>% # turn table with combos of groups and p values to group1, group2, p -->
+<!--   tidyr::unnest(PostHoc) %>% -->
+<!--   rowwise() %>% -->
+<!--   filter(group1 != group2) %>% -->
+<!--   mutate(groups = stringr::str_flatten(sort(c(group1, group2)), collapse = "-"), .before = "p") %>% -->
+<!--   distinct(groups, .keep_all = TRUE) %>% -->
+<!--   group_by(Site, ClimateVariable) %>% -->
+<!--   mutate(p.adj = p.adjust(p, method = "fdr")) %>% -->
+<!--   select(Site, ClimateVariable, groups, p.adj) %>% -->
+<!--   group_by(Site, ClimateVariable) %>% -->
+<!--   tidyr::nest(.key = "PostHoc") %>% -->
+<!--   mutate(PostHoc = purrr::map(PostHoc, ~ tibble::deframe(.))) %>% -->
+<!--   mutate(Letters = purrr::map(PostHoc, ~ multcompView::multcompLetters(.)$Letters %>% -->
+<!--            as_tibble(rownames = "AA") %>% -->
+<!--            rename(Letter = value))) %>% -->
+<!--   tidyr::unnest(Letters) %>% -->
+<!--   rowwise() %>% -->
+<!--   mutate(Signif = any(purrr::pluck(PostHoc) < 0.05)) %>% -->
+<!--   mutate(Letter = ifelse(Signif, Letter, "")) -->
+
+<!-- readr::write_csv(stats, here::here("analyze", "phy_anova_edwards2017.csv")) -->
+
+<!-- ``` -->
+
+## Plot climate
+
+Run above first.
+
+```{r}
+
+bioclim_aa_summary <- readr::read_csv(here::here("analyze", "bioclim_aa_summary.csv"))
+climond_aa_summary <- readr::read_csv(here::here("analyze", "climond_aa_summary.csv"))
+
+full_specific_epithet <- readr::read_csv(here::here("download", "metadata.csv")) %>%
+  dplyr::select(species) %>%
+  mutate(ShortName = stringr::str_sub(species, 1, 10), .before = "species")
+
+aa <- readr::read_csv(here::here("analyze", "aa_at_sites_ancestral.csv")) %>%
+  full_join(full_specific_epithet) %>%
+  filter(AA != "-") %>%
+  rename(Species = species)
+ancestral_aa <- aa %>%
+  ungroup() %>%
+  select(Site, AA_Ancestral) %>%
+  unique()
+
+stats_edwards <- readr::read_csv(here::here("analyze", "phy_anova_edwards2017.csv")) %>%
+  full_join(climond_aa_summary)
+stats <- readr::read_csv(here::here("analyze", "phy_anova.csv")) %>%
+  full_join(bioclim_aa_summary) %>%
+  bind_rows(stats_edwards) %>%
+  full_join(., ancestral_aa, by = "Site") %>%
+  mutate(Ancestral = ifelse(AA == AA_Ancestral, TRUE, FALSE))
+
+sig_sites <- stats %>%
+  filter(Letter != "a") %>%
+  select(Site) %>%
+  unique() %>%
+  pull()
+sig_sites
+#
+# mean_temp_april <- filter(stats, Site %in% sig_sites) %>%
+#   filter(ClimateVariable == "MeanTempApril_mean") %>%
+#   ggplot(aes(x = forcats::fct_reorder(AA, Ancestral, .desc = TRUE), y = ClimateValueMean)) +
+#   geom_errorbar(aes(ymin = ClimateValueMean - ClimateValueSD, ymax = ClimateValueMean + ClimateValueSD),
+#                 width = 0,
+#                 linewidth = 0.25) +
+#   geom_point(aes(fill = Ancestral, shape = Ancestral),
+#              color = "black",
+#              size = 2.5,
+#              stroke = 0.25) +
+#   geom_text(aes(label = Letter, y = ClimateValueMean + ClimateValueSD),
+#             data = filter(stats, Site %in% sig_sites, ClimateVariable == "MeanTempApril_mean"),
+#             vjust = -0.5,
+#             size = 2.5) +
+#   scale_fill_manual(values = c("white", "black")) +
+#   scale_shape_manual(values = c(21, 21)) +
+#   labs(x = "", y = "Mean temp.\nApril\n(°C)") +
+#   scale_y_continuous(sec.axis = dup_axis(), limits = c(0, 25), breaks = seq(0, 25, 5), expand = c(0.003, 0.003)) +
+#   cowplot::panel_border(color = "black", size = 0.5) +
+#   theme(axis.line = element_blank(),
+#         axis.ticks.x = element_blank(),
+#         panel.grid = element_blank(),
+#         panel.spacing.x = unit(-10, "pt"),
+#         legend.position = "none",
+#         strip.text.x = element_text(hjust = 1),
+#         strip.background = element_blank()) +
+#   lemon::facet_rep_grid(~ Site, scales = "free", space = "free", repeat.tick.labels = FALSE)
+# mean_temp_april
+#
+# coldest_week <- filter(stats, Site %in% sig_sites) %>%
+#   filter(ClimateVariable == "MeanTempColdWeek") %>%
+#   ggplot(aes(x = forcats::fct_reorder(AA, Ancestral, .desc = TRUE), y = ClimateValueMean)) +
+#   geom_errorbar(aes(ymin = ClimateValueMean - ClimateValueSD, ymax = ClimateValueMean + ClimateValueSD),
+#                 width = 0,
+#                 linewidth = 0.25) +
+#   geom_point(aes(fill = Ancestral, shape = Ancestral),
+#              color = "black",
+#              size = 2.5,
+#              stroke = 0.25) +
+#   geom_text(aes(label = Letter, y = ClimateValueMean + ClimateValueSD),
+#             data = filter(stats, Site %in% sig_sites, ClimateVariable == "MeanTempColdWeek"),
+#             vjust = -0.5,
+#             size = 2.5) +
+#   scale_fill_manual(values = c("white", "black")) +
+#   scale_shape_manual(values = c(21, 21)) +
+#   labs(x = "", y = "Mean temp.\ncoldest week\n(°C)") +
+#   scale_y_continuous(sec.axis = dup_axis(), limits = c(-20, 25), breaks = seq(-20, 20, 10), expand = c(0.003, 0.003)) +
+#   cowplot::panel_border(color = "black", size = 0.5) +
+#   theme(axis.line = element_blank(),
+#         axis.ticks.x = element_blank(),
+#         panel.grid = element_blank(),
+#         panel.spacing.x = unit(-15, "pt"),
+#         legend.position = "none",
+#         strip.text.x = element_text(hjust = 1),
+#         strip.background = element_blank()) +
+#   lemon::facet_rep_grid(~ Site, scales = "free", space = "free", repeat.tick.labels = FALSE)
+# coldest_week
+#
+# temp_seasonality <- filter(stats, Site %in% sig_sites) %>%
+#   filter(ClimateVariable == "TempSeasonality_mean") %>%
+#   ggplot(aes(x = forcats::fct_reorder(AA, Ancestral, .desc = TRUE), y = ClimateValueMean)) +
+#   geom_errorbar(aes(ymin = pmax(ClimateValueMean - ClimateValueSD, 0), ymax = ClimateValueMean + ClimateValueSD),
+#                 width = 0,
+#                 linewidth = 0.25) +
+#   geom_point(aes(fill = Ancestral, shape = Ancestral),
+#              color = "black",
+#              size = 3,
+#              stroke = 0.25) +
+#   geom_text(aes(label = Letter, y = ClimateValueMean + ClimateValueSD),
+#             data = filter(stats, Site %in% sig_sites, ClimateVariable == "TempSeasonality_mean"),
+#             vjust = -0.5,
+#             size = 2.5) +
+#   scale_fill_manual(values = c("white", "black")) +
+#   scale_shape_manual(values = c(21, 21)) +
+#   labs(x = "", y = "Temp.\nseasonality\n(SD)") +
+#   scale_y_continuous(sec.axis = dup_axis(), limits = c(0, 10), breaks = seq(0, 10, 5), expand = c(0.003, 0.003)) +
+#   cowplot::panel_border(color = "black", size = 0.5) +
+#   theme(axis.line = element_blank(),
+#         axis.ticks.x = element_blank(),
+#         panel.grid = element_blank(),
+#         panel.spacing.x = unit(-10, "pt"),
+#         legend.position = "none",
+#         strip.text.x = element_text(hjust = 1),
+#         strip.background = element_blank()) +
+#   lemon::facet_rep_grid(~ Site, scales = "free", space = "free", repeat.tick.labels = FALSE)
+# temp_seasonality
+#
+# fig_clim <- cowplot::plot_grid(mean_temp_april,
+#                                NULL,
+#                                coldest_week,
+#                                NULL,
+#                                temp_seasonality,
+#                            ncol = 1,
+#                            align = "hv",
+#                            axis = "lr",
+#                            rel_heights = c(1, -0.15, 1, -0.15, 1),
+#                            labels = c("(a)", "", "(b)", "", "(c)"),
+#                            label_fontface = "plain",
+#                            label_size = 10,
+#                            label_x = 0,
+#                            label_y = 0.9,
+#                            scale = 1)
+# fig_clim
+# ggsave(here::here("analyze", "plots", "fig_2.pdf"),fig_clim, width = 3, height = 4.5)
+
+mean_temp_april_all <- stats %>%
+  filter(ClimateVariable == "MeanTempApril_mean") %>%
+  ggplot(aes(x = forcats::fct_reorder(AA, Ancestral, .desc = TRUE), y = ClimateValueMean)) +
+  geom_errorbar(aes(ymin = ClimateValueMean - ClimateValueSD, ymax = ClimateValueMean + ClimateValueSD),
+                width = 0,
+                linewidth = 0.25) +
+  geom_point(aes(fill = Ancestral, shape = Ancestral),
+             color = "black",
+             size = 2.5,
+             stroke = 0.25) +
+  geom_text(aes(label = Letter, y = ClimateValueMean + ClimateValueSD),
+            data = filter(stats, Site %in% sig_sites, ClimateVariable == "MeanTempApril_mean"),
+            vjust = -0.5,
+            size = 2.5) +
+  scale_fill_manual(values = c("white", "black")) +
+  scale_shape_manual(values = c(21, 21)) +
+  labs(x = "", y = "Mean temp.\nApril\n(°C)") +
+  scale_y_continuous(sec.axis = dup_axis(), limits = c(0, 25), breaks = seq(0, 25, 5), expand = c(0.003, 0.003)) +
+  cowplot::panel_border(color = "black", size = 0.5) +
+  theme(axis.line = element_blank(),
+        axis.ticks.x = element_blank(),
+        panel.grid = element_blank(),
+        panel.spacing.x = unit(-10, "pt"),
+        legend.position = "none",
+        strip.text.x = element_text(hjust = 1),
+        strip.background = element_blank()) +
+  lemon::facet_rep_grid(~ Site, scales = "free", space = "free", repeat.tick.labels = FALSE)
+mean_temp_april_all
+
+coldest_week_all <- stats %>%
+  filter(ClimateVariable == "MeanTempColdWeek") %>%
+  ggplot(aes(x = forcats::fct_reorder(AA, Ancestral, .desc = TRUE), y = ClimateValueMean)) +
+  geom_errorbar(aes(ymin = ClimateValueMean - ClimateValueSD, ymax = ClimateValueMean + ClimateValueSD),
+                width = 0,
+                linewidth = 0.25) +
+  geom_point(aes(fill = Ancestral, shape = Ancestral),
+             color = "black",
+             size = 2.5,
+             stroke = 0.25) +
+  geom_text(aes(label = Letter, y = ClimateValueMean + ClimateValueSD),
+            data = filter(stats, ClimateVariable == "MeanTempColdWeek"),,
+            size = 2.5,
+            vjust = -0.5) +
+  scale_fill_manual(values = c("white", "black")) +
+  scale_shape_manual(values = c(21, 21)) +
+  labs(x = "", y = "Temp.\ncoldest week\n(°C)") +
+  scale_y_continuous(sec.axis = dup_axis(), limits = c(-20, 25), breaks = seq(-20, 20, 10), expand = c(0.003, 0.003)) +
+  cowplot::panel_border(color = "black", size = 0.5) +
+  theme(axis.line = element_blank(),
+        axis.ticks.x = element_blank(),
+        panel.grid = element_blank(),
+        panel.spacing.x = unit(-0.85, "lines"),
+        legend.position = "none",
+        strip.text.x = element_text(hjust = 1),
+        strip.background = element_blank()) +
+  lemon::facet_rep_grid(~ Site, scales = "free", space = "free", repeat.tick.labels = FALSE)
+coldest_week_all
+
+temp_seasonality_all <- stats %>%
+  filter(ClimateVariable == "TempSeasonality_mean") %>%
+  ggplot(aes(x = forcats::fct_reorder(AA, Ancestral, .desc = TRUE), y = ClimateValueMean)) +
+  geom_errorbar(aes(ymin = pmax(ClimateValueMean - ClimateValueSD, 0), ymax = ClimateValueMean + ClimateValueSD),
+                width = 0,
+                linewidth = 0.25) +
+  geom_point(aes(fill = Ancestral, shape = Ancestral),
+             color = "black",
+             size = 2.5,
+             stroke = 0.25) +
+  geom_text(aes(label = Letter, y = ClimateValueMean + ClimateValueSD),
+            data = filter(stats, ClimateVariable == "TempSeasonality_mean"),,
+            size = 2.5,
+            vjust = -0.5) +
+  scale_fill_manual(values = c("white", "black")) +
+  scale_shape_manual(values = c(21, 21)) +
+  labs(x = "", y = "Temp.\nseasonality\n(100 × SD)") +
+  scale_y_continuous(sec.axis = dup_axis(), limits = c(0, 10), breaks = seq(0, 10, 5), expand = c(0.003, 0.003)) +
+  cowplot::panel_border(color = "black", size = 0.5) +
+  theme(axis.line = element_blank(),
+        axis.ticks.x = element_blank(),
+        panel.grid = element_blank(),
+        panel.spacing.x = unit(-0.75, "lines"),
+        legend.position = "none",
+        strip.text.x = element_text(hjust = 1),
+        strip.background = element_blank()) +
+  lemon::facet_rep_grid(~ Site, scales = "free", space = "free", repeat.tick.labels = FALSE)
+temp_seasonality_all
+
+fig_clim_all <- cowplot::plot_grid(mean_temp_april_all, NULL, coldest_week_all, NULL, temp_seasonality_all,
+                           ncol = 1,
+                           align = "hv",
+                           axis = "lr",
+                           rel_heights = c(1, -0.15, 1, -0.15, 1),
+                           labels = c("(a)", "", "(b)", "", "(c)"),
+                           label_fontface = "plain",
+                           label_x = 0,
+                           label_y = 0.9)
+
+# ggsave(here::here("analyze", "plots", "s4_bioclim.svg"), plot = fig_clim_all, width = 11, height = 5, units = "in", dpi = 1000) # for showing all data
+
+ggsave(here::here("analyze", "plots", "s4_bioclim.svg"), plot = coldest_week_all, width = 11, height = 1.75, units = "in", dpi = 1000)
+
+```
+
+
+<!-- ``` -->
+
+<!-- # LMA and amino acid - Edwards et al. 2014 -->
+
+<!-- ``` {r} -->
+<!-- sites_of_interest <- readr::read_csv(here::here("analyze", "pos_selected_conv_sites.csv")) %>% -->
+<!--   pull(Site) %>% -->
+<!--   unique() -->
+
+<!-- full_specific_epithet <- readr::read_csv(here::here("download", "metadata.csv")) %>% -->
+<!--   dplyr::select(species) %>% -->
+<!--   mutate(ShortName = stringr::str_sub(species, 1, 10), .before = "species") -->
+
+<!-- aa <- readr::read_csv(here::here("analyze", "aa_at_sites_ancestral.csv")) %>% -->
+<!--   full_join(full_specific_epithet) %>% -->
+<!--   filter(AA != "-") %>% -->
+<!--   rename(Species = species) -->
+
+<!-- ancestral_aa <- aa %>% -->
+<!--   ungroup() %>% -->
+<!--   select(Site, AA_Ancestral) %>% -->
+<!--   unique() -->
+
+<!-- lma <- readr::read_tsv(here::here("edwards", "alltrait_means.txt")) %>% -->
+<!--   mutate(Species = stringr::word(spp, 1, sep = "_")) %>% -->
+<!--   select(Species, LMA) %>% -->
+<!--   group_by(Species) %>% -->
+<!--   summarise(LMA = mean(LMA)) -->
+
+<!-- readr::write_csv(lma_aa, here::here("analyze", "lma_aa.csv")) -->
+
+<!-- ``` -->
+
+<!-- ## Stats -->
+
+<!-- ```{r} -->
+
+<!-- tree <- ape::read.tree(here::here("csubst", "radseq_pruned_csubst.tre")) %>% -->
+<!--   treeio::rename_taxa(full_specific_epithet) -->
+
+<!-- lma_aa_76 <- lma_aa %>% -->
+<!--   filter(Site == 76) -->
+
+<!--   phytools::phylANOVA(ape::keep.tip(tree, lma_aa_76$Species), -->
+<!--                       select(lma_aa_76, "Species", "AA") %>% tibble::deframe(), -->
+<!--                       select(lma_aa_76, "Species", "LMA") %>% tibble::deframe()) -->
+
+<!-- stats <- lma_aa %>% -->
+<!--   select(Species, Site, AA, LMA) %>% -->
+<!--   group_by(Site) %>% -->
+<!--   tidyr::nest(.key = "Data") %>% -->
+<!--   mutate(Tree = purrr::map(Data, ~ ape::keep.tip(tree, .$Species))) %>% -->
+<!--   mutate(Groups = purrr::map(Data, ~ select(., "Species", "AA") %>% tibble::deframe())) %>% -->
+<!--   mutate(ResponseVar = purrr::map(Data, ~ select(., "Species", "LMA") %>% tibble::deframe())) %>% # select + deframe is more readable than setNames -->
+<!--   rowwise() %>% -->
+<!--   mutate(PostHoc = phytools::phylANOVA(tree = purrr::pluck(Tree), -->
+<!--                                        x = purrr::pluck(Groups), -->
+<!--                                        y = purrr::pluck(ResponseVar), -->
+<!--                                        posthoc = TRUE, -->
+<!--                                        nsim = 1000, -->
+<!--                                        p.adj = "none")$Pt %>% as_tibble(rownames = "group1") %>% list()) %>% # list puts the tibble into an object of length 1 (to fit into one cell) -->
+<!--   mutate(PostHoc = tidyr::pivot_longer(PostHoc, cols = !contains("group"), names_to = "group2", values_to = "p") %>% -->
+<!--            list()) %>% # turn table with combos of groups and p values to group1, group2, p -->
+<!--   tidyr::unnest(PostHoc) %>% -->
+<!--   rowwise() %>% -->
+<!--   filter(group1 != group2) %>% -->
+<!--   mutate(groups = stringr::str_flatten(sort(c(group1, group2)), collapse = "-"), .before = "p") %>% -->
+<!--   distinct(groups, .keep_all = TRUE) %>% -->
+<!--   group_by(Site) %>% -->
+<!--   mutate(p.adj = p.adjust(p, method = "fdr")) %>% -->
+<!--   select(Site, groups, p.adj) %>% -->
+<!--   mutate(p.adj = ifelse(is.na(p.adj), 1, p.adj)) %>% -->
+<!--   group_by(Site) %>% -->
+<!--   tidyr::nest(.key = "PostHoc") %>% -->
+<!--   mutate(PostHoc = purrr::map(PostHoc, ~ tibble::deframe(.))) %>% -->
+<!--   mutate(Letters = purrr::map(PostHoc, ~ multcompView::multcompLetters(.)$Letters %>% -->
+<!--            as_tibble(rownames = "AA") %>% -->
+<!--            rename(Letter = value))) %>% -->
+<!--   tidyr::unnest(Letters) %>% -->
+<!--   rowwise() %>% -->
+<!--   mutate(Signif = any(purrr::pluck(PostHoc) < 0.05)) %>% -->
+<!--   mutate(Letter = ifelse(Signif, Letter, "")) -->
+
+<!-- readr::write_csv(stats, here::here("analyze", "phy_anova_edwards2014.csv")) -->
+
+<!-- ``` -->
+
+<!-- # Summary Table -->
+
+<!-- ```{r summarytable} -->
+<!-- ancestral_aa <- readr::read_csv(here::here("analyze", "aa_at_sites_ancestral.csv")) %>% -->
+<!--   select(Site, AA_Ancestral) %>% -->
+<!--   mutate(Site = as.character(Site)) -->
+<!-- rst <- readr::read_csv(here::here("analyze", "paml_site_omega.csv")) %>% -->
+<!--   filter(NSSitesModel == 2) %>% -->
+<!--   mutate(Site = as.character(Site)) %>% -->
+<!--   filter(PosteriorProb > 0.95) %>% -->
+<!--   select(Site, PosteriorProb) %>% -->
+<!--   mutate(PosteriorProb = ifelse(PosteriorProb > 0.95, "*", "")) -->
+<!-- convergent_sites <- readr::read_csv(here::here("csubst", "analysis", "csubst_site_merged.csv")) %>% -->
+<!--   filter(OCNany2spe > 0.95) %>% -->
+<!--   distinct() %>% -->
+<!--   mutate(Site = as.character(codon_site_alignment + 31)) %>% # align with full cds position -->
+<!--   dplyr::select(!codon_site_alignment) %>% -->
+<!--   full_join(ancestral_aa) %>% -->
+<!--   filter(aa_1 != AA_Ancestral & aa_2 != AA_Ancestral) %>% -->
+<!--   dplyr::select(branch_id_1, branch_id_2, node1, node2, Site, OCNany2spe) %>% -->
+<!--   distinct(Site, OCNany2spe) %>% -->
+<!--   group_by(Site) %>% -->
+<!--   slice_min(order_by = OCNany2spe) %>% -->
+<!--   mutate(OCNany2spe = ifelse(OCNany2spe > 0.95, "*", "")) %>% -->
+<!--   arrange(as.numeric(Site)) -->
+
+<!-- cold_lrts <- readxl::read_xlsx(here::here("analyze", "pagels_test_cold.xlsx")) %>% -->
+<!--   arrange(Site)%>% -->
+<!--   mutate(Cold = case_when(p < 0.05 & StateFavoured == "cold" ~ "-", -->
+<!--                            p < 0.05 & StateFavoured == "non-cold" ~ "+", -->
+<!--                            p < 0.05 ~ "*", -->
+<!--                            .default = ""), -->
+<!--          .keep = "unused") %>% -->
+<!--   select(Site, Cold)  -->
+<!-- habit_lrts <- readxl::read_xlsx(here::here("analyze", "pagels_test_habit.xlsx")) %>% -->
+<!--   arrange(Site)%>% -->
+<!--   mutate(Habit = case_when(p < 0.05 & StateFavoured == "deciduous" ~ "-", -->
+<!--                            p < 0.05 & StateFavoured == "evergreen" ~ "+", -->
+<!--                            p < 0.05 ~ "*", -->
+<!--                            .default = ""), -->
+<!--          .keep = "unused") %>% -->
+<!--   select(Site, Habit)  -->
+<!-- binary_p <- purrr::reduce(list(cold_lrts, habit_lrts), full_join) %>% -->
+<!--   mutate(Site = as.character(Site)) -->
+
+<!-- aovs_bisse <- readxl::read_xlsx(here::here("analyze", "bisse.xlsx")) %>% -->
+<!--   group_by(Site) %>% -->
+<!--   slice_min(order_by = AIC, n = 1) %>% -->
+<!--   mutate(Site = as.character(Site), -->
+<!--          p = `Pr(>|Chi|)`) %>% -->
+<!--   filter(p < 0.05) %>% -->
+<!--   filter(Name != "equal sp. and ex. rate") %>% -->
+<!--   mutate(DiversificationRate = case_when(lambda1 - mu1 > lambda0 - mu0 ~ "+", -->
+<!--                                          lambda1 - mu1 < lambda0 - mu0 ~ "-", -->
+<!--                                          .default = "*")) %>% -->
+<!--   select(Site, DiversificationRate) %>% -->
+<!--   distinct() -->
+
+<!-- bioclim_aa_summary <- readr::read_csv(here::here("analyze", "bioclim_aa_summary.csv")) -->
+<!-- climond_aa_summary <- readr::read_csv(here::here("analyze", "climond_aa_summary.csv")) -->
+<!-- full_specific_epithet <- readr::read_csv(here::here("download", "metadata.csv")) %>% -->
+<!--   dplyr::select(species) %>% -->
+<!--   mutate(ShortName = stringr::str_sub(species, 1, 10), .before = "species") -->
+<!-- aa <- readr::read_csv(here::here("analyze", "aa_at_sites_ancestral.csv")) %>%  -->
+<!--   full_join(full_specific_epithet) %>% -->
+<!--   filter(AA != "-") %>% -->
+<!--   rename(Species = species) -->
+<!-- ancestral_aa <- aa %>% -->
+<!--   ungroup() %>% -->
+<!--   select(Site, AA_Ancestral) %>% -->
+<!--   mutate(Site = as.character(Site)) %>% -->
+<!--   unique() -->
+<!-- stats_edwards <- readr::read_csv(here::here("analyze", "phy_anova_edwards2017.csv")) %>% -->
+<!--   full_join(climond_aa_summary) %>% -->
+<!--   mutate(Site = as.character(Site)) %>%  -->
+<!--   full_join(ancestral_aa) %>% -->
+<!--   filter(Letter %in% c("a", "b")) %>% # just get the different groups and exclude "ab", because those aren't significant -->
+<!--   mutate(AA = ifelse(AA == AA_Ancestral, "Ancestral", "Derived")) %>% -->
+<!--   select(Site, ClimateVariable, AA, ClimateValueMean) %>%  -->
+<!--   distinct() %>%  -->
+<!--   tidyr::pivot_wider(names_from = "AA", -->
+<!--                      values_from = "ClimateValueMean") %>% -->
+<!--   mutate(MeanTempColdWeek = ifelse(Ancestral < Derived, "+", "-"), .keep = "unused") %>% -->
+<!--   distinct(Site, MeanTempColdWeek) -->
+
+<!-- h_bonds <- readxl::read_xlsx(here::here("analyze/h_bonds.xlsx")) %>% -->
+<!--   mutate(HydrogenBonds = ifelse(AA_HBondable & !AA_A_HBondable, "+", "-")) %>% # gaining h-bonds means more rigidity, thus better in warmer environments -->
+<!--   select(Site, HydrogenBonds) %>% -->
+<!--   mutate(Site = as.character(Site)) -->
+
+<!-- summary_table <- rst %>% rename(PositiveSelection = PosteriorProb) %>% -->
+<!--   full_join(convergent_sites %>% rename(ConvergentEvolution = OCNany2spe)) %>% -->
+<!--   full_join(binary_p) %>% -->
+<!--   full_join(stats_edwards) %>% -->
+<!--   full_join(aovs_bisse) %>% -->
+<!--   full_join(h_bonds) %>% -->
+<!--   relocate(c(HydrogenBonds, Habit), .after = "ConvergentEvolution") %>% -->
+<!--   mutate(across(.cols = everything(), -->
+<!--                 .fns = ~ifelse(is.na(.), "", .))) %>% -->
+<!--   arrange(as.numeric(Site)) -->
+
+<!-- writexl::write_xlsx(summary_table, here::here("analyze", "plots", "table_1.xlsx")) -->
+
+<!-- ``` -->
+

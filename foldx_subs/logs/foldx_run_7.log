@@ -1,0 +1,307 @@
+   ********************************************
+   ***                                      ***
+   ***             FoldX 5.1 (c)            ***
+   ***                                      ***
+   ***     code by the FoldX Consortium     ***
+   ***                                      ***
+   ***     Jesper Borg, Frederic Rousseau   ***
+   ***    Joost Schymkowitz, Luis Serrano   ***
+   ***    Peter Vanhee, Erik Verschueren    ***
+   ***     Lies Baeten, Javier Delgado      ***
+   ***       and Francois Stricher          ***
+   *** and any other of the 9! permutations ***
+   ***   based on an original concept by    ***
+   ***   Raphael Guerois and Luis Serrano   ***
+   ********************************************
+
+ *** THIS IS AN IMPORTANT MESSAGE: 
+ >> External parametrized molecules were detected...
+ >> Final energetic values will depend of the correct parametrization of this molecules. 
+
+
+1 models read: 8ruc-assembly-clean_Repair.pdb
+1 models read: 8ruc-assembly-clean_Repair.pdb
+
+BackHbond       =               -3996.85
+SideHbond       =               -2172.91
+Energy_VdW      =               -6258.35
+Electro         =               -375.98
+Energy_SolvP    =               8709.95
+Energy_SolvH    =               -8399.37
+Energy_vdwclash =               75.39
+energy_torsion  =               5.52
+backbone_vdwclash=              858.95
+Entropy_sidec   =               3201.08
+Entropy_mainc   =               7361.29
+water bonds     =               0.00
+helix dipole    =               -16.28
+loop_entropy    =               0.00
+cis_bond        =               8.99
+disulfide       =               -7.18
+kn electrostatic=               -14.42
+partial covalent interactions = 0.00
+Energy_Ionisation =             33.24
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -1845.87
+
+
+BackHbond       =               -3996.85
+SideHbond       =               -2172.91
+Energy_VdW      =               -6258.35
+Electro         =               -375.98
+Energy_SolvP    =               8709.95
+Energy_SolvH    =               -8399.37
+Energy_vdwclash =               75.39
+energy_torsion  =               5.52
+backbone_vdwclash=              858.95
+Entropy_sidec   =               3201.08
+Entropy_mainc   =               7361.29
+water bonds     =               0.00
+helix dipole    =               -16.28
+loop_entropy    =               0.00
+cis_bond        =               8.99
+disulfide       =               -7.18
+kn electrostatic=               -14.42
+partial covalent interactions = 0.00
+Energy_Ionisation =             33.24
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -1845.87
+
+Starting BuildModel
+Reading NA95A,NB95A,NC95A,ND95A,NE95A,NF95A,NG95A,NH95A;
+Reading AA143S,AB143S,AC143S,AD143S,AE143S,AF143S,AG143S,AH143S;
+Reading YA226N,YB226N,YC226N,YD226N,YE226N,YF226N,YG226N,YH226N;
+Reading MA251I,MB251I,MC251I,MD251I,ME251I,MF251I,MG251I,MH251I;
+Reading MA251V,MB251V,MC251V,MD251V,ME251V,MF251V,MG251V,MH251V;
+Reading AA254V,AB254V,AC254V,AD254V,AE254V,AF254V,AG254V,AH254V;
+Reading VA255I,VB255I,VC255I,VD255I,VE255I,VF255I,VG255I,VH255I;
+Residue to Mutate ASNA95 has residue index 86
+Residue to Mutate ASNB95 has residue index 553
+Residue to Mutate ASNC95 has residue index 1020
+Residue to Mutate ASND95 has residue index 1487
+Residue to Mutate ASNE95 has residue index 1954
+Residue to Mutate ASNF95 has residue index 2421
+Residue to Mutate ASNG95 has residue index 2888
+Residue to Mutate ASNH95 has residue index 3355
+Residue to Mutate ALAA143 has residue index 134
+Residue to Mutate ALAB143 has residue index 601
+Residue to Mutate ALAC143 has residue index 1068
+Residue to Mutate ALAD143 has residue index 1535
+Residue to Mutate ALAE143 has residue index 2002
+Residue to Mutate ALAF143 has residue index 2469
+Residue to Mutate ALAG143 has residue index 2936
+Residue to Mutate ALAH143 has residue index 3403
+Residue to Mutate TYRA226 has residue index 217
+Residue to Mutate TYRB226 has residue index 684
+Residue to Mutate TYRC226 has residue index 1151
+Residue to Mutate TYRD226 has residue index 1618
+Residue to Mutate TYRE226 has residue index 2085
+Residue to Mutate TYRF226 has residue index 2552
+Residue to Mutate TYRG226 has residue index 3019
+Residue to Mutate TYRH226 has residue index 3486
+Residue to Mutate META251 has residue index 242
+Residue to Mutate METB251 has residue index 709
+Residue to Mutate METC251 has residue index 1176
+Residue to Mutate METD251 has residue index 1643
+Residue to Mutate METE251 has residue index 2110
+Residue to Mutate METF251 has residue index 2577
+Residue to Mutate METG251 has residue index 3044
+Residue to Mutate METH251 has residue index 3511
+Residue to Mutate META251 has residue index 242
+Residue to Mutate METB251 has residue index 709
+Residue to Mutate METC251 has residue index 1176
+Residue to Mutate METD251 has residue index 1643
+Residue to Mutate METE251 has residue index 2110
+Residue to Mutate METF251 has residue index 2577
+Residue to Mutate METG251 has residue index 3044
+Residue to Mutate METH251 has residue index 3511
+Residue to Mutate ALAA254 has residue index 245
+Residue to Mutate ALAB254 has residue index 712
+Residue to Mutate ALAC254 has residue index 1179
+Residue to Mutate ALAD254 has residue index 1646
+Residue to Mutate ALAE254 has residue index 2113
+Residue to Mutate ALAF254 has residue index 2580
+Residue to Mutate ALAG254 has residue index 3047
+Residue to Mutate ALAH254 has residue index 3514
+Residue to Mutate VALA255 has residue index 246
+Residue to Mutate VALB255 has residue index 713
+Residue to Mutate VALC255 has residue index 1180
+Residue to Mutate VALD255 has residue index 1647
+Residue to Mutate VALE255 has residue index 2114
+Residue to Mutate VALF255 has residue index 2581
+Residue to Mutate VALG255 has residue index 3048
+Residue to Mutate VALH255 has residue index 3515
+Mutating residue = ASNA95 into ALA
+Mutating residue = ASNB95 into ALA
+Mutating residue = ASNC95 into ALA
+Mutating residue = ASND95 into ALA
+Mutating residue = ASNE95 into ALA
+Mutating residue = ASNF95 into ALA
+Mutating residue = ASNG95 into ALA
+Mutating residue = ASNH95 into ALA
+Mutating residue = ASNA95 into ALA
+Mutating residue = ASNB95 into ALA
+Mutating residue = ASNC95 into ALA
+Mutating residue = ASND95 into ALA
+Mutating residue = ASNE95 into ALA
+Mutating residue = ASNF95 into ALA
+Mutating residue = ASNG95 into ALA
+Mutating residue = ASNH95 into ALA
+Mutating residue = ASNA95 into ALA
+Mutating residue = ASNB95 into ALA
+Mutating residue = ASNC95 into ALA
+Mutating residue = ASND95 into ALA
+Mutating residue = ASNE95 into ALA
+Mutating residue = ASNF95 into ALA
+Mutating residue = ASNG95 into ALA
+Mutating residue = ASNH95 into ALA
+Mutating residue = ALAA143 into SER
+Mutating residue = ALAB143 into SER
+Mutating residue = ALAC143 into SER
+Mutating residue = ALAD143 into SER
+Mutating residue = ALAE143 into SER
+Mutating residue = ALAF143 into SER
+Mutating residue = ALAG143 into SER
+Mutating residue = ALAH143 into SER
+Mutating residue = ALAA143 into SER
+Mutating residue = ALAB143 into SER
+Mutating residue = ALAC143 into SER
+Mutating residue = ALAD143 into SER
+Mutating residue = ALAE143 into SER
+Mutating residue = ALAF143 into SER
+Mutating residue = ALAG143 into SER
+Mutating residue = ALAH143 into SER
+Mutating residue = ALAA143 into SER
+Mutating residue = ALAB143 into SER
+Mutating residue = ALAC143 into SER
+Mutating residue = ALAD143 into SER
+Mutating residue = ALAE143 into SER
+Mutating residue = ALAF143 into SER
+Mutating residue = ALAG143 into SER
+Mutating residue = ALAH143 into SER
+Mutating residue = TYRA226 into ASN
+Mutating residue = TYRB226 into ASN
+Mutating residue = TYRC226 into ASN
+Mutating residue = TYRD226 into ASN
+Mutating residue = TYRE226 into ASN
+Mutating residue = TYRF226 into ASN
+Mutating residue = TYRG226 into ASN
+Mutating residue = TYRH226 into ASN
+Mutating residue = TYRA226 into ASN
+Mutating residue = TYRB226 into ASN
+Mutating residue = TYRC226 into ASN
+Mutating residue = TYRD226 into ASN
+Mutating residue = TYRE226 into ASN
+Mutating residue = TYRF226 into ASN
+Mutating residue = TYRG226 into ASN
+Mutating residue = TYRH226 into ASN
+Mutating residue = TYRA226 into ASN
+Mutating residue = TYRB226 into ASN
+Mutating residue = TYRC226 into ASN
+Mutating residue = TYRD226 into ASN
+Mutating residue = TYRE226 into ASN
+Mutating residue = TYRF226 into ASN
+Mutating residue = TYRG226 into ASN
+Mutating residue = TYRH226 into ASN
+Mutating residue = META251 into ILE
+Mutating residue = METB251 into ILE
+Mutating residue = METC251 into ILE
+Mutating residue = METD251 into ILE
+Mutating residue = METE251 into ILE
+Mutating residue = METF251 into ILE
+Mutating residue = METG251 into ILE
+Mutating residue = METH251 into ILE
+Mutating residue = META251 into ILE
+Mutating residue = METB251 into ILE
+Mutating residue = METC251 into ILE
+Mutating residue = METD251 into ILE
+Mutating residue = METE251 into ILE
+Mutating residue = METF251 into ILE
+Mutating residue = METG251 into ILE
+Mutating residue = METH251 into ILE
+Mutating residue = META251 into ILE
+Mutating residue = METB251 into ILE
+Mutating residue = METC251 into ILE
+Mutating residue = METD251 into ILE
+Mutating residue = METE251 into ILE
+Mutating residue = METF251 into ILE
+Mutating residue = METG251 into ILE
+Mutating residue = METH251 into ILE
+Mutating residue = META251 into VAL
+Mutating residue = METB251 into VAL
+Mutating residue = METC251 into VAL
+Mutating residue = METD251 into VAL
+Mutating residue = METE251 into VAL
+Mutating residue = METF251 into VAL
+Mutating residue = METG251 into VAL
+Mutating residue = METH251 into VAL
+Mutating residue = META251 into VAL
+Mutating residue = METB251 into VAL
+Mutating residue = METC251 into VAL
+Mutating residue = METD251 into VAL
+Mutating residue = METE251 into VAL
+Mutating residue = METF251 into VAL
+Mutating residue = METG251 into VAL
+Mutating residue = METH251 into VAL
+Mutating residue = META251 into VAL
+Mutating residue = METB251 into VAL
+Mutating residue = METC251 into VAL
+Mutating residue = METD251 into VAL
+Mutating residue = METE251 into VAL
+Mutating residue = METF251 into VAL
+Mutating residue = METG251 into VAL
+Mutating residue = METH251 into VAL
+Mutating residue = ALAA254 into VAL
+Mutating residue = ALAB254 into VAL
+Mutating residue = ALAC254 into VAL
+Mutating residue = ALAD254 into VAL
+Mutating residue = ALAE254 into VAL
+Mutating residue = ALAF254 into VAL
+Mutating residue = ALAG254 into VAL
+Mutating residue = ALAH254 into VAL
+Mutating residue = ALAA254 into VAL
+Mutating residue = ALAB254 into VAL
+Mutating residue = ALAC254 into VAL
+Mutating residue = ALAD254 into VAL
+Mutating residue = ALAE254 into VAL
+Mutating residue = ALAF254 into VAL
+Mutating residue = ALAG254 into VAL
+Mutating residue = ALAH254 into VAL
+Mutating residue = ALAA254 into VAL
+Mutating residue = ALAB254 into VAL
+Mutating residue = ALAC254 into VAL
+Mutating residue = ALAD254 into VAL
+Mutating residue = ALAE254 into VAL
+Mutating residue = ALAF254 into VAL
+Mutating residue = ALAG254 into VAL
+Mutating residue = ALAH254 into VAL
+Mutating residue = VALA255 into ILE
+Mutating residue = VALB255 into ILE
+Mutating residue = VALC255 into ILE
+Mutating residue = VALD255 into ILE
+Mutating residue = VALE255 into ILE
+Mutating residue = VALF255 into ILE
+Mutating residue = VALG255 into ILE
+Mutating residue = VALH255 into ILE
+Mutating residue = VALA255 into ILE
+Mutating residue = VALB255 into ILE
+Mutating residue = VALC255 into ILE
+Mutating residue = VALD255 into ILE
+Mutating residue = VALE255 into ILE
+Mutating residue = VALF255 into ILE
+Mutating residue = VALG255 into ILE
+Mutating residue = VALH255 into ILE
+Mutating residue = VALA255 into ILE
+Mutating residue = VALB255 into ILE
+Mutating residue = VALC255 into ILE
+Mutating residue = VALD255 into ILE
+Mutating residue = VALE255 into ILE
+Mutating residue = VALF255 into ILE
+Mutating residue = VALG255 into ILE
+Mutating residue = VALH255 into ILE
+Your file run OK
+End time of FoldX: Tue Apr 15 20:40:42 2025
+Total time spend: 985.45 seconds.
+Cleaning BuildModel...DONE

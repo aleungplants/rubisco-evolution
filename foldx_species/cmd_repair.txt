@@ -1,0 +1,10 @@
+command=RepairPDB
+pdb=8ruc-assembly-clean.pdb
+
+fix-residues-file=individual_list_constraints.txt
+
+water=-CRYSTAL
+vdwDesign=0
+ionStrength=0.15
+
+numberOfRuns=3

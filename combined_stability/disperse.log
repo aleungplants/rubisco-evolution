@@ -1,0 +1,9 @@
+muscle 5.1.win64 [ddb630] built Jan 13 2022 15:30:12
+Started Fri Mar  7 17:28:17 2025
+..\align\muscle5.1.win64.exe -disperse ensemble.efa -log disperse.log 
+00:03 128Mb   100.0% Pairwise dists
+@disperse file=ensemble.efa D_LP=0 D_Cols=0
+
+Finished Fri Mar  7 17:28:20 2025
+Elapsed time 00:03
+Max memory 128Mb

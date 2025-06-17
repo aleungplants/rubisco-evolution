@@ -1,0 +1,1001 @@
+---
+title: "Dryopteris rubisco evolution"
+author: "Arthur Leung"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+here::i_am("14. analyze.Rmd")
+
+ggplot2::theme_set(cowplot::theme_cowplot(line_size = 0.25, font_size = 10) +
+                     theme(axis.ticks.length = unit(-3, "pt"),
+                           axis.ticks = element_line(linewidth = 0.25),
+                           strip.background = element_blank(),
+                           strip.placement = "outside",
+                           axis.text.x.top = element_blank(),
+                           axis.text.y.right = element_blank(),
+                           axis.title.x.top = element_blank(),
+                           axis.title.y.right = element_blank()))
+```
+
+# Selection analyses
+
+## LRTs and model parameters from PAML site analyses. 
+
+The M1a vs. M0 comparison was used to determine whether there were a class of codon sites with nearly neutral evolution (0 \< ω \< 1), where ω is the ratio of nonsynonymous to synonymous codon substitutions. The M3 vs. M0 tested for variable ω between sites. The M2a vs. M1a and M8a vs. M7 comparisons were used were used to determined if there were codon sites under positive selection (ω \> 1). The M2a vs. M1a test is more stringent than M8 vs. M7, so to prevent false positives we used only the results of M2a for downstream analyses; also this was the better fitting model based on AIC.
+
+```{r paml}
+
+mlc <- readr::read_csv(here::here("paml_site_mlc.csv"))
+knitr::kable(mlc)
+```
+
+## Model parameters from CSUBST analysis. 
+
+Branch pairs with at least one convergent substitution are shown.
+
+```{r csubst}
+
+ancestral_aa <- readr::read_csv(here::here("aa_at_sites_ancestral.csv"))
+
+csubst_site <- readr::read_csv(here::here("site", "csubst_site_merged.csv")) %>%
+  filter(OCNany2spe > 0.95) %>%
+  distinct() %>%
+  mutate(Site = codon_site_alignment + 20) %>% # align with full cds position
+  dplyr::select(!codon_site_alignment) %>%
+  full_join(ancestral_aa) %>% # get root aa
+  filter(aa_1 != AA_Ancestral & aa_2 != AA_Ancestral) %>% # no reversals
+  mutate(substitution_1 = paste0(aa_1_anc, Site, aa_1),
+         substitution_2 = paste0(aa_2_anc, Site, aa_2)) %>% 
+  rename(aa_root = AA_Ancestral) %>%
+  dplyr::select(Site, branch_id_1, branch_id_2, aa_root, substitution_1, substitution_2) %>%
+  tidyr::pivot_longer(
+    cols = ends_with(c("_1", "_2")),
+    names_to = c(".value", "id"),
+    names_pattern = "(.*)_(1|2)$"
+  ) %>% # pivot longer
+  dplyr::select(!id) %>%
+  distinct() %>% # distinct
+  group_by(Site, aa_root, substitution) %>%
+  summarise(branch_ids = paste(branch_id %>% sort, collapse = ", "))
+
+writexl::write_xlsx(csubst_site, here::here("convergent_subs.xlsx"))
+
+```
+
+## Positively selected, convergent sites
+
+```{r omega}
+ancestral_aa <- readr::read_csv(here::here("aa_at_sites_ancestral.csv")) %>%
+  select(Site, AA_Ancestral)
+
+rst <- readr::read_csv(here::here("paml_site_omega.csv")) %>%
+  filter(NSSitesModel == 2) %>%
+  mutate(Site = Site + 20)
+convergent_sites <- readr::read_csv(here::here("site/csubst_site_merged.csv")) %>%
+  filter(OCNany2spe > 0.95) %>%
+  distinct() %>%
+  mutate(Site = codon_site_alignment + 20) %>% # align with full cds position
+  dplyr::select(!codon_site_alignment) %>%
+  full_join(ancestral_aa) %>%
+  filter(aa_1 != AA_Ancestral & aa_2 != AA_Ancestral) %>%
+  dplyr::select(branch_id_1, branch_id_2, node1, node2, Site, OCNany2spe)
+
+combined_sites <- full_join(rst, convergent_sites) %>%
+  filter(PosteriorProb > 0.95)
+readr::write_csv(combined_sites, here::here("pos_selected_conv_sites.csv")) 
+
+rst_labels <- full_join(rst, convergent_sites) %>%
+  distinct(Site, .keep_all = TRUE) %>%
+  mutate(PosSelectedSite = ifelse(PosteriorProb > 0.95, Site, ""),
+         ConvergentSite = ifelse(OCNany2spe > 0.95, "*", "")) %>%
+  mutate(ConvergentSite = tidyr::replace_na(ConvergentSite, "")) %>%
+  mutate(Label = PosSelectedSite) %>%
+  mutate(Label = paste(PosSelectedSite, ConvergentSite, sep = "")) %>%
+  distinct(Label, .keep_all = TRUE) %>%
+  filter(stringr::str_detect(Label, stringr::regex("^[:digit:]")))
+
+fig_omega <- ggplot(rst, aes(x = as.numeric(Site), y = w)) +
+  geom_ribbon(aes(ymin = w-SE, ymax = w+SE), fill = "grey60") +
+  geom_line(linewidth = 0.25) +
+  geom_point(data = filter(rst, PosteriorProb > 0.95),
+             shape = 21,
+             color = "black",
+             fill = "black",
+             size = 1,
+             alpha = 0.5,
+             stroke = 0.25,) +
+  ggrepel ::geom_text_repel(data = rst_labels %>% filter(Site > 270),
+            aes(label = Label),
+            size = 2.5,
+            nudge_x = 2, nudge_y = 0.1) +
+  ggrepel ::geom_text_repel(data = rst_labels %>% filter(Site < 270),
+            aes(label = Label),
+            size = 2.5,
+            nudge_x = -2, nudge_y = .1) +
+  cowplot::theme_cowplot() +
+  xlab("Codon site") + 
+  # scale_x_continuous(limits = c(25, 525), breaks = seq(from = 50, to = 500, by = 50), expand = c(0,0)) +
+  ylab(expression(italic(d)[N]*"/"*italic(d)[S]))
+ggsave(here::here("plots/s3_dnds_dryopteris.svg"),fig_omega, width = 4, height = 3)
+
+```
+
+
+# Climate analyses
+
+## Extract climate 
+
+```{r worldclim}
+
+# Read data
+gbif <- readr::read_csv(here::here("gbif_data", "clean.csv")) %>%
+  dplyr::filter(!if_any(c(decimalLongitude, decimalLatitude), ~ is.na(.))) %>%
+  distinct(decimalLongitude, decimalLatitude, .keep_all = TRUE)
+taxon_keys <- readr::read_csv(here::here("gbif_data", "taxon_keys.csv")) %>%
+  dplyr::select(speciesKey, verbatim_name) %>%
+  distinct()
+
+# Create SpatialPointsDataFrame
+gbif_coords <- gbif %>%
+  dplyr::select(decimalLongitude, decimalLatitude) %>%
+  sp::SpatialPointsDataFrame(coords = ., data = gbif) 
+
+here::i_am("dryopteris_rubisco/14. analyze.Rmd")
+# Get list of Bioclim files, specify files of interest using regex
+bioclim_files <- list.files(here::here("download_gbif", "worldclim"), 
+                              pattern = ".tif") 
+# Iterate over the list of files and raster each, returning a list of raster objects
+bioclim_raster <-  purrr::map(here::here("download_gbif", "worldclim", bioclim_files),
+                              ~raster::raster(.))
+# Stack the raster objects
+bioclim_stack <- raster::stack(bioclim_raster)
+# Extract data from the raster stack
+bioclim_extracted_raw <- raster::extract(bioclim_stack, gbif_coords, method = 'simple', sp = TRUE) %>%
+  as.data.frame() %>%
+  rename(
+    MeanTempAnnual = wc2.1_10m_bio_1,
+    MaxTempWarmestMonth = wc2.1_10m_bio_5,
+    PrecAnnual = wc2.1_10m_bio_12,
+    TempJan = wc2.1_10m_tavg_01,
+    TempFeb = wc2.1_10m_tavg_02,
+    TempMar = wc2.1_10m_tavg_03,
+    TempApr = wc2.1_10m_tavg_04,
+    TempMay = wc2.1_10m_tavg_05,
+    TempJun = wc2.1_10m_tavg_06,
+    TempJul = wc2.1_10m_tavg_07,
+    TempAug = wc2.1_10m_tavg_08,
+    TempSep = wc2.1_10m_tavg_09,
+    TempOct = wc2.1_10m_tavg_10,
+    TempNov = wc2.1_10m_tavg_11,
+    TempDec = wc2.1_10m_tavg_12,
+    PrecJan = wc2.1_10m_prec_01,
+    PrecFeb = wc2.1_10m_prec_02,
+    PrecMar = wc2.1_10m_prec_03,
+    PrecApr = wc2.1_10m_prec_04,
+    PrecMay = wc2.1_10m_prec_05,
+    PrecJun = wc2.1_10m_prec_06,
+    PrecJul = wc2.1_10m_prec_07,
+    PrecAug = wc2.1_10m_prec_08,
+    PrecSep = wc2.1_10m_prec_09,
+    PrecOct = wc2.1_10m_prec_10,
+    PrecNov = wc2.1_10m_prec_11,
+    PrecDec = wc2.1_10m_prec_12
+    ) %>%
+  dplyr::select(!verbatim_name) %>% # species key = query term, from the name from the phylogeny > genbank accession
+  right_join(., taxon_keys, by = "speciesKey", relationship = "many-to-many") %>%
+  filter(!if_any(c(MeanTempAnnual, PrecAnnual), ~ is.na(.x))) %>%
+  tidyr::pivot_longer(cols = starts_with("Temp") | starts_with("Prec") & !PrecAnnual,
+                      names_to = c(".value", "Month"),
+                      names_pattern = "(Temp|Prec)(.{3}$)")
+bioclim_extracted <- bioclim_extracted_raw %>%
+  filter(Temp >= 5) %>%
+  # filter(Temp >= 5 & (Prec >= 2 * MeanTempAnnual)) %>%
+  arrange(match(Month, month.abb)) %>%
+  group_by(gbifID) %>%
+  slice_max(order_by = Prec,
+            n = 3,
+            na_rm = TRUE) %>%
+  mutate(GrowingSeasonTemp = mean(Temp), .keep = "unused") %>%
+  ungroup()
+
+here::i_am("14. analyze.Rmd")
+
+# Get short name (match phylogeny) and write file
+tree_names <- readr::read_csv(here::here("sessa_tree_accessions.csv")) %>% 
+  mutate(ShortName = stringr::str_sub(stringr::word(Taxon, 2), 1, 10),
+         ShortTreeName = case_when(
+    stringr::str_detect(ID, "E[:digit:]{3}$") ~ stringr::str_c(stringr::str_sub(stringr::word(Taxon, 2), 1, 7), 
+                                                                       stringr::str_sub(ID, 2, 4)),
+    .default = stringr::str_sub(stringr::word(Taxon, 2), 1, 10))) %>%
+  distinct(ShortTreeName, .keep_all = TRUE)
+readr::write_csv(tree_names, here::here("tree_names.csv"))
+
+bioclim <- bioclim_extracted %>%
+  rename(Species = verbatim_name) %>%
+  dplyr::select(c(Species, contains(c("Temp", "Prec")))) %>%
+  mutate(ShortName = stringr::str_sub(stringr::word(Species, 2), 1, 10), .after = Species) %>%
+  left_join(tree_names) %>%
+  mutate(ShortName = ShortTreeName)
+readr::write_csv(bioclim, here::here("gbif_data", "bioclim.csv"))
+
+# Get summary statistics and write to file
+bioclim_summary <- bioclim %>%
+  group_by(Species, ShortName) %>%
+  summarise(across(.cols = c(contains(c("Temp", "Prec"))), 
+                   .fns = list(n = ~ length(!is.na(.)),
+                               mean = ~ mean(., na.rm = TRUE),
+                               se = ~ sd(., na.rm = TRUE)/length(!is.na(.)),
+                               median = ~ median(., na.rm = TRUE),
+                               q10 = ~ quantile(., 0.1, na.rm = TRUE),
+                               q90 = ~ quantile(., 0.9, na.rm = TRUE)),
+                   .names = "{.col}_{.fn}")) %>%
+  filter(if_any(ends_with("_n"), ~ . >= 3))
+
+bioclim_summary %>%
+  ggplot(aes(x = MeanTempAnnual_mean, y = GrowingSeasonTemp_mean)) +
+  geom_point() +
+  scale_x_continuous(limits = c(0, NA)) +
+  scale_y_continuous(limits = c(0, NA))
+
+
+readr::write_csv(bioclim_summary, here::here("gbif_data", "bioclim_summary.csv"))
+
+```
+## Extract Whittaker biome
+
+``` {r whittaker}
+
+bioclim_summary <- readr::read_csv(here::here("gbif_data", "bioclim_summary.csv")) %>%
+  select(Species, ShortName, contains("Annual"))
+
+library(plotbiomes)
+data(Whittaker_biomes) 
+
+rainforest_poly <- Whittaker_biomes %>%
+  tibble::as_tibble() %>%
+  filter(stringr::str_detect(biome, "rain forest")) %>%
+  select(temp_c, precp_cm) %>%
+  unique()
+rainforest_poly
+
+ggplot(rainforest_poly, aes(x = temp_c, y = precp_cm)) +
+  geom_point() +
+  lims(x = c(0, NA),
+       y = c(0, NA))
+
+hull <- concaveman::concaveman(rainforest_poly %>% 
+                                 filter(between(row_number(), 38, 60) | row_number() > 118) %>%
+                                 as.matrix(),
+                               concavity = 1) %>%
+  as_tibble() %>%
+  mutate(MeanTempAnnual = V1,
+         PrecAnnual = V2*10,
+         .keep = "unused") %>%
+  arrange(desc(MeanTempAnnual)) %>% 
+  add_row(MeanTempAnnual = 3.38, PrecAnnual = 5000) %>%
+  add_row(MeanTempAnnual = 28.4, PrecAnnual = 5000)
+
+hull_sf <- sf::st_as_sf(hull, coords = c("MeanTempAnnual", "PrecAnnual"))  %>%
+  summarise(geometry = sf::st_combine(geometry)) %>%
+  sf::st_cast("POLYGON")
+centroid_sf <- sf::st_centroid(hull_sf)
+centroid <- sf::st_coordinates(centroid_sf)
+
+expanded_hull_10 <- hull %>%
+  mutate(
+    MeanTempAnnual = (MeanTempAnnual - centroid[1]) * 1.10 + centroid[1],
+    PrecAnnual = (PrecAnnual - centroid[2]) * 1.10 + centroid[2]
+  )
+
+expanded_hull_20 <- hull %>%
+  mutate(
+    MeanTempAnnual = (MeanTempAnnual - centroid[1]) * 1.20 + centroid[1],
+    PrecAnnual = (PrecAnnual - centroid[2]) * 1.20 + centroid[2]
+  )
+
+hull <- hull
+hull <- expanded_hull_10
+hull <- expanded_hull_20
+
+rainforest_summary <- bioclim_summary %>%
+  mutate(Rainforest = sp::point.in.polygon(point.x = MeanTempAnnual_mean,
+                                       point.y = PrecAnnual_mean,
+                                       pol.x = hull$MeanTempAnnual,
+                                       pol.y = hull$PrecAnnual)) %>%
+  mutate(Rainforest = ifelse(Rainforest == 1, "Rainforest", "Non-rainforest"),
+         Species = ShortName)
+rainforest_summary
+
+plot_whit <- plotbiomes::whittaker_base_plot() + 
+  geom_point(aes(x = MeanTempAnnual_mean, y = PrecAnnual_mean/10,
+                 shape = Rainforest, color = Rainforest), 
+             data = rainforest_summary,
+             size = 1) +
+  scale_color_manual(values = c("red", "black")) +
+  scale_shape_manual(values = c(21, 24)) +
+  theme(axis.title = element_blank())
+plot_whit
+
+
+ggsave(here::here("supp_Dryopteris_whit_0.svg"),
+       plot = plot_whit + theme(legend.position = "none"),
+       width = 3.5, height = 3.5)
+
+ggsave(here::here("supp_Dryopteris_whit_10.svg"),
+       plot = plot_whit + theme(legend.position = "none"),
+       width = 3.5, height = 3.5)
+
+ggsave(here::here("supp_Dryopteris_whit_20.svg"),
+       plot = plot_whit + theme(legend.position = "none"),
+       width = 3.5, height = 3.5)
+
+ggsave(here::here("supp_Dryopteris_legend.svg"),
+       plot = plot_whit %>% cowplot::get_legend(),
+       width = 2, height = 3.5)
+
+rainforest_summary <- rainforest_summary %>%
+  select(Species, Rainforest)
+
+# readr::write_csv(rainforest_summary, here::here("gbif_data", "rainforest_summary.csv"))
+
+```
+
+# Get PAML and amino acid data
+
+```{r aa}
+
+SITES_OF_INTEREST <- readr::read_csv(here::here("pos_selected_conv_sites.csv")) %>%
+  pull(Site) %>%
+  unique()
+
+arc <- readr::read_csv(here::here("paml_site_arc.csv")) %>%
+  filter(ID == 186) %>% # root node
+  dplyr::select(Site, AA, PosteriorProb) %>%
+  mutate(Site = Site) %>%
+  rename(AA_Ancestral = AA,
+         AA_A_PosteriorProb = PosteriorProb) %>%
+  filter(Site %in% SITES_OF_INTEREST)
+
+pos_sel <- readr::read_csv(here::here("aa_at_sites.csv")) %>%
+  tidyr::pivot_longer(cols = matches(stringr::regex("[:digit:]+")),
+                      names_to = "Site",
+                      values_to = "AA") %>%
+  mutate(Site = as.numeric(Site),
+         across(.cols = !Species,
+                .fns = ~ifelse(. == "X", "-", .)))
+
+aa <- inner_join(pos_sel, arc, by = "Site") %>%
+  mutate(Ancestral = ifelse(AA == AA_Ancestral,
+                            TRUE,
+                            ifelse(AA == "-",
+                                   NA,
+                                   FALSE)))
+
+sub_groups <- aa %>%
+  filter(!(Site == 116 & AA %in% c("K", "M", "P") | Site == 375 & AA == "I")) %>%
+  filter(Ancestral == FALSE) %>%
+  group_by(Site, AA_Ancestral, Ancestral) %>%
+  summarise(Substitution = paste(unique(AA), collapse = "/")) %>%
+  mutate(Substitution = paste(AA_Ancestral, Site, Substitution, sep = "")) %>%
+  dplyr::select(!c(AA_Ancestral, Ancestral))
+
+aa <- full_join(aa, sub_groups, by = c("Site", "AA_Ancestral"))
+
+readr::write_csv(aa, here::here("aa_at_sites_ancestral.csv"))
+
+```
+
+### Stats 
+
+No need to run if already ran
+
+```{r phy_anova1}
+# PHYLOGENETIC ANOVA
+
+tree <- ape::read.tree(here::here("dryopteris_csubst.tre"))
+
+stats <- bioclim_aa %>%
+  filter(!(Site == 116 & AA %in% c("K", "M", "P") | Site == 375 & AA == "I")) %>%
+  select(ShortName, Site, AA, ClimateVariable, ClimateValue) %>%
+  mutate(ClimateValue = sign(ClimateValue) * (abs(ClimateValue))^(1/3)) %>%
+  group_by(Site, ClimateVariable) %>%
+  tidyr::nest(.key = "Data") %>%
+  mutate(Tree = purrr::map(Data, ~ ape::keep.tip(tree, .$ShortName))) %>%
+  mutate(Groups = purrr::map(Data, ~ select(., "ShortName", "AA") %>% tibble::deframe())) %>%
+  mutate(ResponseVar = purrr::map(Data, ~ select(., "ShortName", "ClimateValue") %>% tibble::deframe())) %>% # select + deframe is more readable than setNames
+  rowwise() %>%
+  # head(3) %>% # for testing with a smaller dataframe
+  mutate(PostHoc = phytools::phylANOVA(tree = purrr::pluck(Tree),
+                                     x = purrr::pluck(Groups) %>% droplevels(), # droplevels will drop the unused levels
+                                     y = purrr::pluck(ResponseVar),
+                                     posthoc = TRUE,
+                                     nsim = 1000,
+                                     p.adj = "none")$Pt %>%  # Pt attribute has the adjusted P values
+           as_tibble(rownames = "group1") %>%
+           list()) %>% # list puts the tibble into an object of length 1 (to fit into one cell)
+  mutate(PostHoc = tidyr::pivot_longer(PostHoc, cols = !contains("group"), names_to = "group2", values_to = "p") %>%
+           list()) %>% # turn table with combos of groups and p values to group1, group2, p
+  tidyr::unnest(PostHoc) %>%
+  rowwise() %>%
+  filter(group1 != group2) %>%
+  mutate(groups = stringr::str_flatten(sort(c(group1, group2)), collapse = "-"), .before = "p") %>% 
+  distinct(groups, .keep_all = TRUE) %>%
+  group_by(Site, ClimateVariable) %>%
+  mutate(p.adj = p.adjust(p, method = "fdr"))
+
+climond_stats <- climond_aa %>%
+  filter(!(Site == 116 & AA %in% c("K", "M", "P") | Site == 375 & AA == "I")) %>%
+  select(ShortName, Site, AA, ClimateVariable, ClimateValue) %>%
+  mutate(ClimateValue = sign(ClimateValue) * (abs(ClimateValue))^(1/3)) %>%
+  group_by(Site, ClimateVariable) %>%
+  tidyr::nest(.key = "Data") %>%
+  mutate(Tree = purrr::map(Data, ~ ape::keep.tip(tree, .$ShortName))) %>%
+  mutate(Groups = purrr::map(Data, ~ select(., "ShortName", "AA") %>% tibble::deframe())) %>%
+  mutate(ResponseVar = purrr::map(Data, ~ select(., "ShortName", "ClimateValue") %>% tibble::deframe())) %>% # select + deframe is more readable than setNames
+  rowwise() %>%
+  # head(1) %>% # for testing with a smaller dataframe
+  # mutate(ANOVAP = phytools::phylANOVA(tree = purrr::pluck(Tree),
+  #                                    x = purrr::pluck(Groups) %>% droplevels(), # droplevels will drop the unused levels
+  #                                    y = purrr::pluck(ResponseVar),
+  #                                    posthoc = TRUE,
+  #                                    nsim = 1000,
+  #                                    p.adj = "none")$Pf) %>%  # Pt attribute has the adjusted P values
+  mutate(PostHoc = phytools::phylANOVA(tree = purrr::pluck(Tree),
+                                     x = purrr::pluck(Groups) %>% droplevels(), # droplevels will drop the unused levels
+                                     y = purrr::pluck(ResponseVar),
+                                     posthoc = TRUE,
+                                     nsim = 1000,
+                                     p.adj = "none")$Pt %>%  # Pt attribute has the adjusted P values
+           as_tibble(rownames = "group1") %>%
+           list()) %>% # list puts the tibble into an object of length 1 (to fit into one cell)
+  mutate(PostHoc = tidyr::pivot_longer(PostHoc, cols = !contains("group"), names_to = "group2", values_to = "p") %>%
+           list()) %>% # turn table with combos of groups and p values to group1, group2, p
+  tidyr::unnest(PostHoc) %>%
+  rowwise() %>%
+  filter(group1 != group2) %>%
+  mutate(groups = stringr::str_flatten(sort(c(group1, group2)), collapse = "-"), .before = "p") %>% 
+  distinct(groups, .keep_all = TRUE) %>%
+  group_by(Site, ClimateVariable) %>%
+  mutate(p.adj = p.adjust(p, method = "fdr"))
+
+stats_adj <- stats %>%
+  bind_rows(climond_stats) %>%
+  select(Site, ClimateVariable, groups, p.adj) %>%
+  group_by(Site, ClimateVariable) %>%
+  tidyr::nest(.key = "PostHoc") %>%
+  mutate(PostHoc = purrr::map(PostHoc, ~ tibble::deframe(.))) %>%
+  mutate(Letters = purrr::map(PostHoc, ~ multcompView::multcompLetters(.)$Letters %>%
+           as_tibble(rownames = "AA") %>%
+           rename(Letter = value))) %>%
+  tidyr::unnest(Letters) %>%
+  rowwise() %>%
+  mutate(Signif = any(purrr::pluck(PostHoc) < 0.05)) %>%
+  mutate(Letter = ifelse(Signif, Letter, ""))
+
+readr::write_csv(stats_adj, here::here("phy_anova.csv"))
+
+```
+
+
+# Pymol analyses
+
+## Hydrogen bonds? (non-covalent interactions)
+
+```{r h_bonds}
+aa <- readr::read_csv(here::here("aa_at_sites_ancestral.csv")) %>% 
+  filter(AA != "-") 
+# Define residues that can form H-bonds, and also categorize amino acid types
+H_BONDABLE <- c("S", # OH (hydroxyl)
+                "T", # OH
+                "Y", # OH
+                "N", # CONH2 (amide)
+                "Q", # CONH2
+                "C", # SH (thiol) - not really, but can participate in dipole interactions with other thiols
+                "H", # imidazole ring
+                "D", # -COO- (carboxylate)
+                "E", # -COO-
+                "R", # guanidine
+                "K") # -NH2 (amine)
+
+ALIPHATIC <- c("A", "G", "I", "L", "P", "V")
+AROMATIC <- c("F", "W", "Y")
+ACIDIC <- c("D", "E")
+BASIC <- c("R", "H", "K")
+HYDROXYLIC <- c("S", "T")
+SULFUR_CONTAINING <- c("C", "M")
+AMIDIC <- c("N", "Q")
+SITES_OF_INTEREST <- readr::read_csv(here::here("pos_selected_conv_sites.csv")) %>%
+  pull(Site) %>%
+  unique()
+
+# See which residues go from non-H-bondable to H-bondable
+h_bonds <- aa %>%
+  filter(Site %in% SITES_OF_INTEREST, AA != "-") %>%
+  ungroup() %>%
+  select(Site, AA, AA_Ancestral) %>%
+  unique() %>%
+  filter(AA != AA_Ancestral) %>%
+  mutate(AA_HBondable = ifelse(AA %in% H_BONDABLE, TRUE, FALSE),
+         AA_A_HBondable = ifelse(AA_Ancestral %in% H_BONDABLE, TRUE, FALSE)) %>%
+  rowwise() %>%
+  mutate(across(c(AA, AA_Ancestral),
+                .fns = ~ case_when(. %in% ALIPHATIC ~ "aliphatic",
+                                   . %in% AROMATIC ~ "aromatic",
+                                   . %in% ACIDIC ~ "acidic",
+                                   . %in% BASIC ~ "basic",
+                                   . %in% HYDROXYLIC ~ "hydroxylic",
+                                   . %in% SULFUR_CONTAINING ~ "sulfur_containing",
+                                   . %in% AMIDIC ~ "amidic"),
+                .names = "{.col}_Type")) %>%
+  filter(AA_HBondable == TRUE & AA_A_HBondable == FALSE |
+           AA_HBondable == FALSE & AA_A_HBondable == TRUE) %>%
+  arrange(AA_A_HBondable, AA_HBondable)
+h_bonds
+
+writexl::write_xlsx(h_bonds, here::here("h_bonds.xlsx"))
+
+```
+
+# Tables: Leaf habit and biome transitions ~ amino acids
+
+
+``` {r}
+
+library(phytools)
+
+subs <- readr::read_csv(here::here("aa_at_sites_ancestral.csv")) %>%
+  rowwise() %>%
+  filter(!AA %in% c(AA_Ancestral, "-")) %>%
+  distinct(Site, AA_Ancestral, Site, AA) %>%
+  mutate(Substitution = paste0(AA_Ancestral, Site, AA)) %>%
+  rename(AA_Derived = AA)
+
+aa_root <- readr::read_csv(here::here("aa_at_sites_ancestral.csv")) %>%
+  distinct(Site, AA_Ancestral) %>%
+  mutate(Species = "ROOT",
+         AA = AA_Ancestral,
+         .keep = "unused") 
+aa <- readr::read_csv(here::here("aa_at_sites_ancestral.csv")) %>%
+  filter(AA != "-") %>%
+  ungroup() %>%
+  select(Species, Site, AA) %>%
+  bind_rows(aa_root) %>%
+  full_join(subs) %>%
+  mutate(Ancestral = ifelse(AA == AA_Derived, FALSE, TRUE))
+
+tree <- ape::read.tree(here::here("dryopteris_csubst.tre")) 
+```
+
+
+<!-- ## Diversification rates -->
+
+<!-- ```{r} -->
+
+<!-- bisse_tree <- ape::read.tree(here::here("dryopteris_csubst.tre"))  -->
+
+<!-- SITE = 262 -->
+
+<!-- aovs_bisse <- tibble::tibble(Site = numeric(), -->
+<!--                              Name = character(), -->
+<!--                              Df = numeric(), -->
+<!--                              lnLik = numeric(), -->
+<!--                              AIC = numeric()) -->
+
+<!-- for (SITE in sites_of_interest) { -->
+
+<!--   print(paste("NDR analyses for site", SITE, "...")) -->
+
+<!--   aa_site <- aa %>% -->
+<!--     filter(Site == SITE) %>% -->
+<!--     select(!Site) %>% -->
+<!--     mutate(Ancestral = ifelse(Ancestral, 0, 1)) %>% -->
+<!--     filter(Species != "ROOT") %>% -->
+<!--     tibble::deframe() -->
+
+
+
+<!--   bisse_species <- names(aa_site) -->
+
+<!--   bisse_model <- diversitree::make.bisse(ape::keep.tip(bisse_tree, bisse_species), aa_site) -->
+<!--   bisse_initial_pars <- diversitree::starting.point.bisse(bisse_tree) -->
+<!--   fit_bisse <- diversitree::find.mle(bisse_model, bisse_initial_pars) -->
+
+<!--   # equal speciation rate -->
+<!--   bisse_equal_sp <- diversitree::constrain(bisse_model, lambda0 ~ lambda1) -->
+<!--   fit_bisse_equal_sp <- diversitree::find.mle(bisse_equal_sp, bisse_initial_pars[c("lambda1", "mu0", "mu1", "q01", "q10")]) -->
+<!--   aov_equal_sp <- as_tibble(anova(fit_bisse, constrain = fit_bisse_equal_sp), rownames = "Name") %>% -->
+<!--     mutate(Name = ifelse(Name == "constrain", "equal sp. rate", Name)) %>% -->
+<!--     select(Name, Df, lnLik, AIC) %>% -->
+<!--     bind_cols(bind_rows(tibble::enframe(fit_bisse$par) %>%  -->
+<!--                           tidyr::pivot_wider(names_from = "name", values_from = "value"), -->
+<!--                         tibble::enframe(fit_bisse_equal_sp$par) %>%  -->
+<!--                           tidyr::pivot_wider(names_from = "name", values_from = "value"))) %>% -->
+<!--     mutate(lambda0 = ifelse(Name != "full", lambda1, lambda0), -->
+<!--            .before = "lambda1") -->
+
+<!--   # equal extinction rate -->
+<!--   bisse_equal_ex <- diversitree::constrain(bisse_model, mu0 ~ mu1) -->
+<!--   fit_bisse_equal_ex<- diversitree::find.mle(bisse_equal_ex, bisse_initial_pars[c("lambda0", "lambda1", "mu1", "q01", "q10")]) -->
+<!--   aov_equal_ex <- as_tibble(anova(fit_bisse, constrain = fit_bisse_equal_ex), rownames = "Name") %>% -->
+<!--     filter(Name == "constrain") %>% -->
+<!--     mutate(Name = "equal ex. rate") %>% -->
+<!--     select(Name, Df, lnLik, AIC) %>% -->
+<!--     bind_cols(tibble::enframe(fit_bisse_equal_ex$par) %>%  -->
+<!--                 tidyr::pivot_wider(names_from = "name", values_from = "value")) %>% -->
+<!--     mutate(mu0 = mu1) -->
+
+<!--   # equal speciation and extinction rate -->
+<!--   bisse_equal_sp_ex <- diversitree::constrain(bisse_model, lambda0 ~ lambda1, mu0 ~ mu1) -->
+<!--   fit_bisse_equal_sp_ex <- diversitree::find.mle(bisse_equal_sp_ex, bisse_initial_pars[c("lambda1", "mu1", "q01", "q10")]) -->
+<!--   aov_equal_sp_ex <- as_tibble(anova(fit_bisse, constrain = fit_bisse_equal_sp_ex), rownames = "Name") %>% -->
+<!--     filter(Name == "constrain") %>% -->
+<!--     mutate(Name = ifelse(Name == "constrain", "equal sp. and ex. rate", Name)) %>% -->
+<!--     select(Name, Df, lnLik, AIC) %>% -->
+<!--     bind_cols(tibble::enframe(fit_bisse_equal_sp_ex$par) %>%  -->
+<!--                 tidyr::pivot_wider(names_from = "name", values_from = "value")) %>% -->
+<!--     mutate(lambda0 = lambda1, -->
+<!--            mu0 = mu1) -->
+
+<!--   aov_bisse <- bind_rows(aov_equal_sp, aov_equal_ex, aov_equal_sp_ex) %>% -->
+<!--     mutate(Site = SITE, .before = "Name") -->
+<!--   aovs_bisse <- bind_rows(aovs_bisse, aov_bisse) -->
+
+<!--   best_bisse <- aov_bisse %>% -->
+<!--     slice_min(AIC, n = 1) %>% -->
+<!--     pull(Name) -->
+<!--   print(paste("Best fit model for site", SITE, "is", best_bisse)) -->
+
+<!--   writexl::write_xlsx(aovs_bisse, here::here("bisse.xlsx"))  -->
+<!-- } -->
+
+
+<!-- ``` -->
+
+
+## Rainforest biome
+
+```{r}
+sp <- readr::read_csv(here::here("aa_at_sites_ancestral.csv")) %>%
+  select(Species) %>%
+  distinct()
+rainforest <- readr::read_csv(here::here("gbif_data", "rainforest_summary.csv"))
+
+rainforest <- rainforest %>%
+  group_by(Species) %>%
+  summarise(Rainforest = ifelse(Rainforest == "non-rainforest", "a", "b"))
+# a is nonrainforest, b is rainforest
+
+rainforest_lrts <- tibble(Substitution = character(),
+                          model = character(),
+                          Q_Ancestral = numeric(),
+                          Q_Derived = numeric(),
+                          deltaQ_Ancestral = numeric(),
+                          deltaQ_Derived = numeric(),
+                          FasterAA = character(),
+                          StateFavouredbyAA = character(),
+                          AIC_Dependent = numeric(),
+                          AIC_Independent = numeric(),
+                          deltaAIC = numeric(),
+                          p = numeric())
+
+for (SUB in subs %>% pull(Substitution)) {
+  
+  print(paste("fitPagels for substitution", SUB, "..."))
+  
+  aa_site <- aa %>%
+    filter(Substitution == SUB) %>%
+    mutate(Ancestral = ifelse(Ancestral, 0, 1)) %>%
+    filter(Species != "ROOT") %>%
+    select(Species, Ancestral)
+  
+  rainforest_species <- intersect(rainforest$Species, aa_site$Species) # get common species
+  
+  rainforest_fit_ER <- fitPagel(ape::keep.tip(tree, rainforest_species), # prune tree
+                          aa_site %>% 
+                            filter(Species %in% rainforest_species) %>% 
+                            tibble::deframe(), # have to turn into named list
+                          rainforest %>% 
+                            filter(Species %in% rainforest_species) %>% 
+                            tibble::deframe(),
+                          dep.var = "y", 
+                          model = "ER")
+  rainforest_fit_SYM <- fitPagel(ape::keep.tip(tree, rainforest_species), # prune tree
+                           aa_site %>% 
+                             filter(Species %in% rainforest_species) %>% 
+                             tibble::deframe(), # have to turn into named list
+                           rainforest %>% 
+                             filter(Species %in% rainforest_species) %>% 
+                             tibble::deframe(),
+                           dep.var = "y", 
+                           model = "SYM")
+  rainforest_fit_ARD <- fitPagel(ape::keep.tip(tree, rainforest_species), # prune tree
+                           aa_site %>% 
+                             filter(Species %in% rainforest_species) %>% 
+                             tibble::deframe(), # have to turn into named list
+                           rainforest %>% 
+                             filter(Species %in% rainforest_species) %>% 
+                             tibble::deframe(),
+                           dep.var = "y", 
+                           model = "ARD")
+  
+  rainforest_AICs <- tibble::tibble(model = "ER", 
+                              AIC_dep = rainforest_fit_ER$dependent.AIC, 
+                              AIC_indep = rainforest_fit_ER$independent.AIC) %>%
+    add_row(model = "SYM", 
+            AIC_dep = rainforest_fit_SYM$dependent.AIC, 
+            AIC_indep = rainforest_fit_SYM$independent.AIC) %>%
+    add_row(model = "ARD", 
+            AIC_dep = rainforest_fit_ARD$dependent.AIC, 
+            AIC_indep = rainforest_fit_ARD$independent.AIC)
+  
+  best_model <- rainforest_AICs %>%
+    slice_min(AIC_dep, n = 1) %>%
+    pull(model)
+  
+  if (best_model[1] == "ARD") {
+    best_rainforest_fit <- rainforest_fit_ARD
+  } else if (best_model[1] == "SYM") {
+    best_rainforest_fit <- rainforest_fit_SYM
+  } else {
+    best_rainforest_fit <- rainforest_fit_ER
+  }
+  
+  rainforest_lrts <- rainforest_lrts %>%
+    add_row(Substitution = SUB,
+            model = best_model[1],
+            Q_Ancestral = best_rainforest_fit$dependent.Q["0|a", "0|b"],
+            Q_Derived = best_rainforest_fit$dependent.Q["1|a", "1|b"],
+            deltaQ_Ancestral = best_rainforest_fit$dependent.Q["0|a", "0|b"]-best_rainforest_fit$dependent.Q["0|b", "0|a"],
+            deltaQ_Derived = best_rainforest_fit$dependent.Q["1|a", "1|b"]-best_rainforest_fit$dependent.Q["1|b", "1|a"],
+            FasterAA = case_when(Q_Derived-Q_Ancestral > 0 ~ "derived",
+                                      Q_Derived-Q_Ancestral < 0 ~ "ancestral",
+                                      Q_Derived-Q_Ancestral == 0 ~ "same"),
+            StateFavouredbyAA = case_when(deltaQ_Derived > 0 ~ "rainforest",
+                                      deltaQ_Derived < 0 ~ "non-rainforest",
+                                      deltaQ_Derived == 0 ~ "symmetrical"),
+            AIC_Independent = best_rainforest_fit$independent.AIC[1],
+            AIC_Dependent = best_rainforest_fit$dependent.AIC[1],
+            deltaAIC = AIC_Independent-AIC_Dependent,
+            p = best_rainforest_fit$P[1]) 
+  
+  writexl::write_xlsx(rainforest_lrts, here::here("pagels_test_rainforest_20.xlsx"))
+  
+}
+
+```
+
+## Rainforest biome, reverse
+
+```{r}
+sp <- readr::read_csv(here::here("aa_at_sites_ancestral.csv")) %>%
+  select(Species) %>%
+  distinct()
+rainforest <- readr::read_csv(here::here("gbif_data", "rainforest_summary.csv"))
+
+rainforest <- rainforest %>%
+  group_by(Species) %>%
+  summarise(Rainforest = ifelse(Rainforest == "non-rainforest", "a", "b"))
+# a is nonrainforest, b is rainforest
+
+rainforest_lrts <- tibble(Substitution = character(),
+                          model = character(),
+                          Q_Ancestral = numeric(),
+                          Q_Derived = numeric(),
+                          deltaQ_Ancestral = numeric(),
+                          deltaQ_Derived = numeric(),
+                          FasterAA = character(),
+                          StateFavouredbyAA = character(),
+                          AIC_Dependent = numeric(),
+                          AIC_Independent = numeric(),
+                          deltaAIC = numeric(),
+                          p = numeric())
+
+for (SUB in subs %>% pull(Substitution)) {
+  
+  print(paste("fitPagels for substitution", SUB, "..."))
+  
+  aa_site <- aa %>%
+    filter(Substitution == SUB) %>%
+    mutate(Ancestral = ifelse(Ancestral, 0, 1)) %>%
+    filter(Species != "ROOT") %>%
+    select(Species, Ancestral)
+  
+  rainforest_species <- intersect(rainforest$Species, aa_site$Species) # get common species
+  
+  rainforest_fit_ER <- fitPagel(ape::keep.tip(tree, rainforest_species), # prune tree
+                          aa_site %>% 
+                            filter(Species %in% rainforest_species) %>% 
+                            tibble::deframe(), # have to turn into named list
+                          rainforest %>% 
+                            filter(Species %in% rainforest_species) %>% 
+                            tibble::deframe(),
+                          dep.var = "x", 
+                          model = "ER")
+  rainforest_fit_SYM <- fitPagel(ape::keep.tip(tree, rainforest_species), # prune tree
+                           aa_site %>% 
+                             filter(Species %in% rainforest_species) %>% 
+                             tibble::deframe(), # have to turn into named list
+                           rainforest %>% 
+                             filter(Species %in% rainforest_species) %>% 
+                             tibble::deframe(),
+                           dep.var = "x", 
+                           model = "SYM")
+  rainforest_fit_ARD <- fitPagel(ape::keep.tip(tree, rainforest_species), # prune tree
+                           aa_site %>% 
+                             filter(Species %in% rainforest_species) %>% 
+                             tibble::deframe(), # have to turn into named list
+                           rainforest %>% 
+                             filter(Species %in% rainforest_species) %>% 
+                             tibble::deframe(),
+                           dep.var = "x", 
+                           model = "ARD")
+  
+  rainforest_AICs <- tibble::tibble(model = "ER", 
+                              AIC_dep = rainforest_fit_ER$dependent.AIC, 
+                              AIC_indep = rainforest_fit_ER$independent.AIC) %>%
+    add_row(model = "SYM", 
+            AIC_dep = rainforest_fit_SYM$dependent.AIC, 
+            AIC_indep = rainforest_fit_SYM$independent.AIC) %>%
+    add_row(model = "ARD", 
+            AIC_dep = rainforest_fit_ARD$dependent.AIC, 
+            AIC_indep = rainforest_fit_ARD$independent.AIC)
+  
+  best_model <- rainforest_AICs %>%
+    slice_min(AIC_dep, n = 1) %>%
+    pull(model)
+  
+  if (best_model[1] == "ARD") {
+    best_rainforest_fit <- rainforest_fit_ARD
+  } else if (best_model[1] == "SYM") {
+    best_rainforest_fit <- rainforest_fit_SYM
+  } else {
+    best_rainforest_fit <- rainforest_fit_ER
+  }
+  
+  rainforest_lrts <- rainforest_lrts %>%
+    add_row(Substitution = SUB,
+            model = best_model[1],
+            Q_Ancestral = best_rainforest_fit$dependent.Q["0|a", "0|b"],
+            Q_Derived = best_rainforest_fit$dependent.Q["1|a", "1|b"],
+            deltaQ_Ancestral = best_rainforest_fit$dependent.Q["0|a", "0|b"]-best_rainforest_fit$dependent.Q["0|b", "0|a"],
+            deltaQ_Derived = best_rainforest_fit$dependent.Q["1|a", "1|b"]-best_rainforest_fit$dependent.Q["1|b", "1|a"],
+            FasterAA = case_when(Q_Derived-Q_Ancestral > 0 ~ "derived",
+                                      Q_Derived-Q_Ancestral < 0 ~ "ancestral",
+                                      Q_Derived-Q_Ancestral == 0 ~ "same"),
+            StateFavouredbyAA = case_when(deltaQ_Derived > 0 ~ "rainforest",
+                                      deltaQ_Derived < 0 ~ "non-rainforest",
+                                      deltaQ_Derived == 0 ~ "symmetrical"),
+            AIC_Independent = best_rainforest_fit$independent.AIC[1],
+            AIC_Dependent = best_rainforest_fit$dependent.AIC[1],
+            deltaAIC = AIC_Independent-AIC_Dependent,
+            p = best_rainforest_fit$P[1]) 
+  
+  writexl::write_xlsx(rainforest_lrts, here::here("pagels_test_rainforest_reverse_20.xlsx"))
+  
+}
+
+```
+
+
+# Ancestral states
+
+``` {r}
+
+library(phytools)
+
+dep_y_pagel <- readxl::read_xlsx(here::here("pagels_test_rainforest_0.xlsx")) %>%
+  rowwise() %>%
+  mutate(Min_AIC = min(AIC_Dependent, AIC_Independent)) %>%
+  select(Substitution, Min_AIC, p)
+dep_x_pagel <- readxl::read_xlsx(here::here("pagels_test_rainforest_reverse_0.xlsx"))  %>%
+  rowwise() %>%
+  mutate(Min_AIC_Re = min(AIC_Dependent, AIC_Independent)) %>%
+  rename(p_Re = p) %>%
+  select(Substitution, Min_AIC_Re, p_Re)
+best_models <- full_join(dep_y_pagel, dep_x_pagel) %>%
+  mutate(BestDepVar = case_when(Min_AIC < Min_AIC_Re & p < 0.05 ~ "y",
+                                Min_AIC > Min_AIC_Re & p_Re < 0.05 ~ "x")) %>%
+  filter(!is.na(BestDepVar)) %>%
+  distinct(Substitution) %>%
+  mutate(Site = stringr::str_extract(Substitution, "[:digit:]+") %>% as.numeric())
+sites_of_interest <- best_models %>%
+  pull(Site) %>%
+  unique()
+subs_of_interest <- best_models %>%
+  pull(Substitution) %>%
+  unique()
+
+aa <- readr::read_csv(here::here("aa_at_sites_ancestral.csv")) %>%
+  filter(Site %in% sites_of_interest) %>%
+  filter(AA != "-") %>%
+  select(Species, Site, AA) %>%
+  full_join(best_models) %>%
+  mutate(Ancestral = ifelse(AA == stringr::str_sub(Substitution, -1, -1), "1", "0")) %>%
+  select(Species, Substitution, Ancestral)
+
+tree <- ape::read.tree(here::here("dryopteris_csubst.tre")) %>%
+  bind.tip(., tip.label = "ROOT", edge.length = 0, where = Ntip(.) + 1)
+
+rainforest <- readr::read_csv(here::here("gbif_data", "rainforest_summary.csv")) %>%
+  group_by(Species) %>%
+  summarise(Rainforest = ifelse(Rainforest == "non-rainforest", "0", "1"))
+  
+
+SUBSTITUTION = "F282H"
+
+OVERWRITE = TRUE
+
+for (SUBSTITUTION in subs_of_interest) {
+  
+  file_list <- list.files(here::here("plots/simmaps"))
+  
+  if (OVERWRITE == FALSE & paste("rainforest", SUBSTITUTION, ".svg", sep = "") %in% file_list) {
+    print("File exists, continuing")
+    next
+  }
+  
+  print(paste("Doing site", SUBSTITUTION))
+  
+  aa_site <- aa %>%
+    filter(Substitution == SUBSTITUTION) %>%
+    select(!Substitution)
+  
+  common_species <- intersect(pull(rainforest, Species), pull(aa_site, Species))
+  
+  pruned_tree <- tree %>% ape::keep.tip(common_species)
+  
+  ER_aa <- fitMk(pruned_tree,
+                 aa_site %>% filter(Species %in% common_species) %>% tibble::deframe(),
+                 model = "ER",
+                 pi = c("0" = 1, "1" = 0))
+  ARD_aa <- fitMk(pruned_tree,
+                  aa_site %>% filter(Species %in% common_species) %>% tibble::deframe(),
+                  model = "ARD",
+                  pi = c("0" = 1, "1" = 0))
+  if (AIC(ER_aa) < AIC(ARD_aa)) {
+    print("AA: Choosing ER")
+    sim_tree_aa <- simmap(ER_aa, nsim = 100)
+  } else {
+    print("AA: Choosing ARD")
+    sim_tree_aa <- simmap(ARD_aa, nsim = 100)
+  }
+  dmap_aa <- densityMap(sim_tree_aa)
+  dmap_aa_color <- setMap(dmap_aa, c("black", "#fde725"))
+  
+  ER_rainforest <- fitMk(pruned_tree,
+                    rainforest %>% filter(Species %in% common_species) %>% tibble::deframe(),
+                    model = "ER",
+                    pi = "fitzjohn")
+  ARD_rainforest <- fitMk(pruned_tree,
+                     rainforest %>% filter(Species %in% common_species) %>% tibble::deframe(),
+                     model = "ARD",
+                     pi = "fitzjohn")
+  if (AIC(ER_rainforest) < AIC(ARD_rainforest)) {
+    print("rainforest: Choosing ER")
+    sim_tree_rainforest <- simmap(ER_rainforest, nsim = 100)
+  } else {
+    print("rainforest: Choosing ARD")
+    sim_tree_rainforest <- simmap(ARD_rainforest, nsim = 100)
+  }
+  dmap_rainforest <- densityMap(sim_tree_rainforest)
+  dmap_rainforest_color <- setMap(dmap_rainforest, c("black", "#abadd7"))
+  
+  svg(here::here("plots/simmaps", paste( "rainforest", SUBSTITUTION, ".svg", sep = "")),
+      height = 5, width = 5)
+  layout(matrix(1:2,1,2),widths=c(1,1))
+  par(oma=c(0,0,0,0))
+  par(mar=c(0,0,0,0))
+  plot(dmap_aa_color, lwd = 2, ftype="off", legend = FALSE, no.margin=T)
+  plot(dmap_rainforest_color, lwd = 2, direction="leftwards", ftype="off", legend = FALSE,no.margin=T)
+  dev.off()
+  
+}
+
+```
+

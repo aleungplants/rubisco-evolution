@@ -1,0 +1,257 @@
+hide
+show cartoon
+set bg_rgb, [1,1,1]
+set cartoon_side_chain_helper, 1
+set ray_shadow, 0
+set stick_radius, 0.15
+set cartoon_loop_cap, 2
+set cartoon_smooth_loops, 1
+set cartoon_loop_quality, 10
+set cartoon_loop_radius, 0.16
+set cartoon_rect_width, 0.3
+set cartoon_fancy_helices, 1
+set cartoon_fancy_sheets, 1
+set cartoon_tube_radius, 0.4
+set cartoon_ring_mode, 3
+set cartoon_ring_width, 0.1
+set cartoon_ring_finder, 1
+set cartoon_ladder_mode, 1
+set cartoon_nucleic_acid_mode, 4
+set cartoon_ring_transparency, 0.5
+set cartoon_discrete_colors, on
+set ray_trace_mode, 1
+set ray_opaque_background, 1
+set antialias, 1
+
+hide cartoon, not chain A
+set cartoon_transparency, 0.7
+color grey80, c. A
+
+show sticks, c. A and i. 4+43+50+76+95+116+143+157+219+225+226+230+245+249+251+254+255+262+265+279+282+309+317+328+340+375+418+424+449+461+471+472+475+477
+
+color salmon, c. A and i. 4+43+50+76+95+116+143+157+219+225+226+230+245+249+251+254+255+262+265+279+282+309+317+328+340+375+418+424+449+461+471+472+475 and elem C
+color forest, c. A and i. 477
+
+color red, c. A and i. 4+43+50+76+95+116+143+157+219+225+226+230+245+249+251+254+255+262+265+279+282+309+317+328+340+375+418+424+449+461+471+472+475+477 and elem O
+color blue, c. A and i. 4+43+50+76+95+116+143+157+219+225+226+230+245+249+251+254+255+262+265+279+282+309+317+328+340+375+418+424+449+461+471+472+475+477 and elem N
+color gold, c. A and i. 4+43+50+76+95+116+143+157+219+225+226+230+245+249+251+254+255+262+265+279+282+309+317+328+340+375+418+424+449+461+471+472+475+477 and elem S
+
+#show sticks, c. A and i. 331-338
+#color marine, c. A and i. 331-338
+#set cartoon_transparency, 0, c. A and i. 331-338
+#label c. A and n. CA and i. 331, "Loop 6"
+
+show sphere, c. A and i. 4+43+50+76+95+116+143+157+219+225+226+230+245+249+251+254+255+262+265+279+282+309+317+328+340+375+418+424+449+461+471+472+475
+set sphere_transparency, 0.8
+
+label c. A and n. CA and i. 4+43+50+76+95+116+143+157+219+225+226+230+245+249+251+254+255+262+265+279+282+309+317+328+340+375+418+424+449+461+471+472+475, "%s" % (resi)
+set label_size, 28
+
+ray 3000,2000
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/macrostructure.png
+
+hide label
+ray 3000,2000
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/macrostructure_unlabelled.png
+
+-----------------------------------------
+-----------------------------------------
+-----------------------------------------
+
+hide
+show cartoon
+set fog_start, 0.15
+set bg_rgb, [1,1,1]
+set cartoon_side_chain_helper, 1
+set ray_shadow, 0
+set stick_radius, 0.15
+set cartoon_loop_cap, 2
+set cartoon_smooth_loops, 1
+set cartoon_loop_quality, 10
+set cartoon_loop_radius, 0.16
+set cartoon_rect_width, 0.3
+set cartoon_fancy_helices, 1
+set cartoon_fancy_sheets, 1
+set cartoon_tube_radius, 0.4
+set cartoon_ring_mode, 3
+set cartoon_ring_width, 0.1
+set cartoon_ring_finder, 1
+set cartoon_ladder_mode, 1
+set cartoon_nucleic_acid_mode, 4
+set cartoon_ring_transparency, 0.5
+set cartoon_discrete_colors, on
+set ray_trace_mode, 1
+set ray_opaque_background, 1
+set antialias, 1
+
+color lime, not c. A
+set cartoon_transparency, 0.8
+set stick_transparency, 0.8, not c. A
+set sphere_transparency, 0.5
+color palecyan, c. I+I-2+J+J-2+K+K-2+L+L-2
+color white, c. A
+cartoon loop, c. A
+
+show sticks, i. 477
+color forest, i. 477
+
+set cartoon_transparency, 0.3, c. A
+set stick_transparency, 0.5, c. A
+set stick_transparency, 0, c. A and i. 95+116+143+157+219+226+230+262+282+328+424+449
+show sticks, c. A and i. 95+116+143+157+219+226+230+262+282+328+424+449
+hide cartoon, c. A and i. 95+116+143+157+219+226+230+262+282+328+424+449
+color forest, c. A and i. 477
+color salmon, c. A and i. 95+116+143+157+219+226+230+262+282+328+424+449
+color red, c. A and i. 95+116+143+157+219+226+230+262+282+328+424+449 and elem O
+color blue, c. A and i. 95+116+143+157+219+226+230+262+282+328+424+449 and elem N
+color gold, c. A and i. 95+116+143+157+219+226+230+262+282+328+424+449 and elem S
+set label_size, 72
+set h_bond_cutoff_center, 3.7
+show sphere, resn hoh
+color lightblue, resn hoh
+set sphere_scale, 0.15
+
+#mutagenesis wizard
+
+select n. OG and i. 95
+select n. OG and i. 116
+select n. NZ and i. 116
+select n. OG and i. 143
+select n. OG and i. 157
+select n. SG and i. 219
+select n. OG1 and i. 230
+select n. OG1 and i. 262
+select n. OG and i. 328
+select n. OH and i. 226
+(sele) "A" > find > polar contacts > to any other atoms
+
+# no polar contacts but close to 44-46
+label c. A and n. CA and i. 95, "%s%s" % (oneletter, resi)
+show sticks, c. A and i. 94-96
+color red, c. A and i. 94-96 and elem O
+color blue, c. A and i. 94-96 and elem N
+color gold, c. A and i. 94-96 and elem S
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/s95.png, width=1000, height=1000,ray=1
+hide label
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/s95_unlabelled.png, width=1000, height=1000, ray=1
+
+# buried within protein
+show sticks, c. A and i. 115-117
+color red, c. A and i. 115-117 and elem O
+color blue, c. A and i. 115-117 and elem N
+color gold, c. A and i. 115-117 and elem S
+label c. A and n. CA and i. 116, "%s%s" % (oneletter, resi)
+hide label
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/s116_unlabelled.png, width=1000, height=1000, ray=1
+label c. A and n. CA and i. 116, "%s%s" % (oneletter, resi)
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/k116_unlabelled.png, width=1000, height=1000, ray=1
+
+#
+label c. A and n. CA and i. 143, "%s%s" % (oneletter, resi)
+label c. A and n. O and i. 33, "%s%s" % (oneletter, resi)
+show sticks, c. A and i. 142-144
+color red, c. A and i. 142-144 and elem O
+color blue, c. A and i. 142-144 and elem N
+color gold, c. A and i. 142-144 and elem S
+sele (sele) around 3.7 and resn hoh
+set sphere_transparency, 0, sele
+set stick_transparency, 0, c. A and i. 33
+hide cartoon, c. A and i. 32-34
+show sticks, c. A and i. 32-34
+color red, c. A and i. 32-34 and elem O
+color blue, c. A and i. 32-34 and elem N
+color gold, c. A and i. 32-34 and elem S
+dist d33hoh, sele, c. A and i. 33 and n. O
+dist s143hoh, sele, c. A and i. 143 and n. OG+N
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/s143.png, width=1000, height=1000, ray=1
+hide label
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/s143_unlabelled.png, width=1000, height=1000, ray=1
+
+#
+label c. A and n. CA and i. 157, "%s%s" % (oneletter, resi)
+show sticks, c. A and i. 153-158
+color red, c. A and i. 153-158 and elem O
+color blue, c. A and i. 153-158 and elem N
+color gold, c. A and i. 153-158 and elem S
+label c. C and n. OD1 and i. 216, "%s%s" % (oneletter, resi)
+set stick_transparency, 0, c. C and i. 216
+hide cartoon, c. C and i. 215-217
+show sticks, c. C and i. 215-217
+color red, c. C and i. 215-217 and elem O
+color blue, c. C and i. 215-217 and elem N
+color gold, c. C and i. 215-217 and elem S
+select n. OG and i. 157
+dist hoh1, c. A and i. 480, c. A and i. 153 and n. O
+dist hoh2, c. A and i. 480, c. A and i. 154 and n. O
+dist hoh3, c. A and i. 480, c. A and i. 156 and n. N
+dist hoh4, c. A and i. 480, c. A and i. 157 and n. OG
+set sphere_transparency, 0, (sele)
+
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/s157.png, width=1000, height=1000, ray=1
+hide label
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/s157_unlabelled.png, width=1000, height=1000, ray=1
+
+label c. A and n. CA and i. 219, "%s%s" % (oneletter, resi)
+hide label
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/c219_unlabelled.png, width=1000, height=1000, ray=1
+
+
+label c. A and n. CA and i. 226+230, "%s%s" % (oneletter, resi)
+label c. L and n. NE2 and i. 55, "%s%s" % (oneletter, resi)
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/t230.png, width=1000, height=1000, ray=1
+hide label
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/t230_unlabelled.png, width=1000, height=1000, ray=1
+
+label c. A and n. CA and i. 328, "%s%s" % (oneletter, resi)
+label c. A and n. CA and i. 329+377, "%s%s" % (oneletter, resi)
+color white, c. A and i. 329+377
+color red, c. A and i. 329+377 and elem O
+color blue, c. A and i. 329+377 and elem N
+color gold, c. A and i. 329+377 and elem S
+set stick_transparency, 0, c. A and i. 95+116+143+157+219+226+230+262+282+328+424+449
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/s328.png, width=1000, height=1000, ray=1
+hide label
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/s328_unlabelled.png, width=1000, height=1000, ray=1
+
+
+
+
+label c. A and n. CA and i. 262, "%s%s" % (oneletter, resi)
+label c. A and n. CA and i. 257, "%s%s" % (oneletter, resi)
+color white, c. A and i. 257
+color red, c. A and i. 257 and elem O
+color blue, c. A and i. 257 and elem N
+color gold, c. A and i. 257 and elem S
+set stick_transparency, 0, c. A and i. 95+116+143+157+219+226+230+262+282+328+424+449
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/t262.png, width=1000, height=1000, ray=1
+hide label
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/t262_unlabelled.png, width=1000, height=1000, ray=1
+
+label c. A and n. OH and i. 226, "%s%s" % (oneletter, resi)
+label c. A and n. O and i. 260+261, "%s%s" % (oneletter, resi)
+label c. I and n. NH1 and i. 53, "%s%s" % (oneletter, resi)
+show sticks, c. A and i. 260+261 
+color red, c. A and i. 260+261 and elem O
+color blue, c. A and i. 260+261 and elem N
+color gold, c. A and i. 260+261 and elem S
+show sticks, c. I and i. 53
+color red, c. I and i. 53 and elem O
+color blue, c. I and i. 53 and elem N
+color gold, c. I and i. 53 and elem S
+set stick_transparency, 0, c. A and i. 95+116+143+157+219+226+230+262+282+328+424+449
+show label
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/t226.png, width=1000, height=1000, ray=1
+hide label
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/t226_unlabelled.png, width=1000, height=1000, ray=1
+
+
+label c. A and n. SG and i. 449+459, "%s%s" % (oneletter, resi)
+color white, c. A and i. 459
+color red, c. A and i. 459 and elem O
+color blue, c. A and i. 459 and elem N
+color gold, c. A and i. 459 and elem S
+set stick_transparency, 0, c. A and i. 95+116+143+157+219+226+230+262+282+328+424+449
+show label
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/t449.png, width=1000, height=1000, ray=1
+hide label
+png /Users/art/Library/CloudStorage/GoogleDrive-arthur.aqualung@gmail.com/My Drive/Research projects/2022 Viburnum rubisco/structure/t449_unlabelled.png, width=1000, height=1000, ray=1

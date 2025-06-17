@@ -1,0 +1,472 @@
+IQ-TREE multicore version 2.0.3 for Mac OS X 64-bit built Dec 19 2020
+Developed by Bui Quang Minh, Nguyen Lam Tung, Olga Chernomor,
+Heiko Schmidt, Dominik Schrempf, Michael Woodhams.
+
+Host:    esc2074-dgl-leung-sage.eeb.utoronto.ca (SSE4.2, 16 GB RAM)
+Command: iqtree -s ../clean_aligned_csubst.fasta -te tmp.csubst.nwk -m ECMK07+F+R4 --seqtype CODON11 --threads-max 3 -T AUTO --ancestral --rate --redo
+Seed:    397357 (Using SPRNG - Scalable Parallel Random Number Generator)
+Time:    Mon Jan 13 14:13:46 2025
+Kernel:  SSE2 - auto-detect threads (8 CPU cores detected)
+
+Reading alignment file ../clean_aligned_csubst.fasta ... Fasta format detected
+Alignment most likely contains DNA/RNA sequences
+Converting to codon sequences with genetic code 11 ...
+WARNING: Sequence heterolaen has ambiguous character --A at site 1
+WARNING: Sequence neolacera has ambiguous character --A at site 1
+WARNING: Sequence annamensis has ambiguous character --A at site 1
+WARNING: Sequence wattsii has ambiguous character --A at site 1
+WARNING: Sequence transmorri has ambiguous character -AC at site 13
+WARNING: Sequence caudipinna has ambiguous character -AC at site 13
+WARNING: Sequence polita has ambiguous character -AC at site 13
+WARNING: Sequence christense has ambiguous character -AC at site 13
+WARNING: Sequence integrilob has ambiguous character -AC at site 13
+WARNING: Sequence celsa has ambiguous character SCC at site 16
+WARNING: Sequence scottii has ambiguous character T-A at site 289
+WARNING: Sequence crispifoli has ambiguous character T-T at site 373
+WARNING: Sequence sandwicens has ambiguous character TNT at site 373
+WARNING: Sequence setosa has ambiguous character --T at site 484
+WARNING: Sequence subcren638 has ambiguous character AAR at site 487
+WARNING: Sequence setosa has ambiguous character CNN at site 520
+WARNING: Sequence goldiana has ambiguous character -TC at site 535
+WARNING: Sequence hawaiiensi has ambiguous character -TC at site 535
+WARNING: Sequence expansa has ambiguous character -TC at site 535
+WARNING: Sequence nubigena has ambiguous character -TC at site 535
+WARNING: Sequence flaccisqua has ambiguous character -TC at site 535
+WARNING: Sequence futura has ambiguous character A-- at site 559
+WARNING: Sequence barberiger has ambiguous character AT- at site 559
+WARNING: Sequence flaccisqua has ambiguous character -CC at site 562
+WARNING: Sequence komarovii has ambiguous character T-- at site 562
+WARNING: Sequence setosa has ambiguous character CAN at site 565
+WARNING: Sequence rosea has ambiguous character CC- at site 568
+WARNING: Sequence knoblochii has ambiguous character CA- at site 568
+WARNING: Sequence sororia has ambiguous character YYT at site 568
+WARNING: Sequence mannian510 has ambiguous character G-- at site 577
+WARNING: Sequence aitonia466 has ambiguous character C-- at site 577
+WARNING: Sequence sororia has ambiguous character KGG at site 580
+WARNING: Sequence pseudofili has ambiguous character -GG at site 580
+WARNING: Sequence bojeri568 has ambiguous character G-- at site 586
+WARNING: Sequence subcren638 has ambiguous character G-- at site 586
+WARNING: Sequence oligodo640 has ambiguous character G-- at site 586
+WARNING: Sequence schimpe639 has ambiguous character A-- at site 586
+WARNING: Sequence lewalle637 has ambiguous character G-- at site 586
+WARNING: Sequence fadenii459 has ambiguous character G-- at site 586
+WARNING: Sequence occiden458 has ambiguous character G-- at site 586
+WARNING: Sequence tricell456 has ambiguous character YKT at site 589
+WARNING: Sequence katanga626 has ambiguous character CKT at site 589
+WARNING: Sequence glandul457 has ambiguous character SKT at site 589
+WARNING: Sequence squamis504 has ambiguous character TTY at site 592
+WARNING: Sequence cognata546 has ambiguous character TC- at site 592
+WARNING: Sequence scottii has ambiguous character --M at site 598
+WARNING: Sequence inaequa632 has ambiguous character --C at site 598
+WARNING: Sequence glandul457 has ambiguous character TTY at site 598
+WARNING: Sequence bojeri568 has ambiguous character -TA at site 601
+WARNING: Sequence schnell455 has ambiguous character GTW at site 601
+WARNING: Sequence cognata546 has ambiguous character --T at site 601
+WARNING: Sequence mannian510 has ambiguous character -CA at site 604
+WARNING: Sequence futura has ambiguous character -CA at site 604
+WARNING: Sequence barberiger has ambiguous character -CA at site 604
+WARNING: Sequence glandul457 has ambiguous character RCA at site 604
+WARNING: Sequence lewalle637 has ambiguous character -CA at site 604
+WARNING: Sequence fadenii459 has ambiguous character -AC at site 604
+WARNING: Sequence occiden458 has ambiguous character -CA at site 604
+WARNING: Sequence goldiana has ambiguous character -AA at site 607
+WARNING: Sequence athamantic has ambiguous character -AA at site 607
+WARNING: Sequence subcren638 has ambiguous character -AC at site 610
+WARNING: Sequence oligodo640 has ambiguous character -CT at site 610
+WARNING: Sequence schimpe639 has ambiguous character -CT at site 610
+WARNING: Sequence remota has ambiguous character -TT at site 613
+WARNING: Sequence inaequa632 has ambiguous character TT- at site 616
+WARNING: Sequence wallichian has ambiguous character A-A at site 619
+WARNING: Sequence tyrrhen494 has ambiguous character AAN at site 619
+WARNING: Sequence subpycnopt has ambiguous character NCC at site 622
+WARNING: Sequence saffordii has ambiguous character TC- at site 622
+WARNING: Sequence panda has ambiguous character --A at site 625
+WARNING: Sequence aitonia466 has ambiguous character -AG at site 625
+WARNING: Sequence celsa has ambiguous character GA- at site 631
+WARNING: Sequence inaequa632 has ambiguous character GRA at site 631
+WARNING: Sequence saffordii has ambiguous character GA- at site 631
+WARNING: Sequence futura has ambiguous character G-G at site 637
+WARNING: Sequence gymnosora has ambiguous character --G at site 637
+WARNING: Sequence mannian510 has ambiguous character GRA at site 640
+WARNING: Sequence cristata has ambiguous character G-A at site 640
+WARNING: Sequence patula has ambiguous character G-A at site 640
+WARNING: Sequence ludovician has ambiguous character G-A at site 640
+WARNING: Sequence ludovician has ambiguous character AT- at site 643
+WARNING: Sequence subcren638 has ambiguous character CRG at site 646
+WARNING: Sequence setosa has ambiguous character GGN at site 649
+WARNING: Sequence subcren638 has ambiguous character CRT at site 652
+WARNING: Sequence squamis504 has ambiguous character WTT at site 691
+WARNING: Sequence tricell456 has ambiguous character WTT at site 691
+WARNING: Sequence glandul457 has ambiguous character WTT at site 691
+WARNING: Sequence subcren638 has ambiguous character AMY at site 763
+WARNING: Sequence subcren638 has ambiguous character AWT at site 769
+WARNING: Sequence saffordii has ambiguous character AG- at site 775
+WARNING: Sequence subcren638 has ambiguous character TTR at site 778
+WARNING: Sequence subcren638 has ambiguous character TRT at site 784
+WARNING: Sequence subcren638 has ambiguous character TAY at site 787
+WARNING: Sequence subcren638 has ambiguous character AKA at site 793
+WARNING: Sequence subcren638 has ambiguous character YTG at site 805
+WARNING: Sequence subcren638 has ambiguous character ATM at site 841
+WARNING: Sequence goldiana has ambiguous character MGA at site 853
+WARNING: Sequence subcren638 has ambiguous character CWC at site 859
+WARNING: Sequence subcren638 has ambiguous character SKT at site 874
+WARNING: Sequence heterolaen has ambiguous character CGY at site 874
+WARNING: Sequence subcren638 has ambiguous character GMC at site 883
+WARNING: Sequence subcren638 has ambiguous character ACK at site 928
+WARNING: Sequence basisora has ambiguous character GNC at site 991
+WARNING: Sequence simasakii has ambiguous character GGY at site 1021
+WARNING: Sequence subpycnopt has ambiguous character TNT at site 1048
+WARNING: Sequence atrata has ambiguous character TCN at site 1048
+WARNING: Sequence cochleata has ambiguous character GTN at site 1090
+WARNING: Sequence basisora has ambiguous character CNT at site 1102
+WARNING: Sequence subpycnopt has ambiguous character GAN at site 1126
+WARNING: Sequence sororia has ambiguous character AA- at site 1177
+WARNING: Sequence sinofibril has ambiguous character NTC at site 1204
+WARNING: Sequence subpycnopt has ambiguous character NTA at site 1210
+WARNING: Sequence insularis has ambiguous character GC- at site 1216
+WARNING: Sequence anadroma has ambiguous character GC- at site 1216
+WARNING: Sequence commixta has ambiguous character GC- at site 1216
+WARNING: Sequence pacifica has ambiguous character GC- at site 1216
+WARNING: Sequence tsugiwoi has ambiguous character GC- at site 1216
+WARNING: Sequence melanocarp has ambiguous character GC- at site 1216
+WARNING: Sequence tsutsuiana has ambiguous character GC- at site 1216
+WARNING: Sequence medioxima has ambiguous character GC- at site 1216
+WARNING: Sequence shibipedis has ambiguous character GC- at site 1216
+WARNING: Sequence hangchowen has ambiguous character GC- at site 1216
+WARNING: Sequence lunanensis has ambiguous character GC- at site 1216
+WARNING: Sequence hasseltii has ambiguous character GC- at site 1216
+WARNING: Sequence simasakii has ambiguous character GC- at site 1216
+WARNING: Sequence yakusilvic has ambiguous character GC- at site 1216
+WARNING: Sequence anthracini has ambiguous character GC- at site 1216
+WARNING: Sequence shiroumens has ambiguous character GC- at site 1216
+WARNING: Sequence namegatae has ambiguous character GC- at site 1216
+WARNING: Sequence hadanoi has ambiguous character GC- at site 1216
+WARNING: Sequence amurensis has ambiguous character GC- at site 1216
+WARNING: Sequence sordidipes has ambiguous character GC- at site 1216
+WARNING: Sequence handeliana has ambiguous character GC- at site 1216
+WARNING: Sequence ryo-itoana has ambiguous character GC- at site 1216
+WARNING: Sequence indusiata has ambiguous character GC- at site 1216
+WARNING: Sequence protobisse has ambiguous character GC- at site 1216
+WARNING: Sequence sabaei has ambiguous character GC- at site 1216
+WARNING: Sequence koidsumian has ambiguous character GC- at site 1216
+WARNING: Sequence nodosa has ambiguous character GC- at site 1216
+WARNING: Sequence coreano-mo has ambiguous character GC- at site 1216
+WARNING: Sequence transmorri has ambiguous character CG- at site 1231
+WARNING: Sequence polita has ambiguous character CG- at site 1231
+WARNING: Sequence christense has ambiguous character CG- at site 1231
+WARNING: Sequence integrilob has ambiguous character CG- at site 1231
+WARNING: Sequence sinofibril has ambiguous character NAC at site 1234
+WARNING: Sequence setosa has ambiguous character TAN at site 1234
+WARNING: Sequence cristata has ambiguous character GA- at site 1237
+WARNING: Sequence apiciflora has ambiguous character GG- at site 1240
+WARNING: Sequence championii has ambiguous character GG- at site 1240
+WARNING: Sequence zhuweiming has ambiguous character GG- at site 1240
+WARNING: Sequence cycadina has ambiguous character GG- at site 1240
+WARNING: Sequence pseudocaen has ambiguous character GG- at site 1240
+WARNING: Sequence decipiens has ambiguous character GG- at site 1240
+WARNING: Sequence diffracta has ambiguous character GG- at site 1240
+WARNING: Sequence paleolata has ambiguous character GG- at site 1240
+WARNING: Sequence kawakamii has ambiguous character GG- at site 1240
+WARNING: Sequence setosa has ambiguous character CNC at site 1243
+WARNING: Sequence uniformis has ambiguous character G-- at site 1246
+WARNING: Sequence wallichian has ambiguous character GA- at site 1246
+WARNING: Sequence celsa has ambiguous character GA- at site 1246
+WARNING: Sequence fadenii459 has ambiguous character GA- at site 1246
+WARNING: Sequence annamensis has ambiguous character CT- at site 1249
+WARNING: Sequence goldiana has ambiguous character G-- at site 1252
+WARNING: Sequence futura has ambiguous character GC- at site 1252
+WARNING: Sequence karwinskya has ambiguous character G-- at site 1252
+WARNING: Sequence carthusian has ambiguous character G-- at site 1252
+WARNING: Sequence azorica460 has ambiguous character G-- at site 1252
+Alignment has 185 sequences with 418 columns, 379 distinct patterns
+191 parsimony-informative, 107 singleton sites, 120 constant sites
+            Gap/Ambiguity  Composition  p-value
+   1  uniformis     5.02%    passed    100.00%
+   2  kilemen505   52.63%    passed     96.39%
+   3  affinis       0.00%    passed    100.00%
+   4  crispifoli    0.24%    passed    100.00%
+   5  stewartii     0.00%    passed    100.00%
+   6  fuscipes      0.00%    passed    100.00%
+   7  insularis     4.07%    passed    100.00%
+   8  bojeri568     1.44%    passed    100.00%
+   9  arguta        0.00%    passed    100.00%
+  10  anadroma      4.07%    passed    100.00%
+  11  goldiana      0.96%    passed    100.00%
+  12  apiciflora    2.63%    passed    100.00%
+  13  panda         0.24%    passed    100.00%
+  14  sparsa        0.00%    passed    100.00%
+  15  sandwicens    0.24%    passed    100.00%
+  16  commixta      4.07%    passed    100.00%
+  17  pacifica      4.07%    passed    100.00%
+  18  shikokiana    0.00%    passed    100.00%
+  19  rosea         0.24%    passed    100.00%
+  20  subcren638    5.74%    passed    100.00%
+  21  tsugiwoi      4.07%    passed    100.00%
+  22  wallichian    0.96%    passed    100.00%
+  23  clintonian    0.00%    passed    100.00%
+  24  saxifragiv    0.00%    passed    100.00%
+  25  melanocarp    4.07%    passed    100.00%
+  26  diacalpe      0.00%    passed    100.00%
+  27  subexaltat    0.00%    passed    100.00%
+  28  oligodo640    2.15%    passed    100.00%
+  29  mannian510    2.63%    passed    100.00%
+  30  tsutsuiana    4.07%    passed    100.00%
+  31  rubrobrunn    0.00%    passed    100.00%
+  32  championii    2.63%    passed    100.00%
+  33  maxonii       0.00%    passed    100.00%
+  34  scottii       2.63%    passed    100.00%
+  35  transmorri    3.11%    passed    100.00%
+  36  bissetiana    0.00%    passed    100.00%
+  37  caudipinna    1.20%    passed    100.00%
+  38  medioxima     4.07%    passed    100.00%
+  39  polylepis     0.00%    passed    100.00%
+  40  rossii        0.00%    passed    100.00%
+  41  dracomo635    1.67%    passed    100.00%
+  42  schnell455    0.24%    passed    100.00%
+  43  shibipedis    4.07%    passed    100.00%
+  44  dilatata      0.00%    passed    100.00%
+  45  peranema      0.00%    passed    100.00%
+  46  cinnamomea    0.00%    passed    100.00%
+  47  juxtaposit    0.00%    passed    100.00%
+  48  gamblei       0.00%    passed    100.00%
+  49  conjugata     0.00%    passed    100.00%
+  50  hangchowen    4.07%    passed    100.00%
+  51  lunanensis    4.07%    passed    100.00%
+  52  caucasica     0.00%    passed    100.00%
+  53  gymnophyll    0.00%    passed    100.00%
+  54  celsa         1.20%    passed    100.00%
+  55  schimpe639    2.15%    passed    100.00%
+  56  guanchica     0.00%    passed    100.00%
+  57  costalisor    0.00%    passed    100.00%
+  58  squamis504    0.48%    passed    100.00%
+  59  munchii       0.00%    passed    100.00%
+  60  cognata546    0.96%    passed    100.00%
+  61  pallida       0.00%    passed    100.00%
+  62  knoblochii    0.24%    passed    100.00%
+  63  hasseltii     4.07%    passed    100.00%
+  64  fragrans      0.00%    passed    100.00%
+  65  cristata     28.71%    passed    100.00%
+  66  glabra        0.00%    passed    100.00%
+  67  simasakii     4.31%    passed    100.00%
+  68  oligodonta    0.00%    passed    100.00%
+  69  subpycnopt    0.96%    passed    100.00%
+  70  ardechensi    0.00%    passed    100.00%
+  71  subbipinna    0.00%    passed    100.00%
+  72  basisora      0.48%    passed    100.00%
+  73  polita        3.11%    passed    100.00%
+  74  sinofibril    0.48%    passed    100.00%
+  75  aemula        0.00%    passed    100.00%
+  76  christense    3.11%    passed    100.00%
+  77  tricell456    0.48%    passed    100.00%
+  78  chinensis     0.00%    passed    100.00%
+  79  futura        4.31%    passed    100.00%
+  80  tokyoensis    0.00%    passed    100.00%
+  81  pulcherrim    0.00%    passed    100.00%
+  82  maximowicz    0.96%    passed    100.00%
+  83  varia         0.00%    passed    100.00%
+  84  exstipella    0.00%    passed    100.00%
+  85  barberiger    3.83%    passed    100.00%
+  86  athamantic    1.91%    passed    100.00%
+  87  bernieri      0.96%    passed     99.75%
+  88  inaequa632    1.20%    failed      0.00%
+  89  pentheri      0.00%    passed    100.00%
+  90  yakusilvic    4.07%    passed    100.00%
+  91  unidentata    0.00%    passed    100.00%
+  92  squamifera    0.00%    passed    100.00%
+  93  hendersoni    0.72%    passed    100.00%
+  94  patula        0.24%    passed    100.00%
+  95  zhuweiming    2.63%    passed    100.00%
+  96  chrysocoma    0.00%    passed    100.00%
+  97  integrilob    3.11%    passed    100.00%
+  98  cycadina      2.63%    passed    100.00%
+  99  aquilinoid    0.00%    passed    100.00%
+ 100  anthracini    4.07%    passed    100.00%
+ 101  formosana     0.00%    passed    100.00%
+ 102  tetrapinna    0.00%    passed    100.00%
+ 103  monticola     0.00%    passed    100.00%
+ 104  heterolaen    0.48%    passed    100.00%
+ 105  hawaiiensi    0.24%    passed    100.00%
+ 106  emeiensis     0.00%    passed    100.00%
+ 107  expansa       0.24%    passed    100.00%
+ 108  setosa       39.95%    passed    100.00%
+ 109  shiroumens    4.07%    passed     99.69%
+ 110  corleyi       0.00%    passed    100.00%
+ 111  sacrosanct    0.00%    passed    100.00%
+ 112  campylopte    0.00%    passed    100.00%
+ 113  neolacera     0.24%    passed     99.87%
+ 114  saxifraga     0.00%    passed    100.00%
+ 115  labordei      0.00%    passed    100.00%
+ 116  fuscoatra     0.00%    passed    100.00%
+ 117  namegatae     4.07%    passed    100.00%
+ 118  crinalis      0.00%    passed    100.00%
+ 119  hadanoi       4.07%    passed    100.00%
+ 120  annamensis    0.72%    passed    100.00%
+ 121  reflexosqu    0.00%    passed    100.00%
+ 122  hondoensis    0.00%    passed    100.00%
+ 123  wattsii       0.24%    passed    100.00%
+ 124  filix-mas     0.00%    passed    100.00%
+ 125  remota        3.59%    passed    100.00%
+ 126  nubigena      0.24%    passed    100.00%
+ 127  pseudocaen    2.63%    passed    100.00%
+ 128  decipiens     2.63%    passed    100.00%
+ 129  amurensis     4.07%    passed    100.00%
+ 130  marginalis    0.00%    passed    100.00%
+ 131  karwinskya    0.24%    passed    100.00%
+ 132  odontoloma    0.00%    passed    100.00%
+ 133  intermedia    0.00%    passed    100.00%
+ 134  stenolepis    0.00%    passed    100.00%
+ 135  lacera        0.00%    passed    100.00%
+ 136  sororia       6.70%    passed    100.00%
+ 137  katanga626    0.24%    passed    100.00%
+ 138  maderensis    0.00%    passed    100.00%
+ 139  huberi        0.00%    passed    100.00%
+ 140  dickinsii     0.00%    passed    100.00%
+ 141  glandul457    0.96%    passed    100.00%
+ 142  erythrosor    0.00%    passed    100.00%
+ 143  alpestris     0.00%    passed    100.00%
+ 144  atrata        0.24%    passed    100.00%
+ 145  antarctica    0.00%    passed    100.00%
+ 146  sordidipes    4.07%    passed    100.00%
+ 147  rubiginosa    0.00%    passed    100.00%
+ 148  rosthornii    0.00%    passed    100.00%
+ 149  tyrrhen494   48.33%    passed    100.00%
+ 150  diffracta     2.63%    passed    100.00%
+ 151  crassirhiz    0.00%    passed    100.00%
+ 152  gymnosora     4.31%    passed    100.00%
+ 153  paleolata     2.63%    passed    100.00%
+ 154  lepidopoda    0.00%    passed    100.00%
+ 155  lewalle637    1.67%    passed    100.00%
+ 156  sieboldii     0.00%    passed    100.00%
+ 157  fadenii459    2.39%    passed    100.00%
+ 158  villari414    1.67%    passed    100.00%
+ 159  handeliana    4.07%    passed    100.00%
+ 160  ryo-itoana    4.07%    passed    100.00%
+ 161  sublacera     0.00%    passed    100.00%
+ 162  goeringian    0.00%    passed    100.00%
+ 163  saffordii    38.76%    passed    100.00%
+ 164  indusiata     4.07%    passed    100.00%
+ 165  oreades       0.00%    passed    100.00%
+ 166  protobisse    4.07%    passed    100.00%
+ 167  sabaei        4.07%    passed    100.00%
+ 168  bodinieri     0.00%    passed    100.00%
+ 169  occiden458    1.67%    passed    100.00%
+ 170  cochleata     0.24%    passed    100.00%
+ 171  carthusian    0.24%    passed    100.00%
+ 172  flaccisqua    0.48%    passed    100.00%
+ 173  mauiensis     0.00%    passed    100.00%
+ 174  koidsumian    4.07%    passed    100.00%
+ 175  aitonia466    4.07%    passed    100.00%
+ 176  kawakamii     2.63%    passed    100.00%
+ 177  azorica460    3.59%    passed    100.00%
+ 178  kinkiensis    0.00%    passed    100.00%
+ 179  nodosa        4.07%    passed    100.00%
+ 180  clarkei      23.68%    passed    100.00%
+ 181  pycnoptero    0.00%    passed    100.00%
+ 182  coreano-mo    4.07%    passed    100.00%
+ 183  komarovii     5.02%    passed    100.00%
+ 184  pseudofili    0.24%    passed    100.00%
+ 185  ludovician    0.48%    passed    100.00%
+WARNING: 1 sequences contain more than 50% gaps/ambiguity
+****  TOTAL         2.54%  1 sequences failed composition chi2 test (p-value<5%; df=60)
+WARNING: States(s) CGG rarely appear in alignment and may cause numerical problems
+Reading input tree file tmp.csubst.nwk ... rooted tree
+
+NOTE: 152 MB RAM (0 GB) is required!
+Measuring multi-threading efficiency up to 3 CPU cores
+2 trees examined
+Threads: 1 / Time: 3.873 sec / Speedup: 1.000 / Efficiency: 100% / LogL: -17995
+Threads: 2 / Time: 2.238 sec / Speedup: 1.730 / Efficiency: 87% / LogL: -17995
+Threads: 3 / Time: 1.664 sec / Speedup: 2.328 / Efficiency: 78% / LogL: -17995
+BEST NUMBER OF THREADS: 3
+
+Estimate model parameters (epsilon = 0.010)
+1. Initial log-likelihood: -56660.722
+2. Current log-likelihood: -8583.692
+3. Current log-likelihood: -8580.722
+4. Current log-likelihood: -8567.938
+5. Current log-likelihood: -8567.834
+6. Current log-likelihood: -8567.761
+7. Current log-likelihood: -8567.702
+8. Current log-likelihood: -8567.650
+9. Current log-likelihood: -8567.603
+10. Current log-likelihood: -8567.557
+11. Current log-likelihood: -8567.512
+12. Current log-likelihood: -8567.463
+13. Current log-likelihood: -8567.405
+14. Current log-likelihood: -8567.327
+15. Current log-likelihood: -8567.205
+16. Current log-likelihood: -8566.980
+17. Current log-likelihood: -8566.507
+18. Current log-likelihood: -8548.293
+19. Current log-likelihood: -8548.084
+20. Current log-likelihood: -8547.936
+21. Current log-likelihood: -8547.770
+22. Current log-likelihood: -8547.543
+23. Current log-likelihood: -8547.232
+24. Current log-likelihood: -8538.014
+25. Current log-likelihood: -8537.927
+26. Current log-likelihood: -8537.862
+27. Current log-likelihood: -8537.796
+28. Current log-likelihood: -8537.718
+29. Current log-likelihood: -8537.622
+30. Current log-likelihood: -8537.497
+31. Current log-likelihood: -8537.342
+32. Current log-likelihood: -8537.177
+33. Current log-likelihood: -8518.807
+34. Current log-likelihood: -8518.772
+35. Current log-likelihood: -8518.741
+36. Current log-likelihood: -8518.700
+37. Current log-likelihood: -8518.642
+38. Current log-likelihood: -8518.555
+39. Current log-likelihood: -8518.431
+40. Current log-likelihood: -8518.276
+41. Current log-likelihood: -8518.129
+42. Current log-likelihood: -8491.884
+43. Current log-likelihood: -8491.708
+44. Current log-likelihood: -8491.497
+45. Current log-likelihood: -8491.306
+46. Current log-likelihood: -8491.191
+47. Current log-likelihood: -8478.672
+48. Current log-likelihood: -8478.448
+49. Current log-likelihood: -8478.258
+50. Current log-likelihood: -8478.140
+51. Current log-likelihood: -8478.073
+52. Current log-likelihood: -8472.686
+53. Current log-likelihood: -8472.427
+54. Current log-likelihood: -8472.289
+55. Current log-likelihood: -8472.217
+56. Current log-likelihood: -8472.171
+57. Current log-likelihood: -8469.616
+58. Current log-likelihood: -8469.405
+59. Current log-likelihood: -8469.303
+60. Current log-likelihood: -8469.244
+61. Current log-likelihood: -8469.205
+62. Current log-likelihood: -8469.176
+63. Current log-likelihood: -8469.156
+64. Current log-likelihood: -8469.141
+65. Current log-likelihood: -8469.130
+Optimal log-likelihood: -8469.122
+Nonsynonymous/synonymous ratio (omega): 1.000
+Transition/transversion ratio (kappa): 1.000
+Site proportion and rates:  (0.467,0.189) (0.420,0.983) (0.103,3.814) (0.010,10.689)
+Parameters optimization took 65 rounds (446.412 sec)
+BEST SCORE FOUND : -8469.122
+Ancestral state probabilities printed to ../clean_aligned_csubst.fasta.state
+Empirical proportions for each category: 0.495 0.400 0.096 0.010
+Site rates printed to ../clean_aligned_csubst.fasta.rate
+Total tree length: 3.140
+
+Total number of iterations: 0
+CPU time used for tree search: 0.000 sec (0h:0m:0s)
+Wall-clock time used for tree search: 0.000 sec (0h:0m:0s)
+Total CPU time used: 1345.283 sec (0h:22m:25s)
+Total wall-clock time used: 457.066 sec (0h:7m:37s)
+
+Analysis results written to: 
+  IQ-TREE report:                ../clean_aligned_csubst.fasta.iqtree
+  Maximum-likelihood tree:       ../clean_aligned_csubst.fasta.treefile
+  Site-specific rates:           ../clean_aligned_csubst.fasta.rate
+  Ancestral state:               ../clean_aligned_csubst.fasta.state
+  Screen log file:               ../clean_aligned_csubst.fasta.log
+
+Date and Time: Mon Jan 13 14:21:23 2025

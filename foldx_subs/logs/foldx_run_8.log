@@ -1,0 +1,307 @@
+   ********************************************
+   ***                                      ***
+   ***             FoldX 5.1 (c)            ***
+   ***                                      ***
+   ***     code by the FoldX Consortium     ***
+   ***                                      ***
+   ***     Jesper Borg, Frederic Rousseau   ***
+   ***    Joost Schymkowitz, Luis Serrano   ***
+   ***    Peter Vanhee, Erik Verschueren    ***
+   ***     Lies Baeten, Javier Delgado      ***
+   ***       and Francois Stricher          ***
+   *** and any other of the 9! permutations ***
+   ***   based on an original concept by    ***
+   ***   Raphael Guerois and Luis Serrano   ***
+   ********************************************
+
+ *** THIS IS AN IMPORTANT MESSAGE: 
+ >> External parametrized molecules were detected...
+ >> Final energetic values will depend of the correct parametrization of this molecules. 
+
+
+1 models read: 8ruc-assembly-clean_Repair.pdb
+1 models read: 8ruc-assembly-clean_Repair.pdb
+
+BackHbond       =               -3996.85
+SideHbond       =               -2172.91
+Energy_VdW      =               -6258.35
+Electro         =               -375.98
+Energy_SolvP    =               8709.95
+Energy_SolvH    =               -8399.37
+Energy_vdwclash =               75.39
+energy_torsion  =               5.52
+backbone_vdwclash=              858.95
+Entropy_sidec   =               3201.08
+Entropy_mainc   =               7361.29
+water bonds     =               0.00
+helix dipole    =               -16.28
+loop_entropy    =               0.00
+cis_bond        =               8.99
+disulfide       =               -7.18
+kn electrostatic=               -14.42
+partial covalent interactions = 0.00
+Energy_Ionisation =             33.24
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -1845.87
+
+
+BackHbond       =               -3996.85
+SideHbond       =               -2172.91
+Energy_VdW      =               -6258.35
+Electro         =               -375.98
+Energy_SolvP    =               8709.95
+Energy_SolvH    =               -8399.37
+Energy_vdwclash =               75.39
+energy_torsion  =               5.52
+backbone_vdwclash=              858.95
+Entropy_sidec   =               3201.08
+Entropy_mainc   =               7361.29
+water bonds     =               0.00
+helix dipole    =               -16.28
+loop_entropy    =               0.00
+cis_bond        =               8.99
+disulfide       =               -7.18
+kn electrostatic=               -14.42
+partial covalent interactions = 0.00
+Energy_Ionisation =             33.24
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -1845.87
+
+Starting BuildModel
+Reading VA265I,VB265I,VC265I,VD265I,VE265I,VF265I,VG265I,VH265I;
+Reading LA375M,LB375M,LC375M,LD375M,LE375M,LF375M,LG375M,LH375M;
+Reading VA418A,VB418A,VC418A,VD418A,VE418A,VF418A,VG418A,VH418A;
+Reading TA449C,TB449C,TC449C,TD449C,TE449C,TF449C,TG449C,TH449C;
+Reading TA449A,TB449A,TC449A,TD449A,TE449A,TF449A,TG449A,TH449A;
+Reading TA449S,TB449S,TC449S,TD449S,TE449S,TF449S,TG449S,TH449S;
+Reading AA471V,AB471V,AC471V,AD471V,AE471V,AF471V,AG471V,AH471V;
+Residue to Mutate VALA265 has residue index 256
+Residue to Mutate VALB265 has residue index 723
+Residue to Mutate VALC265 has residue index 1190
+Residue to Mutate VALD265 has residue index 1657
+Residue to Mutate VALE265 has residue index 2124
+Residue to Mutate VALF265 has residue index 2591
+Residue to Mutate VALG265 has residue index 3058
+Residue to Mutate VALH265 has residue index 3525
+Residue to Mutate LEUA375 has residue index 366
+Residue to Mutate LEUB375 has residue index 833
+Residue to Mutate LEUC375 has residue index 1300
+Residue to Mutate LEUD375 has residue index 1767
+Residue to Mutate LEUE375 has residue index 2234
+Residue to Mutate LEUF375 has residue index 2701
+Residue to Mutate LEUG375 has residue index 3168
+Residue to Mutate LEUH375 has residue index 3635
+Residue to Mutate VALA418 has residue index 409
+Residue to Mutate VALB418 has residue index 876
+Residue to Mutate VALC418 has residue index 1343
+Residue to Mutate VALD418 has residue index 1810
+Residue to Mutate VALE418 has residue index 2277
+Residue to Mutate VALF418 has residue index 2744
+Residue to Mutate VALG418 has residue index 3211
+Residue to Mutate VALH418 has residue index 3678
+Residue to Mutate THRA449 has residue index 440
+Residue to Mutate THRB449 has residue index 907
+Residue to Mutate THRC449 has residue index 1374
+Residue to Mutate THRD449 has residue index 1841
+Residue to Mutate THRE449 has residue index 2308
+Residue to Mutate THRF449 has residue index 2775
+Residue to Mutate THRG449 has residue index 3242
+Residue to Mutate THRH449 has residue index 3709
+Residue to Mutate THRA449 has residue index 440
+Residue to Mutate THRB449 has residue index 907
+Residue to Mutate THRC449 has residue index 1374
+Residue to Mutate THRD449 has residue index 1841
+Residue to Mutate THRE449 has residue index 2308
+Residue to Mutate THRF449 has residue index 2775
+Residue to Mutate THRG449 has residue index 3242
+Residue to Mutate THRH449 has residue index 3709
+Residue to Mutate THRA449 has residue index 440
+Residue to Mutate THRB449 has residue index 907
+Residue to Mutate THRC449 has residue index 1374
+Residue to Mutate THRD449 has residue index 1841
+Residue to Mutate THRE449 has residue index 2308
+Residue to Mutate THRF449 has residue index 2775
+Residue to Mutate THRG449 has residue index 3242
+Residue to Mutate THRH449 has residue index 3709
+Residue to Mutate ALAA471 has residue index 462
+Residue to Mutate ALAB471 has residue index 929
+Residue to Mutate ALAC471 has residue index 1396
+Residue to Mutate ALAD471 has residue index 1863
+Residue to Mutate ALAE471 has residue index 2330
+Residue to Mutate ALAF471 has residue index 2797
+Residue to Mutate ALAG471 has residue index 3264
+Residue to Mutate ALAH471 has residue index 3731
+Mutating residue = VALA265 into ILE
+Mutating residue = VALB265 into ILE
+Mutating residue = VALC265 into ILE
+Mutating residue = VALD265 into ILE
+Mutating residue = VALE265 into ILE
+Mutating residue = VALF265 into ILE
+Mutating residue = VALG265 into ILE
+Mutating residue = VALH265 into ILE
+Mutating residue = VALA265 into ILE
+Mutating residue = VALB265 into ILE
+Mutating residue = VALC265 into ILE
+Mutating residue = VALD265 into ILE
+Mutating residue = VALE265 into ILE
+Mutating residue = VALF265 into ILE
+Mutating residue = VALG265 into ILE
+Mutating residue = VALH265 into ILE
+Mutating residue = VALA265 into ILE
+Mutating residue = VALB265 into ILE
+Mutating residue = VALC265 into ILE
+Mutating residue = VALD265 into ILE
+Mutating residue = VALE265 into ILE
+Mutating residue = VALF265 into ILE
+Mutating residue = VALG265 into ILE
+Mutating residue = VALH265 into ILE
+Mutating residue = LEUA375 into MET
+Mutating residue = LEUB375 into MET
+Mutating residue = LEUC375 into MET
+Mutating residue = LEUD375 into MET
+Mutating residue = LEUE375 into MET
+Mutating residue = LEUF375 into MET
+Mutating residue = LEUG375 into MET
+Mutating residue = LEUH375 into MET
+Mutating residue = LEUA375 into MET
+Mutating residue = LEUB375 into MET
+Mutating residue = LEUC375 into MET
+Mutating residue = LEUD375 into MET
+Mutating residue = LEUE375 into MET
+Mutating residue = LEUF375 into MET
+Mutating residue = LEUG375 into MET
+Mutating residue = LEUH375 into MET
+Mutating residue = LEUA375 into MET
+Mutating residue = LEUB375 into MET
+Mutating residue = LEUC375 into MET
+Mutating residue = LEUD375 into MET
+Mutating residue = LEUE375 into MET
+Mutating residue = LEUF375 into MET
+Mutating residue = LEUG375 into MET
+Mutating residue = LEUH375 into MET
+Mutating residue = VALA418 into ALA
+Mutating residue = VALB418 into ALA
+Mutating residue = VALC418 into ALA
+Mutating residue = VALD418 into ALA
+Mutating residue = VALE418 into ALA
+Mutating residue = VALF418 into ALA
+Mutating residue = VALG418 into ALA
+Mutating residue = VALH418 into ALA
+Mutating residue = VALA418 into ALA
+Mutating residue = VALB418 into ALA
+Mutating residue = VALC418 into ALA
+Mutating residue = VALD418 into ALA
+Mutating residue = VALE418 into ALA
+Mutating residue = VALF418 into ALA
+Mutating residue = VALG418 into ALA
+Mutating residue = VALH418 into ALA
+Mutating residue = VALA418 into ALA
+Mutating residue = VALB418 into ALA
+Mutating residue = VALC418 into ALA
+Mutating residue = VALD418 into ALA
+Mutating residue = VALE418 into ALA
+Mutating residue = VALF418 into ALA
+Mutating residue = VALG418 into ALA
+Mutating residue = VALH418 into ALA
+Mutating residue = THRA449 into CYS
+Mutating residue = THRB449 into CYS
+Mutating residue = THRC449 into CYS
+Mutating residue = THRD449 into CYS
+Mutating residue = THRE449 into CYS
+Mutating residue = THRF449 into CYS
+Mutating residue = THRG449 into CYS
+Mutating residue = THRH449 into CYS
+Mutating residue = THRA449 into CYS
+Mutating residue = THRB449 into CYS
+Mutating residue = THRC449 into CYS
+Mutating residue = THRD449 into CYS
+Mutating residue = THRE449 into CYS
+Mutating residue = THRF449 into CYS
+Mutating residue = THRG449 into CYS
+Mutating residue = THRH449 into CYS
+Mutating residue = THRA449 into CYS
+Mutating residue = THRB449 into CYS
+Mutating residue = THRC449 into CYS
+Mutating residue = THRD449 into CYS
+Mutating residue = THRE449 into CYS
+Mutating residue = THRF449 into CYS
+Mutating residue = THRG449 into CYS
+Mutating residue = THRH449 into CYS
+Mutating residue = THRA449 into ALA
+Mutating residue = THRB449 into ALA
+Mutating residue = THRC449 into ALA
+Mutating residue = THRD449 into ALA
+Mutating residue = THRE449 into ALA
+Mutating residue = THRF449 into ALA
+Mutating residue = THRG449 into ALA
+Mutating residue = THRH449 into ALA
+Mutating residue = THRA449 into ALA
+Mutating residue = THRB449 into ALA
+Mutating residue = THRC449 into ALA
+Mutating residue = THRD449 into ALA
+Mutating residue = THRE449 into ALA
+Mutating residue = THRF449 into ALA
+Mutating residue = THRG449 into ALA
+Mutating residue = THRH449 into ALA
+Mutating residue = THRA449 into ALA
+Mutating residue = THRB449 into ALA
+Mutating residue = THRC449 into ALA
+Mutating residue = THRD449 into ALA
+Mutating residue = THRE449 into ALA
+Mutating residue = THRF449 into ALA
+Mutating residue = THRG449 into ALA
+Mutating residue = THRH449 into ALA
+Mutating residue = THRA449 into SER
+Mutating residue = THRB449 into SER
+Mutating residue = THRC449 into SER
+Mutating residue = THRD449 into SER
+Mutating residue = THRE449 into SER
+Mutating residue = THRF449 into SER
+Mutating residue = THRG449 into SER
+Mutating residue = THRH449 into SER
+Mutating residue = THRA449 into SER
+Mutating residue = THRB449 into SER
+Mutating residue = THRC449 into SER
+Mutating residue = THRD449 into SER
+Mutating residue = THRE449 into SER
+Mutating residue = THRF449 into SER
+Mutating residue = THRG449 into SER
+Mutating residue = THRH449 into SER
+Mutating residue = THRA449 into SER
+Mutating residue = THRB449 into SER
+Mutating residue = THRC449 into SER
+Mutating residue = THRD449 into SER
+Mutating residue = THRE449 into SER
+Mutating residue = THRF449 into SER
+Mutating residue = THRG449 into SER
+Mutating residue = THRH449 into SER
+Mutating residue = ALAA471 into VAL
+Mutating residue = ALAB471 into VAL
+Mutating residue = ALAC471 into VAL
+Mutating residue = ALAD471 into VAL
+Mutating residue = ALAE471 into VAL
+Mutating residue = ALAF471 into VAL
+Mutating residue = ALAG471 into VAL
+Mutating residue = ALAH471 into VAL
+Mutating residue = ALAA471 into VAL
+Mutating residue = ALAB471 into VAL
+Mutating residue = ALAC471 into VAL
+Mutating residue = ALAD471 into VAL
+Mutating residue = ALAE471 into VAL
+Mutating residue = ALAF471 into VAL
+Mutating residue = ALAG471 into VAL
+Mutating residue = ALAH471 into VAL
+Mutating residue = ALAA471 into VAL
+Mutating residue = ALAB471 into VAL
+Mutating residue = ALAC471 into VAL
+Mutating residue = ALAD471 into VAL
+Mutating residue = ALAE471 into VAL
+Mutating residue = ALAF471 into VAL
+Mutating residue = ALAG471 into VAL
+Mutating residue = ALAH471 into VAL
+Your file run OK
+End time of FoldX: Tue Apr 15 20:31:36 2025
+Total time spend: 439.68 seconds.
+Cleaning BuildModel...DONE

@@ -1,0 +1,17 @@
+FoldX 5.1 (2011)
+by the FoldX Consortium 
+Jesper Borg, Frederic Rousseau, Joost Schymkowitz,
+Luis Serrano and Francois Stricher
+------------------------------------------------------
+
+PDB file analysed: batch
+Output type: BuildModel
+Pdb	SD	total energy	Backbone Hbond	Sidechain Hbond	Van der Waals	Electrostatics	Solvation Polar	Solvation Hydrophobic	Van der Waals clashes	entropy sidechain	entropy mainchain	sloop_entropy	mloop_entropy	cis_bond	torsional clash	backbone clash	helix dipole	water bridge	disulfide	electrostatic kon	partial covalent bonds	energy Ionisation	Entropy Complex
+8ruc-assembly-clean_Repair_1	0.436607	12.8499	1.7904	6.1704	3.98643	0.313732	-4.82807	6.89805	-0.0153699	-5.34991	4.2575	0	0	0	-0.398712	0	0.0025821	0	0	0.022885	0	0	0
+8ruc-assembly-clean_Repair_2	0.0392699	14.6802	1.95638	3.5055	4.8719	0.00237296	-5.98669	5.56049	0.0038729	-0.569099	5.55895	0	0	0	-0.223487	0	-8.74678e-12	0	0	2.13163e-13	0	0	0
+8ruc-assembly-clean_Repair_3	0.0616862	17.6836	4.00085	5.87012	2.86269	0.0600445	-4.18263	1.8517	0.022871	-2.03327	8.82915	0	0	0	0.40119	0	0.00127935	0	0	-0.000426938	0	0	0
+8ruc-assembly-clean_Repair_4	0.373106	5.9242	0.478039	-11.624	7.06237	1.2022	-5.97783	15.6541	-1.2888	0.617181	-0.17151	0	0	0	-0.0495072	0	0.0860473	0	0	-0.0273262	0	-0.0368701	0
+8ruc-assembly-clean_Repair_5	0.126697	24.02	-0.564409	-1.11525	8.10997	0.0136819	-5.42362	17.7468	-0.25979	0.38673	5.12616	0	0	0	-0.0266525	0	0.0122168	0	0	0.014129	0	2.99046e-10	0
+8ruc-assembly-clean_Repair_6	0.237839	9.68941	0.145298	0.612729	4.77288	0.288112	-3.10107	9.12767	-0.794723	-2.14933	0.784355	0	0	0	0.00348377	0	1.04817e-11	0	0	-3.9672e-14	0	1.61648e-10	0
+8ruc-assembly-clean_Repair_7	0.161093	1.7028	-0.672766	2.25779e-07	0.736354	2.6961e-08	-0.414056	1.30052	0.0458089	-0.222383	0.929314	0	0	0	6.74683e-06	0	3.12319e-11	0	0	-2.89546e-13	0	5.06525e-10	0
+8ruc-assembly-clean_Repair_8	0.1741	10.9226	6.13415	14.4941	1.09205	-0.0972079	-5.33797	-2.98794	0.772692	-0.940312	-2.20502	0	0	0	-1.06581e-14	0	3.11644e-11	0	0	-3.08494e-13	0	-0.00190377	0

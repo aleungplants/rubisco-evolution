@@ -1,0 +1,308 @@
+IQ-TREE multicore version 2.0.3 for Mac OS X 64-bit built Dec 19 2020
+Developed by Bui Quang Minh, Nguyen Lam Tung, Olga Chernomor,
+Heiko Schmidt, Dominik Schrempf, Michael Woodhams.
+
+Host:    esc2074-dgl-leung-sage.eeb.utoronto.ca (SSE4.2, 16 GB RAM)
+Command: iqtree -s ../clean_aligned_csubst.fasta -te tmp.csubst.nwk -m ECMK07+F+R4 --seqtype CODON11 --threads-max 3 -T AUTO --ancestral --rate --redo
+Seed:    675747 (Using SPRNG - Scalable Parallel Random Number Generator)
+Time:    Tue Dec 10 17:35:12 2024
+Kernel:  SSE2 - auto-detect threads (8 CPU cores detected)
+
+Reading alignment file ../clean_aligned_csubst.fasta ... Fasta format detected
+Alignment most likely contains DNA/RNA sequences
+Converting to codon sequences with genetic code 11 ...
+WARNING: Sequence sinense has ambiguous character -AT at site 7
+WARNING: Sequence carolinian has ambiguous character -CT at site 16
+WARNING: Sequence vulgare has ambiguous character -AT at site 34
+WARNING: Sequence frederici has ambiguous character --A at site 85
+WARNING: Sequence stenotatum has ambiguous character --A at site 85
+WARNING: Sequence vigaroense has ambiguous character --A at site 103
+WARNING: Sequence hibericum has ambiguous character -CC at site 112
+WARNING: Sequence humile has ambiguous character T-- at site 505
+WARNING: Sequence multiforme has ambiguous character -TT at site 595
+WARNING: Sequence minutiflor has ambiguous character AT- at site 610
+WARNING: Sequence tabernense has ambiguous character G-- at site 619
+WARNING: Sequence subglabrum has ambiguous character ANT at site 664
+WARNING: Sequence dichroanth has ambiguous character A-- at site 664
+WARNING: Sequence carpetanic has ambiguous character A-- at site 664
+WARNING: Sequence supinum has ambiguous character A-- at site 664
+WARNING: Sequence kaschgaric has ambiguous character ANT at site 664
+WARNING: Sequence lobinii has ambiguous character A-- at site 664
+WARNING: Sequence jovibarba has ambiguous character A-- at site 664
+WARNING: Sequence sundingii has ambiguous character A-- at site 664
+WARNING: Sequence sarcophyll has ambiguous character ANT at site 664
+WARNING: Sequence subglabrum has ambiguous character G-- at site 667
+WARNING: Sequence ocymifoliu has ambiguous character GC- at site 667
+WARNING: Sequence brasiliens has ambiguous character G-- at site 667
+WARNING: Sequence corculum has ambiguous character G-- at site 667
+WARNING: Sequence milleri has ambiguous character G-- at site 667
+WARNING: Sequence guaicuru has ambiguous character G-- at site 667
+WARNING: Sequence sokotranum has ambiguous character GNA at site 667
+WARNING: Sequence hoeltzeri has ambiguous character G-- at site 667
+WARNING: Sequence kaschgaric has ambiguous character G-- at site 667
+WARNING: Sequence limbatum has ambiguous character G-- at site 667
+WARNING: Sequence papillatum has ambiguous character GNA at site 667
+WARNING: Sequence braunii has ambiguous character G-- at site 667
+WARNING: Sequence suffrutico has ambiguous character G-- at site 667
+WARNING: Sequence tunetanum has ambiguous character G-- at site 667
+WARNING: Sequence sougiae has ambiguous character GNA at site 667
+WARNING: Sequence iranicum has ambiguous character GNA at site 667
+WARNING: Sequence fallax has ambiguous character G-- at site 667
+WARNING: Sequence mucronatum has ambiguous character G-- at site 667
+WARNING: Sequence sarcophyll has ambiguous character G-- at site 667
+WARNING: Sequence flexuosum has ambiguous character G-- at site 670
+WARNING: Sequence cymuliferu has ambiguous character G-- at site 670
+WARNING: Sequence sokotranum has ambiguous character G-- at site 670
+WARNING: Sequence papillatum has ambiguous character G-- at site 670
+WARNING: Sequence paulayanum has ambiguous character G-- at site 670
+WARNING: Sequence sougiae has ambiguous character G-- at site 670
+WARNING: Sequence iranicum has ambiguous character G-- at site 670
+WARNING: Sequence sventenii has ambiguous character G-- at site 670
+WARNING: Sequence palmyrense has ambiguous character G-- at site 670
+WARNING: Sequence grabusae has ambiguous character CC- at site 724
+WARNING: Sequence hibericum has ambiguous character A-- at site 1153
+WARNING: Sequence vigaroense has ambiguous character GG- at site 1159
+WARNING: Sequence frederici has ambiguous character G-- at site 1177
+WARNING: Sequence stenotatum has ambiguous character G-- at site 1177
+WARNING: Sequence frutescens has ambiguous character G-- at site 1177
+WARNING: Sequence failachicu has ambiguous character GT- at site 1219
+WARNING: Sequence cordatum has ambiguous character CG- at site 1228
+WARNING: Sequence bourgeaui has ambiguous character C-- at site 1246
+WARNING: Sequence sinense has ambiguous character G-- at site 1258
+WARNING: Sequence sinuatum has ambiguous character A-- at site 1261
+WARNING: Sequence mouretii has ambiguous character G-A at site 1264
+Alignment has 184 sequences with 422 columns, 299 distinct patterns
+64 parsimony-informative, 19 singleton sites, 339 constant sites
+            Gap/Ambiguity  Composition  p-value
+   1  cancellatu    0.00%    passed    100.00%
+   2  tomentellu    0.00%    passed    100.00%
+   3  grabusae     42.89%    passed    100.00%
+   4  perfoliatu    0.00%    passed    100.00%
+   5  vigaroense   16.82%    passed     99.36%
+   6  subglabrum   47.63%    passed    100.00%
+   7  proliferum    0.00%    passed    100.00%
+   8  thiniense    59.24%    passed     99.99%
+   9  ocymifoliu   47.39%    passed    100.00%
+  10  lanceolatu    4.74%    passed    100.00%
+  11  greuteri      0.00%    passed    100.00%
+  12  frederici    13.98%    passed    100.00%
+  13  dichroanth   47.63%    passed     99.99%
+  14  macropteru    0.00%    passed    100.00%
+  15  sinense       1.42%    passed    100.00%
+  16  gougetianu    0.00%    passed    100.00%
+  17  brasiliens   47.39%    passed    100.00%
+  18  imbricatum    0.00%    passed    100.00%
+  19  carolinian    1.42%    passed    100.00%
+  20  scabrum       0.00%    passed    100.00%
+  21  roridum       0.00%    passed    100.00%
+  22  wrightii      0.00%    passed    100.00%
+  23  algarvense    0.00%    passed    100.00%
+  24  corculum     47.39%    passed    100.00%
+  25  hierapetra    0.00%    passed    100.00%
+  26  iconicum      0.00%    passed    100.00%
+  27  perezii       0.00%    passed    100.00%
+  28  flexuosum    47.16%    passed     99.99%
+  29  archaeothi    0.00%    passed    100.00%
+  30  aucheri       0.00%    passed    100.00%
+  31  minutum       0.00%    passed    100.00%
+  32  camposanum    0.00%    passed    100.00%
+  33  ursifolium    0.00%    passed    100.00%
+  34  multiforme   47.16%    passed     99.86%
+  35  ebusitanum    0.00%    passed    100.00%
+  36  arboreum      0.00%    passed    100.00%
+  37  multifloru    0.00%    passed    100.00%
+  38  cymuliferu   47.16%    passed    100.00%
+  39  diasii        0.00%    passed    100.00%
+  40  tetragonum    0.00%    passed    100.00%
+  41  meyeri        0.00%    passed    100.00%
+  42  milleri      47.39%    passed     99.85%
+  43  carpetanic   47.63%    passed    100.00%
+  44  remotispic    0.00%    passed    100.00%
+  45  guaicuru     47.39%    passed    100.00%
+  46  sokotranum   47.39%    passed     99.85%
+  47  capense       0.00%    passed    100.00%
+  48  hoeltzeri    47.39%    passed    100.00%
+  49  pycnanthum    0.00%    passed    100.00%
+  50  stenotatum   13.98%    passed    100.00%
+  51  coronense     0.00%    passed    100.00%
+  52  aureum        0.71%    passed    100.00%
+  53  supinum      47.63%    passed    100.00%
+  54  kaschgaric   47.63%    passed    100.00%
+  55  cordatum      3.08%    passed    100.00%
+  56  cythereum     0.00%    passed    100.00%
+  57  latebracte    0.00%    passed    100.00%
+  58  limbatum     47.39%    passed    100.00%
+  59  toletanum     0.00%    failed      0.00%
+  60  hibericum    18.01%    passed    100.00%
+  61  brunneri      0.00%    passed    100.00%
+  62  lobinii      47.63%    passed    100.00%
+  63  circaei       0.00%    passed    100.00%
+  64  pruinosum     0.00%    passed    100.00%
+  65  papillatum   47.39%    passed    100.00%
+  66  insigne       0.00%    passed    100.00%
+  67  bonduellei    0.00%    passed    100.00%
+  68  saracinatu    0.00%    passed    100.00%
+  69  bourgeaui     1.66%    passed    100.00%
+  70  albomargin    0.00%    passed    100.00%
+  71  minoicum      0.00%    passed    100.00%
+  72  effusum       0.00%    passed    100.00%
+  73  latifolium    0.00%    passed    100.00%
+  74  aragonense    0.00%    passed    100.00%
+  75  lowei         0.00%    passed    100.00%
+  76  binervosum    2.13%    passed    100.00%
+  77  californic    0.00%    passed    100.00%
+  78  rigualii     59.24%    passed     99.99%
+  79  failachicu    3.79%    passed    100.00%
+  80  obtusifoli    0.00%    passed    100.00%
+  81  echioides     0.00%    passed    100.00%
+  82  bonifacien    0.00%    passed    100.00%
+  83  braunii      47.39%    passed    100.00%
+  84  lilacinum     0.00%    passed    100.00%
+  85  delicatulu    0.00%    passed    100.00%
+  86  preauxii      0.00%    passed    100.00%
+  87  suffrutico   47.39%    passed    100.00%
+  88  tunetanum    47.39%    passed    100.00%
+  89  nydeggeri     0.00%    passed    100.00%
+  90  oligotrich    0.00%    passed    100.00%
+  91  kardamylii    0.00%    passed    100.00%
+  92  recticaule    0.00%    passed    100.00%
+  93  santapolen    0.00%    passed    100.00%
+  94  creticum      0.00%    passed    100.00%
+  95  cornarianu    0.24%    passed    100.00%
+  96  pigadiense    0.00%    passed    100.00%
+  97  puberulum     0.00%    passed    100.00%
+  98  bocconei      0.00%    passed    100.00%
+  99  contortira    0.00%    passed    100.00%
+ 100  tournefort    0.00%    passed    100.00%
+ 101  longebract    0.00%    passed    100.00%
+ 102  caesium       0.00%    passed    100.00%
+ 103  solandri      0.00%    passed    100.00%
+ 104  paulayanum   47.16%    passed     99.84%
+ 105  bellidifol    0.00%    passed    100.00%
+ 106  narbonense    8.29%    passed    100.00%
+ 107  sougiae      47.39%    passed    100.00%
+ 108  platyphyll    0.00%    passed    100.00%
+ 109  carthagine    0.00%    passed    100.00%
+ 110  otolepis      0.00%    passed    100.00%
+ 111  cephalonic    0.00%    passed    100.00%
+ 112  iranicum     47.39%    passed    100.00%
+ 113  brassicifo    0.00%    passed    100.00%
+ 114  ammophilon    0.00%    passed    100.00%
+ 115  dichotomum    0.00%    passed    100.00%
+ 116  pylium        0.00%    passed    100.00%
+ 117  benmageci     0.00%    passed    100.00%
+ 118  gymnesicum    0.00%    passed    100.00%
+ 119  jovibarba    47.63%    passed    100.00%
+ 120  dufourii      0.00%    passed    100.00%
+ 121  sinuatum      0.47%    passed    100.00%
+ 122  somalorum     0.00%    passed    100.00%
+ 123  hungaricum    0.00%    passed    100.00%
+ 124  confusum      0.00%    passed    100.00%
+ 125  biflorum      0.00%    passed    100.00%
+ 126  minutiflor   51.90%    passed    100.00%
+ 127  calliopsiu    0.00%    passed    100.00%
+ 128  densissimu    0.00%    passed    100.00%
+ 129  rhumile       0.00%    passed    100.00%
+ 130  ovalifoliu    0.00%    passed    100.00%
+ 131  spreitzenh    0.00%    passed    100.00%
+ 132  scopulorum    0.00%    passed    100.00%
+ 133  sventenii    47.16%    passed     99.91%
+ 134  redivivum     0.00%    passed    100.00%
+ 135  vulgare       2.84%    passed    100.00%
+ 136  palmyrense   47.16%    passed     99.98%
+ 137  gmelini       0.00%    passed    100.00%
+ 138  cossonianu    0.00%    passed    100.00%
+ 139  fallax       47.39%    passed    100.00%
+ 140  humile       60.19%    passed     99.93%
+ 141  girardianu    0.00%    passed    100.00%
+ 142  anatolicum    0.00%    passed    100.00%
+ 143  sieberi       0.00%    passed    100.00%
+ 144  xiliense      0.00%    passed    100.00%
+ 145  craterifor    0.00%    passed    100.00%
+ 146  meandrinum    0.00%    passed    100.00%
+ 147  bollei        0.00%    passed    100.00%
+ 148  frutescens   13.51%    passed     99.79%
+ 149  relicticum    0.00%    passed    100.00%
+ 150  brevipetio    0.00%    passed    100.00%
+ 151  mouretii      0.24%    passed     98.54%
+ 152  cosyrense     0.00%    passed    100.00%
+ 153  virgatum      0.00%    passed    100.00%
+ 154  globulifer    0.00%    passed    100.00%
+ 155  tuberculat    0.00%    passed    100.00%
+ 156  sp2           0.00%    passed    100.00%
+ 157  hyblaeum      0.00%    passed    100.00%
+ 158  erectum       0.00%    passed    100.00%
+ 159  tabernense   51.18%    passed    100.00%
+ 160  beaumieria    0.00%    passed    100.00%
+ 161  axillare      2.13%    passed    100.00%
+ 162  pseudebusi    0.00%    passed    100.00%
+ 163  aphroditae    0.00%    passed    100.00%
+ 164  plurisquam    0.00%    passed    100.00%
+ 165  compactum     0.00%    passed    100.00%
+ 166  sundingii    47.63%    passed    100.00%
+ 167  corsicum      0.00%    passed    100.00%
+ 168  macrophyll    0.00%    passed    100.00%
+ 169  lobatum      48.82%    passed     99.99%
+ 170  sp1           0.00%    passed    100.00%
+ 171  amopicum      0.00%    passed    100.00%
+ 172  furfuraceu    0.00%    passed    100.00%
+ 173  mucronatum   47.39%    passed    100.00%
+ 174  divaricatu    0.00%    passed    100.00%
+ 175  daveaui       0.00%    passed    100.00%
+ 176  tenellum      0.00%    passed    100.00%
+ 177  estevei       0.00%    passed    100.00%
+ 178  articulatu    0.00%    passed    100.00%
+ 179  peregrinum   59.24%    passed     99.95%
+ 180  dodartii      0.00%    passed    100.00%
+ 181  dendroides    4.03%    failed      0.00%
+ 182  purpuratum    0.00%    passed    100.00%
+ 183  spectabile    1.42%    passed    100.00%
+ 184  sarcophyll   47.63%    passed     99.87%
+WARNING: 6 sequences contain more than 50% gaps/ambiguity
+****  TOTAL        10.96%  2 sequences failed composition chi2 test (p-value<5%; df=60)
+WARNING: States(s) ACG, CGG, CTC rarely appear in alignment and may cause numerical problems
+Reading input tree file tmp.csubst.nwk ... rooted tree
+
+NOTE: 124 MB RAM (0 GB) is required!
+Measuring multi-threading efficiency up to 3 CPU cores
+2 trees examined
+Threads: 1 / Time: 3.147 sec / Speedup: 1.000 / Efficiency: 100% / LogL: -9067
+Threads: 2 / Time: 1.854 sec / Speedup: 1.698 / Efficiency: 85% / LogL: -9067
+Threads: 3 / Time: 1.367 sec / Speedup: 2.303 / Efficiency: 77% / LogL: -9067
+BEST NUMBER OF THREADS: 3
+
+Estimate model parameters (epsilon = 0.010)
+1. Initial log-likelihood: -18255.748
+2. Current log-likelihood: -3339.429
+3. Current log-likelihood: -3232.365
+4. Current log-likelihood: -3227.353
+5. Current log-likelihood: -3222.933
+6. Current log-likelihood: -3222.881
+7. Current log-likelihood: -3222.845
+8. Current log-likelihood: -3222.823
+9. Current log-likelihood: -3222.810
+Optimal log-likelihood: -3222.802
+Nonsynonymous/synonymous ratio (omega): 1.000
+Transition/transversion ratio (kappa): 1.000
+Site proportion and rates:  (0.346,0.129) (0.308,0.188) (0.289,0.911) (0.057,11.038)
+Parameters optimization took 9 rounds (54.332 sec)
+BEST SCORE FOUND : -3222.802
+Ancestral state probabilities printed to ../clean_aligned_csubst.fasta.state
+Empirical proportions for each category: 0.803 0.000 0.142 0.055
+Site rates printed to ../clean_aligned_csubst.fasta.rate
+Total tree length: 0.483
+
+Total number of iterations: 0
+CPU time used for tree search: 0.000 sec (0h:0m:0s)
+Wall-clock time used for tree search: 0.000 sec (0h:0m:0s)
+Total CPU time used: 180.346 sec (0h:3m:0s)
+Total wall-clock time used: 63.319 sec (0h:1m:3s)
+
+Analysis results written to: 
+  IQ-TREE report:                ../clean_aligned_csubst.fasta.iqtree
+  Maximum-likelihood tree:       ../clean_aligned_csubst.fasta.treefile
+  Site-specific rates:           ../clean_aligned_csubst.fasta.rate
+  Ancestral state:               ../clean_aligned_csubst.fasta.state
+  Screen log file:               ../clean_aligned_csubst.fasta.log
+
+Date and Time: Tue Dec 10 17:36:16 2024

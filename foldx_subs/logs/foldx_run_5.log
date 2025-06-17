@@ -1,0 +1,307 @@
+   ********************************************
+   ***                                      ***
+   ***             FoldX 5.1 (c)            ***
+   ***                                      ***
+   ***     code by the FoldX Consortium     ***
+   ***                                      ***
+   ***     Jesper Borg, Frederic Rousseau   ***
+   ***    Joost Schymkowitz, Luis Serrano   ***
+   ***    Peter Vanhee, Erik Verschueren    ***
+   ***     Lies Baeten, Javier Delgado      ***
+   ***       and Francois Stricher          ***
+   *** and any other of the 9! permutations ***
+   ***   based on an original concept by    ***
+   ***   Raphael Guerois and Luis Serrano   ***
+   ********************************************
+
+ *** THIS IS AN IMPORTANT MESSAGE: 
+ >> External parametrized molecules were detected...
+ >> Final energetic values will depend of the correct parametrization of this molecules. 
+
+
+1 models read: 8ruc-assembly-clean_Repair.pdb
+1 models read: 8ruc-assembly-clean_Repair.pdb
+
+BackHbond       =               -3996.85
+SideHbond       =               -2172.91
+Energy_VdW      =               -6258.35
+Electro         =               -375.98
+Energy_SolvP    =               8709.95
+Energy_SolvH    =               -8399.37
+Energy_vdwclash =               75.39
+energy_torsion  =               5.52
+backbone_vdwclash=              858.95
+Entropy_sidec   =               3201.08
+Entropy_mainc   =               7361.29
+water bonds     =               0.00
+helix dipole    =               -16.28
+loop_entropy    =               0.00
+cis_bond        =               8.99
+disulfide       =               -7.18
+kn electrostatic=               -14.42
+partial covalent interactions = 0.00
+Energy_Ionisation =             33.24
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -1845.87
+
+
+BackHbond       =               -3996.85
+SideHbond       =               -2172.91
+Energy_VdW      =               -6258.35
+Electro         =               -375.98
+Energy_SolvP    =               8709.95
+Energy_SolvH    =               -8399.37
+Energy_vdwclash =               75.39
+energy_torsion  =               5.52
+backbone_vdwclash=              858.95
+Entropy_sidec   =               3201.08
+Entropy_mainc   =               7361.29
+water bonds     =               0.00
+helix dipole    =               -16.28
+loop_entropy    =               0.00
+cis_bond        =               8.99
+disulfide       =               -7.18
+kn electrostatic=               -14.42
+partial covalent interactions = 0.00
+Energy_Ionisation =             33.24
+Entropy Complex =               0.00
+-----------------------------------------------------------
+Total          = 				  -1845.87
+
+Starting BuildModel
+Reading HA282Y,HB282Y,HC282Y,HD282Y,HE282Y,HF282Y,HG282Y,HH282Y;
+Reading HA282L,HB282L,HC282L,HD282L,HE282L,HF282L,HG282L,HH282L;
+Reading HA282I,HB282I,HC282I,HD282I,HE282I,HF282I,HG282I,HH282I;
+Reading LA375F,LB375F,LC375F,LD375F,LE375F,LF375F,LG375F,LH375F;
+Reading LA375I,LB375I,LC375I,LD375I,LE375I,LF375I,LG375I,LH375I;
+Reading LA424S,LB424S,LC424S,LD424S,LE424S,LF424S,LG424S,LH424S;
+Reading SA43T,SB43T,SC43T,SD43T,SE43T,SF43T,SG43T,SH43T;
+Residue to Mutate HISA282 has residue index 273
+Residue to Mutate HISB282 has residue index 740
+Residue to Mutate HISC282 has residue index 1207
+Residue to Mutate HISD282 has residue index 1674
+Residue to Mutate HISE282 has residue index 2141
+Residue to Mutate HISF282 has residue index 2608
+Residue to Mutate HISG282 has residue index 3075
+Residue to Mutate HISH282 has residue index 3542
+Residue to Mutate HISA282 has residue index 273
+Residue to Mutate HISB282 has residue index 740
+Residue to Mutate HISC282 has residue index 1207
+Residue to Mutate HISD282 has residue index 1674
+Residue to Mutate HISE282 has residue index 2141
+Residue to Mutate HISF282 has residue index 2608
+Residue to Mutate HISG282 has residue index 3075
+Residue to Mutate HISH282 has residue index 3542
+Residue to Mutate HISA282 has residue index 273
+Residue to Mutate HISB282 has residue index 740
+Residue to Mutate HISC282 has residue index 1207
+Residue to Mutate HISD282 has residue index 1674
+Residue to Mutate HISE282 has residue index 2141
+Residue to Mutate HISF282 has residue index 2608
+Residue to Mutate HISG282 has residue index 3075
+Residue to Mutate HISH282 has residue index 3542
+Residue to Mutate LEUA375 has residue index 366
+Residue to Mutate LEUB375 has residue index 833
+Residue to Mutate LEUC375 has residue index 1300
+Residue to Mutate LEUD375 has residue index 1767
+Residue to Mutate LEUE375 has residue index 2234
+Residue to Mutate LEUF375 has residue index 2701
+Residue to Mutate LEUG375 has residue index 3168
+Residue to Mutate LEUH375 has residue index 3635
+Residue to Mutate LEUA375 has residue index 366
+Residue to Mutate LEUB375 has residue index 833
+Residue to Mutate LEUC375 has residue index 1300
+Residue to Mutate LEUD375 has residue index 1767
+Residue to Mutate LEUE375 has residue index 2234
+Residue to Mutate LEUF375 has residue index 2701
+Residue to Mutate LEUG375 has residue index 3168
+Residue to Mutate LEUH375 has residue index 3635
+Residue to Mutate LEUA424 has residue index 415
+Residue to Mutate LEUB424 has residue index 882
+Residue to Mutate LEUC424 has residue index 1349
+Residue to Mutate LEUD424 has residue index 1816
+Residue to Mutate LEUE424 has residue index 2283
+Residue to Mutate LEUF424 has residue index 2750
+Residue to Mutate LEUG424 has residue index 3217
+Residue to Mutate LEUH424 has residue index 3684
+Residue to Mutate SERA43 has residue index 34
+Residue to Mutate SERB43 has residue index 501
+Residue to Mutate SERC43 has residue index 968
+Residue to Mutate SERD43 has residue index 1435
+Residue to Mutate SERE43 has residue index 1902
+Residue to Mutate SERF43 has residue index 2369
+Residue to Mutate SERG43 has residue index 2836
+Residue to Mutate SERH43 has residue index 3303
+Mutating residue = H1SA282 into TYR
+Mutating residue = H1SB282 into TYR
+Mutating residue = H1SC282 into TYR
+Mutating residue = H1SD282 into TYR
+Mutating residue = H1SE282 into TYR
+Mutating residue = H1SF282 into TYR
+Mutating residue = H2SG282 into TYR
+Mutating residue = H2SH282 into TYR
+Mutating residue = H1SA282 into TYR
+Mutating residue = H1SB282 into TYR
+Mutating residue = H1SC282 into TYR
+Mutating residue = H1SD282 into TYR
+Mutating residue = H1SE282 into TYR
+Mutating residue = H1SF282 into TYR
+Mutating residue = H2SG282 into TYR
+Mutating residue = H2SH282 into TYR
+Mutating residue = H1SA282 into TYR
+Mutating residue = H1SB282 into TYR
+Mutating residue = H1SC282 into TYR
+Mutating residue = H1SD282 into TYR
+Mutating residue = H1SE282 into TYR
+Mutating residue = H1SF282 into TYR
+Mutating residue = H2SG282 into TYR
+Mutating residue = H2SH282 into TYR
+Mutating residue = H1SA282 into LEU
+Mutating residue = H1SB282 into LEU
+Mutating residue = H1SC282 into LEU
+Mutating residue = H1SD282 into LEU
+Mutating residue = H1SE282 into LEU
+Mutating residue = H1SF282 into LEU
+Mutating residue = H2SG282 into LEU
+Mutating residue = H2SH282 into LEU
+Mutating residue = H1SA282 into LEU
+Mutating residue = H1SB282 into LEU
+Mutating residue = H1SC282 into LEU
+Mutating residue = H1SD282 into LEU
+Mutating residue = H1SE282 into LEU
+Mutating residue = H1SF282 into LEU
+Mutating residue = H2SG282 into LEU
+Mutating residue = H2SH282 into LEU
+Mutating residue = H1SA282 into LEU
+Mutating residue = H1SB282 into LEU
+Mutating residue = H1SC282 into LEU
+Mutating residue = H1SD282 into LEU
+Mutating residue = H1SE282 into LEU
+Mutating residue = H1SF282 into LEU
+Mutating residue = H2SG282 into LEU
+Mutating residue = H2SH282 into LEU
+Mutating residue = H1SA282 into ILE
+Mutating residue = H1SB282 into ILE
+Mutating residue = H1SC282 into ILE
+Mutating residue = H1SD282 into ILE
+Mutating residue = H1SE282 into ILE
+Mutating residue = H1SF282 into ILE
+Mutating residue = H2SG282 into ILE
+Mutating residue = H2SH282 into ILE
+Mutating residue = H1SA282 into ILE
+Mutating residue = H1SB282 into ILE
+Mutating residue = H1SC282 into ILE
+Mutating residue = H1SD282 into ILE
+Mutating residue = H1SE282 into ILE
+Mutating residue = H1SF282 into ILE
+Mutating residue = H2SG282 into ILE
+Mutating residue = H2SH282 into ILE
+Mutating residue = H1SA282 into ILE
+Mutating residue = H1SB282 into ILE
+Mutating residue = H1SC282 into ILE
+Mutating residue = H1SD282 into ILE
+Mutating residue = H1SE282 into ILE
+Mutating residue = H1SF282 into ILE
+Mutating residue = H2SG282 into ILE
+Mutating residue = H2SH282 into ILE
+Mutating residue = LEUA375 into PHE
+Mutating residue = LEUB375 into PHE
+Mutating residue = LEUC375 into PHE
+Mutating residue = LEUD375 into PHE
+Mutating residue = LEUE375 into PHE
+Mutating residue = LEUF375 into PHE
+Mutating residue = LEUG375 into PHE
+Mutating residue = LEUH375 into PHE
+Mutating residue = LEUA375 into PHE
+Mutating residue = LEUB375 into PHE
+Mutating residue = LEUC375 into PHE
+Mutating residue = LEUD375 into PHE
+Mutating residue = LEUE375 into PHE
+Mutating residue = LEUF375 into PHE
+Mutating residue = LEUG375 into PHE
+Mutating residue = LEUH375 into PHE
+Mutating residue = LEUA375 into PHE
+Mutating residue = LEUB375 into PHE
+Mutating residue = LEUC375 into PHE
+Mutating residue = LEUD375 into PHE
+Mutating residue = LEUE375 into PHE
+Mutating residue = LEUF375 into PHE
+Mutating residue = LEUG375 into PHE
+Mutating residue = LEUH375 into PHE
+Mutating residue = LEUA375 into ILE
+Mutating residue = LEUB375 into ILE
+Mutating residue = LEUC375 into ILE
+Mutating residue = LEUD375 into ILE
+Mutating residue = LEUE375 into ILE
+Mutating residue = LEUF375 into ILE
+Mutating residue = LEUG375 into ILE
+Mutating residue = LEUH375 into ILE
+Mutating residue = LEUA375 into ILE
+Mutating residue = LEUB375 into ILE
+Mutating residue = LEUC375 into ILE
+Mutating residue = LEUD375 into ILE
+Mutating residue = LEUE375 into ILE
+Mutating residue = LEUF375 into ILE
+Mutating residue = LEUG375 into ILE
+Mutating residue = LEUH375 into ILE
+Mutating residue = LEUA375 into ILE
+Mutating residue = LEUB375 into ILE
+Mutating residue = LEUC375 into ILE
+Mutating residue = LEUD375 into ILE
+Mutating residue = LEUE375 into ILE
+Mutating residue = LEUF375 into ILE
+Mutating residue = LEUG375 into ILE
+Mutating residue = LEUH375 into ILE
+Mutating residue = LEUA424 into SER
+Mutating residue = LEUB424 into SER
+Mutating residue = LEUC424 into SER
+Mutating residue = LEUD424 into SER
+Mutating residue = LEUE424 into SER
+Mutating residue = LEUF424 into SER
+Mutating residue = LEUG424 into SER
+Mutating residue = LEUH424 into SER
+Mutating residue = LEUA424 into SER
+Mutating residue = LEUB424 into SER
+Mutating residue = LEUC424 into SER
+Mutating residue = LEUD424 into SER
+Mutating residue = LEUE424 into SER
+Mutating residue = LEUF424 into SER
+Mutating residue = LEUG424 into SER
+Mutating residue = LEUH424 into SER
+Mutating residue = LEUA424 into SER
+Mutating residue = LEUB424 into SER
+Mutating residue = LEUC424 into SER
+Mutating residue = LEUD424 into SER
+Mutating residue = LEUE424 into SER
+Mutating residue = LEUF424 into SER
+Mutating residue = LEUG424 into SER
+Mutating residue = LEUH424 into SER
+Mutating residue = SERA43 into THR
+Mutating residue = SERB43 into THR
+Mutating residue = SERC43 into THR
+Mutating residue = SERD43 into THR
+Mutating residue = SERE43 into THR
+Mutating residue = SERF43 into THR
+Mutating residue = SERG43 into THR
+Mutating residue = SERH43 into THR
+Mutating residue = SERA43 into THR
+Mutating residue = SERB43 into THR
+Mutating residue = SERC43 into THR
+Mutating residue = SERD43 into THR
+Mutating residue = SERE43 into THR
+Mutating residue = SERF43 into THR
+Mutating residue = SERG43 into THR
+Mutating residue = SERH43 into THR
+Mutating residue = SERA43 into THR
+Mutating residue = SERB43 into THR
+Mutating residue = SERC43 into THR
+Mutating residue = SERD43 into THR
+Mutating residue = SERE43 into THR
+Mutating residue = SERF43 into THR
+Mutating residue = SERG43 into THR
+Mutating residue = SERH43 into THR
+Your file run OK
+End time of FoldX: Tue Apr 15 21:00:55 2025
+Total time spend: 2198.57 seconds.
+Cleaning BuildModel...DONE
